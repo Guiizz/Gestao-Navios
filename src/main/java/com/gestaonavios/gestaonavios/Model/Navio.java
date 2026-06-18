@@ -1,8 +1,8 @@
-package Model;
+package com.gestaonavios.gestaonavios.Model;
 
-import Model.enums.EstadoOperacional;
-import Model.enums.TipoCargaEnums;
-import Model.enums.TipoNavioEnums;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoOperacional;
+import com.gestaonavios.gestaonavios.Model.enums.TipoCargaEnums;
+import com.gestaonavios.gestaonavios.Model.enums.TipoNavioEnums;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,14 @@ public class Navio {
         this.portoAtual = portoAtual;
     }
 
-    public boolean aceitaTipoCarga(TipoCargaEnums tipo) {
-        return getCargasCompativeis().contains(tipo);
+    public boolean aceitaTipoCarga(TipoCarga tipo) {
+        if (tipo == null) return false;
+        // Convenção do projeto: TIPO_CARGA.designacao guarda o nome do enum (ver NavioDAL)
+        try {
+            return getCargasCompativeis().contains(TipoCargaEnums.valueOf(tipo.getDesignacao()));
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public List<TipoCargaEnums> getCargasCompativeis() {
