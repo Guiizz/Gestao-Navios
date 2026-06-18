@@ -1,4 +1,8 @@
 target/
+
+### Configuração local da BD (credenciais — cada membro tem a sua) ###
+src/bd.properties
+
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

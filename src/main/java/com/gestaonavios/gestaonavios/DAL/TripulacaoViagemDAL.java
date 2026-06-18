@@ -1,10 +1,10 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.TripulacaoViagem;
-import Model.Tripulante;
-import Model.enums.FuncaoTripulante;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
+import com.gestaonavios.gestaonavios.Model.Tripulante;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 
 import java.time.LocalDate;
 import java.util.List;

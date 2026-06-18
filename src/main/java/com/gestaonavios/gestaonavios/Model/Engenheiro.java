@@ -1,6 +1,6 @@
 // Engenheiro.java
-package Model;
-import Model.enums.FuncaoTripulante;
+package com.gestaonavios.gestaonavios.Model;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 
 public class Engenheiro extends Tripulante {
     public Engenheiro() { super(); }

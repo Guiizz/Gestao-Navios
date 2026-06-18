@@ -1,16 +1,14 @@
-package Model;
-
-import Model.enums.TipoNavioEnums;
+package com.gestaonavios.gestaonavios.Model;
 
 public class TipoNavio {
     private int id;
     private String designacao;
-    private TipoNavioEnums categoria;
+    private String categoria;
     private int maxCargasPorViagem;
 
     public TipoNavio() {}
 
-    public TipoNavio(int id, String designacao, TipoNavioEnums categoria, int maxCargasPorViagem) {
+    public TipoNavio(int id, String designacao, String categoria, int maxCargasPorViagem) {
         this.id = id;
         this.designacao = designacao;
         this.categoria = categoria;
@@ -23,8 +21,8 @@ public class TipoNavio {
     public String getDesignacao() { return designacao; }
     public void setDesignacao(String designacao) { this.designacao = designacao; }
 
-    public TipoNavioEnums getCategoria() { return categoria; }
-    public void setCategoria(TipoNavioEnums categoria) { this.categoria = categoria; }
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
 
     public int getMaxCargasPorViagem() { return maxCargasPorViagem; }
     public void setMaxCargasPorViagem(int maxCargasPorViagem) { this.maxCargasPorViagem = maxCargasPorViagem; }
