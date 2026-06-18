@@ -1,6 +1,6 @@
-package Model;
+package com.gestaonavios.gestaonavios.Model;
 
-import Model.enums.EstadoViagem;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoViagem;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

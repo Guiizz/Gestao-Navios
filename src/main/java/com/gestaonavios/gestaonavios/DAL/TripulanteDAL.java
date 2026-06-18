@@ -1,13 +1,13 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.Capitao;
-import Model.Engenheiro;
-import Model.Oficial;
-import Model.Operador;
-import Model.Tripulante;
-import Model.enums.FuncaoTripulante;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.Capitao;
+import com.gestaonavios.gestaonavios.Model.Engenheiro;
+import com.gestaonavios.gestaonavios.Model.Oficial;
+import com.gestaonavios.gestaonavios.Model.Operador;
+import com.gestaonavios.gestaonavios.Model.Tripulante;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 
 import java.util.List;
 

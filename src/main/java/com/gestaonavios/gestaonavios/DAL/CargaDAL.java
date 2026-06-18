@@ -1,10 +1,10 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.Carga;
-import Model.Porto;
-import Model.TipoCarga;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.Carga;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.TipoCarga;
 
 import java.util.List;
 

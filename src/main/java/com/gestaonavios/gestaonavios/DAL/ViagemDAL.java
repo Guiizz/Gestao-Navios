@@ -1,13 +1,13 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.AtribuicaoCarga;
-import Model.Navio;
-import Model.Porto;
-import Model.TripulacaoViagem;
-import Model.Viagem;
-import Model.enums.EstadoViagem;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.AtribuicaoCarga;
+import com.gestaonavios.gestaonavios.Model.Navio;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
+import com.gestaonavios.gestaonavios.Model.Viagem;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoViagem;
 
 import java.time.LocalDate;
 import java.util.List;

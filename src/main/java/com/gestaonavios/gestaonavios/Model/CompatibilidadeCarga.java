@@ -1,17 +1,14 @@
-package Model;
-
-import Model.enums.TipoCargaEnums;
-import Model.enums.TipoNavioEnums;
+package com.gestaonavios.gestaonavios.Model;
 
 public class CompatibilidadeCarga {
     private int id;
-    private TipoNavioEnums tipoNavio;
-    private TipoCargaEnums tipoCarga;
-    private double limiteCarga;
+    private TipoNavio tipoNavio;
+    private TipoCarga tipoCarga;
+    private int limiteCarga;
 
     public CompatibilidadeCarga() {}
 
-    public CompatibilidadeCarga(int id, TipoNavioEnums tipoNavio, TipoCargaEnums tipoCarga, double limiteCarga) {
+    public CompatibilidadeCarga(int id, TipoNavio tipoNavio, TipoCarga tipoCarga, int limiteCarga) {
         this.id = id;
         this.tipoNavio = tipoNavio;
         this.tipoCarga = tipoCarga;
@@ -21,14 +18,14 @@ public class CompatibilidadeCarga {
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public TipoNavioEnums getTipoNavio() { return tipoNavio; }
-    public void setTipoNavio(TipoNavioEnums tipoNavio) { this.tipoNavio = tipoNavio; }
+    public TipoNavio getTipoNavio() { return tipoNavio; }
+    public void setTipoNavio(TipoNavio tipoNavio) { this.tipoNavio = tipoNavio; }
 
-    public TipoCargaEnums getTipoCarga() { return tipoCarga; }
-    public void setTipoCarga(TipoCargaEnums tipoCarga) { this.tipoCarga = tipoCarga; }
+    public TipoCarga getTipoCarga() { return tipoCarga; }
+    public void setTipoCarga(TipoCarga tipoCarga) { this.tipoCarga = tipoCarga; }
 
-    public double getLimiteCarga() { return limiteCarga; }
-    public void setLimiteCarga(double limiteCarga) { this.limiteCarga = limiteCarga; }
+    public int getLimiteCarga() { return limiteCarga; }
+    public void setLimiteCarga(int limiteCarga) { this.limiteCarga = limiteCarga; }
 
     @Override
     public String toString() {

@@ -1,18 +1,16 @@
-package Model;
-
-import Model.enums.TipoCargaEnums;
+package com.gestaonavios.gestaonavios.Model;
 
 public class TipoCarga {
     private int id;
     private String designacao;
-    private TipoCargaEnums categoria;
+    private String categoria;
     private boolean inflamavel;
     private boolean corrosiva;
     private boolean toxica;
 
     public TipoCarga() {}
 
-    public TipoCarga(int id, String designacao, TipoCargaEnums categoria,
+    public TipoCarga(int id, String designacao, String categoria,
                      boolean inflamavel, boolean corrosiva, boolean toxica) {
         this.id = id;
         this.designacao = designacao;
@@ -28,8 +26,8 @@ public class TipoCarga {
     public String getDesignacao() { return designacao; }
     public void setDesignacao(String designacao) { this.designacao = designacao; }
 
-    public TipoCargaEnums getCategoria() { return categoria; }
-    public void setCategoria(TipoCargaEnums categoria) { this.categoria = categoria; }
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
 
     public boolean isInflamavel() { return inflamavel; }
     public void setInflamavel(boolean inflamavel) { this.inflamavel = inflamavel; }
