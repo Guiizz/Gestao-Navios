@@ -1,9 +1,13 @@
-module com.gestaonavios.gestaonavios {
+open module com.gestaonavios.gestaonavios {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
 
-
-    opens com.gestaonavios.gestaonavios to javafx.fxml;
     exports com.gestaonavios.gestaonavios;
+    exports com.gestaonavios.gestaonavios.BLL;
+    exports com.gestaonavios.gestaonavios.Controller;
+    exports com.gestaonavios.gestaonavios.DAL;
+    exports com.gestaonavios.gestaonavios.Model;
+    exports com.gestaonavios.gestaonavios.Model.enums;
+    exports com.gestaonavios.gestaonavios.Utils;
 }
