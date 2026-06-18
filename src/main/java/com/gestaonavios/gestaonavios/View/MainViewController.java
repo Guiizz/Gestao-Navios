@@ -1,4 +1,4 @@
-package View;
+package com.gestaonavios.gestaonavios.View;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

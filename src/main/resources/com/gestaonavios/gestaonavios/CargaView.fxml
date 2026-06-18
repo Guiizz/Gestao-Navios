@@ -12,7 +12,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="View.CargaViewController"
+      fx:controller="com.gestaonavios.gestaonavios.View.CargaViewController"
       styleClass="section-container" spacing="0">
 
     <!-- TOOLBAR -->
