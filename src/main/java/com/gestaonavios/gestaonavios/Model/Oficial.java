@@ -1,6 +1,6 @@
 // Oficial.java
-package Model;
-import Model.enums.FuncaoTripulante;
+package com.gestaonavios.gestaonavios.Model;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 
 public class Oficial extends Tripulante {
     public Oficial() { super(); }

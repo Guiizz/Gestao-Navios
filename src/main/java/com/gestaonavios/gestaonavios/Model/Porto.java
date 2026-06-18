@@ -1,4 +1,4 @@
-package Model;
+package com.gestaonavios.gestaonavios.Model;
 
 public class Porto {
 

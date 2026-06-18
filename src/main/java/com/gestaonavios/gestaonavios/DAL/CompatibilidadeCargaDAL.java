@@ -1,10 +1,10 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.CompatibilidadeCarga;
-import Model.TipoCarga;
-import Model.TipoNavio;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.CompatibilidadeCarga;
+import com.gestaonavios.gestaonavios.Model.TipoCarga;
+import com.gestaonavios.gestaonavios.Model.TipoNavio;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class CompatibilidadeCargaDAL {
                 "INSERT INTO COMPATIBILIDADE_CARGA (id_tipo_navio, id_tipo_carga, limite_cargas) VALUES ("
                         + idTipoNavio + ", "
                         + idTipoCarga + ", "
-                        + (int) compatibilidade.getLimiteCarga() + ")");
+                        + compatibilidade.getLimiteCarga() + ")");
     }
 
     public boolean remover(int idTipoNavio, int idTipoCarga) {
