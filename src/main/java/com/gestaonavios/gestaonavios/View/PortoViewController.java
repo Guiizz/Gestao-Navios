@@ -1,15 +1,15 @@
-package View;
+package com.gestaonavios.gestaonavios.View;
 
-import BLL.PortoBLL;
-import Controller.PortoController;
-import DAL.CargaDAL;
-import DAL.NavioDAL;
-import DAL.PortoDAL;
-import DAL.TipoCargaDAL;
-import DAL.TipoNavioDAL;
-import DAL.ViagemDAL;
-import Model.Porto;
-import Utils.AlertUtils;
+import com.gestaonavios.gestaonavios.BLL.PortoBLL;
+import com.gestaonavios.gestaonavios.Controller.PortoController;
+import com.gestaonavios.gestaonavios.DAL.CargaDAL;
+import com.gestaonavios.gestaonavios.DAL.NavioDAL;
+import com.gestaonavios.gestaonavios.DAL.PortoDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoCargaDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoNavioDAL;
+import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Utils.AlertUtils;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

@@ -1,19 +1,19 @@
-package View;
+package com.gestaonavios.gestaonavios.View;
 
-import DAL.CargaDAL;
-import DAL.NavioDAL;
-import DAL.PortoDAL;
-import DAL.TipoCargaDAL;
-import DAL.TipoNavioDAL;
-import DAL.TripulanteDAL;
-import DAL.ViagemDAL;
-import Model.Carga;
-import Model.Navio;
-import Model.Porto;
-import Model.Tripulante;
-import Model.Viagem;
-import Model.enums.EstadoOperacional;
-import Model.enums.EstadoViagem;
+import com.gestaonavios.gestaonavios.DAL.CargaDAL;
+import com.gestaonavios.gestaonavios.DAL.NavioDAL;
+import com.gestaonavios.gestaonavios.DAL.PortoDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoCargaDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoNavioDAL;
+import com.gestaonavios.gestaonavios.DAL.TripulanteDAL;
+import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
+import com.gestaonavios.gestaonavios.Model.Carga;
+import com.gestaonavios.gestaonavios.Model.Navio;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.Tripulante;
+import com.gestaonavios.gestaonavios.Model.Viagem;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoOperacional;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoViagem;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
