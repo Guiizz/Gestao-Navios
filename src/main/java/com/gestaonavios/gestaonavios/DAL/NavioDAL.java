@@ -1,12 +1,12 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.Navio;
-import Model.Porto;
-import Model.TipoNavio;
-import Model.enums.EstadoOperacional;
-import Model.enums.TipoNavioEnums;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.Navio;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.TipoNavio;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoOperacional;
+import com.gestaonavios.gestaonavios.Model.enums.TipoNavioEnums;
 
 import java.util.List;
 

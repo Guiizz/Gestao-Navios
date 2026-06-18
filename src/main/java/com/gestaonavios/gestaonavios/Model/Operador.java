@@ -1,6 +1,6 @@
 // Operador.java
-package Model;
-import Model.enums.FuncaoTripulante;
+package com.gestaonavios.gestaonavios.Model;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 
 public class Operador extends Tripulante {
     public Operador() { super(); }
