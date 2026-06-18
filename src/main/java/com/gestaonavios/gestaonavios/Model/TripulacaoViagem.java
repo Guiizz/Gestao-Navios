@@ -1,6 +1,6 @@
-package Model;
+package com.gestaonavios.gestaonavios.Model;
 
-import Model.enums.FuncaoTripulante;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 import java.time.LocalDate;
 
 public class TripulacaoViagem {

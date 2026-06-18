@@ -1,8 +1,8 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.Porto;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.Porto;
 
 import java.util.List;
 

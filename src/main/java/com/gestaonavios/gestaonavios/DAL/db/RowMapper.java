@@ -1,4 +1,4 @@
-package DAL.db;
+package com.gestaonavios.gestaonavios.DAL.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
