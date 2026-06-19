@@ -437,7 +437,7 @@ public class ViagemViewController {
         btnOk.setDisable(true);
         Runnable check = () -> btnOk.setDisable(
                 cbNavio.getValue() == null || cbOrigem.getValue() == null ||
-                        cbDestino.getValue() == null || dpPartida.getValue() == null || dpChegada.getValue() == null);
+                cbDestino.getValue() == null || dpPartida.getValue() == null || dpChegada.getValue() == null);
         cbNavio.valueProperty().addListener((o,a,b) -> check.run());
         cbOrigem.valueProperty().addListener((o,a,b) -> check.run());
         cbDestino.valueProperty().addListener((o,a,b) -> check.run());
@@ -504,8 +504,8 @@ public class ViagemViewController {
         cbCarga.setConverter(new javafx.util.StringConverter<>() {
             @Override public String toString(Carga c)   {
                 return c == null ? "" : c.getDesignacao() + " — " +
-                                        (c.getTipoCarga() != null ? c.getTipoCarga().getDesignacao() : "?") +
-                                        " (" + c.getPeso() + " t)";
+                        (c.getTipoCarga() != null ? c.getTipoCarga().getDesignacao() : "?") +
+                        " (" + c.getPeso() + " t)";
             }
             @Override public Carga fromString(String s) { return null; }
         });

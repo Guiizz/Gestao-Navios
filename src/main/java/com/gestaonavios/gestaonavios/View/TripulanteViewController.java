@@ -156,11 +156,11 @@ public class TripulanteViewController {
                     }
                 }
                 sb.append("Viagem #").append(v.getId())
-                        .append("  ").append(v.getOrigem()  != null ? v.getOrigem().getNome()  : "?")
-                        .append(" → ").append(v.getDestino() != null ? v.getDestino().getNome() : "?")
-                        .append("  [").append(v.getEstado()).append("]")
-                        .append("  Função: ").append(funcaoViagem)
-                        .append("\n");
+                  .append("  ").append(v.getOrigem()  != null ? v.getOrigem().getNome()  : "?")
+                  .append(" → ").append(v.getDestino() != null ? v.getDestino().getNome() : "?")
+                  .append("  [").append(v.getEstado()).append("]")
+                  .append("  Função: ").append(funcaoViagem)
+                  .append("\n");
             }
         }
 
