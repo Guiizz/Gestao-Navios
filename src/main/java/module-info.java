@@ -1,4 +1,4 @@
-module com.gestaonavios.gestaonavios {
+open module com.gestaonavios.gestaonavios {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
