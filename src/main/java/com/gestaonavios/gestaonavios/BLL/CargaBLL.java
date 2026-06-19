@@ -30,8 +30,7 @@ public class CargaBLL {
     public List<Carga> listarPorTipo(TipoCarga tipo) {
         List<Carga> resultado = new ArrayList<>();
         for (Carga c : cargaDAL.listarTodos())
-            if (c.getTipoCarga() != null && c.getTipoCarga().getId() == tipo.getId())
-                resultado.add(c);
+            if (c.getTipoCarga() != null && c.getTipoCarga().getId() == tipo.getId()) resultado.add(c);
         return resultado;
     }
 
