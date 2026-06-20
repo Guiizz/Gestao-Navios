@@ -2,6 +2,7 @@ package com.gestaonavios.gestaonavios.BLL;
 
 import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
 import com.gestaonavios.gestaonavios.Model.AtribuicaoCarga;
+import com.gestaonavios.gestaonavios.Model.Carga;
 import com.gestaonavios.gestaonavios.Model.Navio;
 import com.gestaonavios.gestaonavios.Model.Tripulante;
 import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
@@ -15,14 +16,17 @@ import java.util.List;
 
 public class ViagemBLL {
 
-    private final ViagemDAL     viagemDAL;
-    private final NavioBLL      navioBLL;
+    private final ViagemDAL viagemDAL;
+    private final NavioBLL navioBLL;
     private final TripulanteBLL tripulanteBLL;
+    private final CompatibilidadeBLL compatibilidadeBLL;
 
-    public ViagemBLL(ViagemDAL viagemDAL, NavioBLL navioBLL, TripulanteBLL tripulanteBLL) {
-        this.viagemDAL     = viagemDAL;
-        this.navioBLL      = navioBLL;
+    public ViagemBLL(ViagemDAL viagemDAL, NavioBLL navioBLL, TripulanteBLL tripulanteBLL,
+                     CompatibilidadeBLL compatibilidadeBLL) {
+        this.viagemDAL = viagemDAL;
+        this.navioBLL = navioBLL;
         this.tripulanteBLL = tripulanteBLL;
+        this.compatibilidadeBLL = compatibilidadeBLL;
     }
 
     public List<Viagem> listarTodos() {
@@ -124,12 +128,13 @@ public class ViagemBLL {
             throw new Exception("Só é possível adicionar cargas a viagens no estado PLANEADA.");
 
         Navio navio = viagem.getNavio();
-        if (!navio.aceitaTipoCarga(atribuicao.getCarga().getTipoCarga()))
+        if (!compatibilidadeBLL.aceita(navio.getTipoNavio(), atribuicao.getCarga().getTipoCarga()))
             throw new Exception("O navio '" + navio.getNome() + "' não é compatível com o tipo de carga '"
                     + atribuicao.getCarga().getTipoCarga() + "'.");
-        if (viagem.getCargas().size() >= navio.getMaxCargasPorViagem())
+        int maxCargas = compatibilidadeBLL.maxCargasPorViagem(navio.getTipoNavio());
+        if (viagem.getCargas().size() >= maxCargas)
             throw new Exception("O navio já atingiu o limite máximo de cargas por viagem ("
-                    + navio.getMaxCargasPorViagem() + ").");
+                    + maxCargas + ").");
         if (viagem.getPesoTotalCargas() + atribuicao.getPesoAtribuido() > navio.getCapacidadeMaxima())
             throw new Exception("A adição desta carga excede a capacidade máxima do navio ("
                     + navio.getCapacidadeMaxima() + " t).");
@@ -189,7 +194,10 @@ public class ViagemBLL {
 
         Tripulante tripulante = null;
         for (TripulacaoViagem tvItem : viagem.getTripulacao())
-            if (tvItem.getTripulante().getId() == idTripulante) { tripulante = tvItem.getTripulante(); break; }
+            if (tvItem.getTripulante().getId() == idTripulante) {
+                tripulante = tvItem.getTripulante();
+                break;
+            }
         if (tripulante == null)
             throw new Exception("O tripulante indicado não está associado a esta viagem.");
 
@@ -226,5 +234,11 @@ public class ViagemBLL {
 
     public boolean remover(int id) {
         return viagemDAL.remover(id);
+    }
+
+    /** Compatibilidade navio-carga segundo a BD (usado também para filtrar a UI). */
+    public boolean aceitaCarga(Navio navio, Carga carga) {
+        if (navio == null || carga == null) return false;
+        return compatibilidadeBLL.aceita(navio.getTipoNavio(), carga.getTipoCarga());
     }
 }

@@ -1,7 +1,0 @@
-# Configuracao local da BD — copiar para bd.properties e preencher com as tuas credenciais
-# (bd.properties esta ignorado no git; cada membro mantem o seu)
-db.host=localhost
-db.port=1433
-db.name=GestaoNavios
-db.user=SEU_UTILIZADOR
-db.password=SUA_PASSWORD

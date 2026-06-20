@@ -16,7 +16,7 @@ public class NavioDAL {
     private final TipoNavioDAL tipoNavioDAL;
 
     public NavioDAL(PortoDAL portoDAL, TipoNavioDAL tipoNavioDAL) {
-        this.portoDAL    = portoDAL;
+        this.portoDAL = portoDAL;
         this.tipoNavioDAL = tipoNavioDAL;
     }
 
@@ -72,16 +72,16 @@ public class NavioDAL {
 
     public void adicionar(Navio navio) {
         int idTipoNavio = getIdTipoNavio(navio.getTipoNavio());
-        String idPorto  = navio.getPortoAtual() != null
+        String idPorto = navio.getPortoAtual() != null
                 ? String.valueOf(navio.getPortoAtual().getId()) : "NULL";
         ConnectionManager.create(
                 "INSERT INTO NAVIO (nome, codigo_imo, cap_maxima, n_tanques, bandeira, ano_fabrico, estado_op, id_tipo_navio, id_porto_atual) VALUES ('"
-                        + navio.getNome()       + "', '"
-                        + navio.getCodigoIMO()  + "', "
+                        + navio.getNome() + "', '"
+                        + navio.getCodigoIMO() + "', "
                         + navio.getCapacidadeMaxima() + ", "
-                        + navio.getNumeroTanques()    + ", '"
-                        + navio.getBandeira()    + "', "
-                        + navio.getAnoFabrico()  + ", '"
+                        + navio.getNumeroTanques() + ", '"
+                        + navio.getBandeira() + "', "
+                        + navio.getAnoFabrico() + ", '"
                         + navio.getEstadoOperacional().name() + "', "
                         + idTipoNavio + ", "
                         + idPorto + ")");
@@ -89,19 +89,19 @@ public class NavioDAL {
 
     public boolean atualizar(Navio navio) {
         int idTipoNavio = getIdTipoNavio(navio.getTipoNavio());
-        String idPorto  = navio.getPortoAtual() != null
+        String idPorto = navio.getPortoAtual() != null
                 ? String.valueOf(navio.getPortoAtual().getId()) : "NULL";
         ConnectionManager.create(
-                "UPDATE NAVIO SET nome='"        + navio.getNome()
-                        + "', codigo_imo='"      + navio.getCodigoIMO()
-                        + "', cap_maxima="       + navio.getCapacidadeMaxima()
-                        + ", n_tanques="         + navio.getNumeroTanques()
-                        + ", bandeira='"         + navio.getBandeira()
-                        + "', ano_fabrico="      + navio.getAnoFabrico()
-                        + ", estado_op='"        + navio.getEstadoOperacional().name()
-                        + "', id_tipo_navio="    + idTipoNavio
-                        + ", id_porto_atual="    + idPorto
-                        + " WHERE id_navio="     + navio.getId());
+                "UPDATE NAVIO SET nome='" + navio.getNome()
+                        + "', codigo_imo='" + navio.getCodigoIMO()
+                        + "', cap_maxima=" + navio.getCapacidadeMaxima()
+                        + ", n_tanques=" + navio.getNumeroTanques()
+                        + ", bandeira='" + navio.getBandeira()
+                        + "', ano_fabrico=" + navio.getAnoFabrico()
+                        + ", estado_op='" + navio.getEstadoOperacional().name()
+                        + "', id_tipo_navio=" + idTipoNavio
+                        + ", id_porto_atual=" + idPorto
+                        + " WHERE id_navio=" + navio.getId());
         return true;
     }
 

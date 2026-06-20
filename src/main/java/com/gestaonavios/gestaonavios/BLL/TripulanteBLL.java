@@ -12,11 +12,11 @@ import java.util.List;
 public class TripulanteBLL {
 
     private final TripulanteDAL tripulanteDAL;
-    private final ViagemDAL     viagemDAL;
+    private final ViagemDAL viagemDAL;
 
     public TripulanteBLL(TripulanteDAL tripulanteDAL, ViagemDAL viagemDAL) {
         this.tripulanteDAL = tripulanteDAL;
-        this.viagemDAL     = viagemDAL;
+        this.viagemDAL = viagemDAL;
     }
 
     public List<Tripulante> listarTodos() {

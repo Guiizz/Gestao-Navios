@@ -4,7 +4,8 @@ import java.time.LocalDate;
 
 public class ValidacaoUtils {
 
-    private ValidacaoUtils() {}
+    private ValidacaoUtils() {
+    }
 
     /**
      * Lança exceção se o valor for nulo ou em branco.
@@ -51,7 +52,9 @@ public class ValidacaoUtils {
             throw new Exception(nomeEntidade + " não encontrado (id=" + id + ").");
     }
 
-    /** NIF: exatamente 9 dígitos numéricos. */
+    /**
+     * NIF: exatamente 9 dígitos numéricos.
+     */
     public static void exigirFormatoNif(String nif) throws Exception {
         if (nif == null || nif.length() != 9)
             throw new Exception("NIF inválido — deve ter exatamente 9 dígitos.");
@@ -61,7 +64,9 @@ public class ValidacaoUtils {
         }
     }
 
-    /** UNLOCODE: 2 letras maiúsculas (país) + 3 caracteres alfanuméricos maiúsculos. Ex: PTLEI */
+    /**
+     * UNLOCODE: 2 letras maiúsculas (país) + 3 caracteres alfanuméricos maiúsculos. Ex: PTLEI
+     */
     public static void exigirFormatoUnlocode(String locode) throws Exception {
         if (locode == null || locode.length() != 5)
             throw new Exception("Código UNLOCODE inválido — deve ter exatamente 5 caracteres (ex: PTLEI).");
@@ -76,7 +81,9 @@ public class ValidacaoUtils {
         }
     }
 
-    /** Ano de fabrico: entre 1900 e o ano corrente. */
+    /**
+     * Ano de fabrico: entre 1900 e o ano corrente.
+     */
     public static void exigirAnoFabrico(int ano) throws Exception {
         int anoAtual = LocalDate.now().getYear();
         if (ano < 1900 || ano > anoAtual)

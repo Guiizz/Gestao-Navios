@@ -22,8 +22,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class NavioBLLTest {
 
-    @Mock NavioDAL navioDAL;
-    @Mock ViagemDAL viagemDAL;
+    @Mock
+    NavioDAL navioDAL;
+    @Mock
+    ViagemDAL viagemDAL;
 
     NavioBLL navioBLL;
 

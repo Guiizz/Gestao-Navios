@@ -6,7 +6,8 @@ public class CompatibilidadeCarga {
     private TipoCarga tipoCarga;
     private int limiteCarga;
 
-    public CompatibilidadeCarga() {}
+    public CompatibilidadeCarga() {
+    }
 
     public CompatibilidadeCarga(int id, TipoNavio tipoNavio, TipoCarga tipoCarga, int limiteCarga) {
         this.id = id;
@@ -15,17 +16,37 @@ public class CompatibilidadeCarga {
         this.limiteCarga = limiteCarga;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public TipoNavio getTipoNavio() { return tipoNavio; }
-    public void setTipoNavio(TipoNavio tipoNavio) { this.tipoNavio = tipoNavio; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public TipoCarga getTipoCarga() { return tipoCarga; }
-    public void setTipoCarga(TipoCarga tipoCarga) { this.tipoCarga = tipoCarga; }
+    public TipoNavio getTipoNavio() {
+        return tipoNavio;
+    }
 
-    public int getLimiteCarga() { return limiteCarga; }
-    public void setLimiteCarga(int limiteCarga) { this.limiteCarga = limiteCarga; }
+    public void setTipoNavio(TipoNavio tipoNavio) {
+        this.tipoNavio = tipoNavio;
+    }
+
+    public TipoCarga getTipoCarga() {
+        return tipoCarga;
+    }
+
+    public void setTipoCarga(TipoCarga tipoCarga) {
+        this.tipoCarga = tipoCarga;
+    }
+
+    public int getLimiteCarga() {
+        return limiteCarga;
+    }
+
+    public void setLimiteCarga(int limiteCarga) {
+        this.limiteCarga = limiteCarga;
+    }
 
     @Override
     public String toString() {

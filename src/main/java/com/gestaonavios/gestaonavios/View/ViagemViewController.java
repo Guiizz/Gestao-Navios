@@ -1,12 +1,14 @@
 package com.gestaonavios.gestaonavios.View;
 
 import com.gestaonavios.gestaonavios.BLL.CargaBLL;
+import com.gestaonavios.gestaonavios.BLL.CompatibilidadeBLL;
 import com.gestaonavios.gestaonavios.BLL.NavioBLL;
 import com.gestaonavios.gestaonavios.BLL.PortoBLL;
 import com.gestaonavios.gestaonavios.BLL.TripulanteBLL;
 import com.gestaonavios.gestaonavios.BLL.ViagemBLL;
 import com.gestaonavios.gestaonavios.Controller.ViagemController;
 import com.gestaonavios.gestaonavios.DAL.CargaDAL;
+import com.gestaonavios.gestaonavios.DAL.CompatibilidadeCargaDAL;
 import com.gestaonavios.gestaonavios.DAL.NavioDAL;
 import com.gestaonavios.gestaonavios.DAL.PortoDAL;
 import com.gestaonavios.gestaonavios.DAL.TipoCargaDAL;
@@ -40,55 +42,78 @@ import java.util.Optional;
 public class ViagemViewController {
 
     // ── Viagens table ─────────────────────────────────────────────────────────
-    @FXML private TableView<Viagem> tabelaViagens;
-    @FXML private TableColumn<Viagem, Integer> colId;
-    @FXML private TableColumn<Viagem, String>  colOrigem;
-    @FXML private TableColumn<Viagem, String>  colDestino;
-    @FXML private TableColumn<Viagem, String>  colPartida;
-    @FXML private TableColumn<Viagem, String>  colChegadaP;
-    @FXML private TableColumn<Viagem, String>  colChegadaR;
-    @FXML private TableColumn<Viagem, String>  colEstado;
-    @FXML private TableColumn<Viagem, String>  colNavio;
-    @FXML private TableColumn<Viagem, Integer> colNCargas;
-    @FXML private TableColumn<Viagem, Integer> colNTrip;
+    @FXML
+    private TableView<Viagem> tabelaViagens;
+    @FXML
+    private TableColumn<Viagem, Integer> colId;
+    @FXML
+    private TableColumn<Viagem, String> colOrigem;
+    @FXML
+    private TableColumn<Viagem, String> colDestino;
+    @FXML
+    private TableColumn<Viagem, String> colPartida;
+    @FXML
+    private TableColumn<Viagem, String> colChegadaP;
+    @FXML
+    private TableColumn<Viagem, String> colChegadaR;
+    @FXML
+    private TableColumn<Viagem, String> colEstado;
+    @FXML
+    private TableColumn<Viagem, String> colNavio;
+    @FXML
+    private TableColumn<Viagem, Integer> colNCargas;
+    @FXML
+    private TableColumn<Viagem, Integer> colNTrip;
 
     // ── Cargas sub-table ──────────────────────────────────────────────────────
-    @FXML private TableView<AtribuicaoCarga> tabelaCargas;
-    @FXML private TableColumn<AtribuicaoCarga, String> colCargaDesig;
-    @FXML private TableColumn<AtribuicaoCarga, String> colCargaTipo;
-    @FXML private TableColumn<AtribuicaoCarga, String> colCargaPeso;
-    @FXML private TableColumn<AtribuicaoCarga, String> colCargaVolume;
+    @FXML
+    private TableView<AtribuicaoCarga> tabelaCargas;
+    @FXML
+    private TableColumn<AtribuicaoCarga, String> colCargaDesig;
+    @FXML
+    private TableColumn<AtribuicaoCarga, String> colCargaTipo;
+    @FXML
+    private TableColumn<AtribuicaoCarga, String> colCargaPeso;
+    @FXML
+    private TableColumn<AtribuicaoCarga, String> colCargaVolume;
 
     // ── Tripulação sub-table ──────────────────────────────────────────────────
-    @FXML private TableView<TripulacaoViagem> tabelaTripulacao;
-    @FXML private TableColumn<TripulacaoViagem, String> colTripNome;
-    @FXML private TableColumn<TripulacaoViagem, String> colTripFuncao;
-    @FXML private TableColumn<TripulacaoViagem, String> colTripEmbarque;
-    @FXML private TableColumn<TripulacaoViagem, String> colTripDesembarque;
+    @FXML
+    private TableView<TripulacaoViagem> tabelaTripulacao;
+    @FXML
+    private TableColumn<TripulacaoViagem, String> colTripNome;
+    @FXML
+    private TableColumn<TripulacaoViagem, String> colTripFuncao;
+    @FXML
+    private TableColumn<TripulacaoViagem, String> colTripEmbarque;
+    @FXML
+    private TableColumn<TripulacaoViagem, String> colTripDesembarque;
 
     private ViagemController viagemController;
 
     @FXML
     public void initialize() {
-        PortoDAL     portoDAL     = new PortoDAL();
+        PortoDAL portoDAL = new PortoDAL();
         TipoNavioDAL tipoNavioDAL = new TipoNavioDAL();
         TipoCargaDAL tipoCargaDAL = new TipoCargaDAL();
-        NavioDAL     navioDAL     = new NavioDAL(portoDAL, tipoNavioDAL);
-        CargaDAL     cargaDAL     = new CargaDAL(tipoCargaDAL, portoDAL);
+        NavioDAL navioDAL = new NavioDAL(portoDAL, tipoNavioDAL);
+        CargaDAL cargaDAL = new CargaDAL(tipoCargaDAL, portoDAL);
         TripulanteDAL tripulanteDAL = new TripulanteDAL();
-        ViagemDAL    viagemDAL    = new ViagemDAL(portoDAL, navioDAL);
+        ViagemDAL viagemDAL = new ViagemDAL(portoDAL, navioDAL);
 
-        PortoBLL      portoBLL      = new PortoBLL(portoDAL);
-        CargaBLL      cargaBLL      = new CargaBLL(cargaDAL, viagemDAL);
+        PortoBLL portoBLL = new PortoBLL(portoDAL);
+        CargaBLL cargaBLL = new CargaBLL(cargaDAL, viagemDAL);
         TripulanteBLL tripulanteBLL = new TripulanteBLL(tripulanteDAL, viagemDAL);
-        NavioBLL      navioBLL      = new NavioBLL(navioDAL, viagemDAL);
-        ViagemBLL     viagemBLL     = new ViagemBLL(viagemDAL, navioBLL, tripulanteBLL);
+        NavioBLL navioBLL = new NavioBLL(navioDAL, viagemDAL);
+        CompatibilidadeCargaDAL compatibilidadeCargaDAL = new CompatibilidadeCargaDAL(tipoNavioDAL, tipoCargaDAL);
+        CompatibilidadeBLL compatibilidadeBLL = new CompatibilidadeBLL(tipoNavioDAL, compatibilidadeCargaDAL);
+        ViagemBLL viagemBLL = new ViagemBLL(viagemDAL, navioBLL, tripulanteBLL, compatibilidadeBLL);
         viagemController = new ViagemController(viagemBLL, navioBLL, portoBLL, cargaBLL, tripulanteBLL);
 
         // Viagens table columns
         colId.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
         colOrigem.setCellValueFactory(d -> new SimpleStringProperty(
-                d.getValue().getOrigem()  != null ? d.getValue().getOrigem().getNome()  : "—"));
+                d.getValue().getOrigem() != null ? d.getValue().getOrigem().getNome() : "—"));
         colDestino.setCellValueFactory(d -> new SimpleStringProperty(
                 d.getValue().getDestino() != null ? d.getValue().getDestino().getNome() : "—"));
         colPartida.setCellValueFactory(d -> new SimpleStringProperty(
@@ -132,7 +157,10 @@ public class ViagemViewController {
         carregarDados();
     }
 
-    @FXML private void atualizar() { carregarDados(); }
+    @FXML
+    private void atualizar() {
+        carregarDados();
+    }
 
     @FXML
     private void nova() {
@@ -163,7 +191,10 @@ public class ViagemViewController {
     @FXML
     private void editar() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem para editar."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem para editar.");
+            return;
+        }
         if (sel.getEstado() != EstadoViagem.PLANEADA) {
             AlertUtils.aviso("Só é possível editar viagens no estado PLANEADA.");
             return;
@@ -183,7 +214,10 @@ public class ViagemViewController {
     @FXML
     private void avancarEstado() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem para avançar o estado."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem para avançar o estado.");
+            return;
+        }
         if (sel.getEstado() != EstadoViagem.PLANEADA && sel.getEstado() != EstadoViagem.EM_CURSO) {
             AlertUtils.aviso("A viagem não pode ter o estado avançado no estado atual.");
             return;
@@ -197,8 +231,12 @@ public class ViagemViewController {
             dlg.setContentText("Data de chegada real (AAAA-MM-DD):");
             Optional<String> res = dlg.showAndWait();
             if (res.isPresent() && !res.get().isBlank()) {
-                try { chegadaReal = LocalDate.parse(res.get().trim()); }
-                catch (Exception e) { AlertUtils.erro("Formato de data inválido (use AAAA-MM-DD)."); return; }
+                try {
+                    chegadaReal = LocalDate.parse(res.get().trim());
+                } catch (Exception e) {
+                    AlertUtils.erro("Formato de data inválido (use AAAA-MM-DD).");
+                    return;
+                }
             }
         }
 
@@ -217,7 +255,10 @@ public class ViagemViewController {
     @FXML
     private void cancelar() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem para cancelar."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem para cancelar.");
+            return;
+        }
         if (sel.getEstado() != EstadoViagem.PLANEADA && sel.getEstado() != EstadoViagem.EM_CURSO) {
             AlertUtils.aviso("Só é possível cancelar viagens PLANEADA ou EM_CURSO.");
             return;
@@ -236,7 +277,10 @@ public class ViagemViewController {
     @FXML
     private void remover() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem para remover."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem para remover.");
+            return;
+        }
         if (AlertUtils.confirmar("Confirma a remoção da viagem #" + sel.getId() + "?")) {
             viagemController.remover(sel.getId());
             carregarDados();
@@ -249,7 +293,10 @@ public class ViagemViewController {
     @FXML
     private void adicionarCarga() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem.");
+            return;
+        }
         if (sel.getEstado() != EstadoViagem.PLANEADA) {
             AlertUtils.aviso("Só é possível adicionar cargas a viagens no estado PLANEADA.");
             return;
@@ -265,10 +312,18 @@ public class ViagemViewController {
 
         List<Carga> compativeis = new ArrayList<>();
         for (Carga c : viagemController.listarCargas()) {
-            if (sel.getNavio() != null && !sel.getNavio().aceitaTipoCarga(c.getTipoCarga())) continue;
+            if (sel.getNavio() != null && !viagemController.aceitaCarga(sel.getNavio(), c)) continue;
             boolean excluir = false;
-            for (AtribuicaoCarga ac : sel.getCargas()) if (ac.getCarga().getId() == c.getId()) { excluir = true; break; }
-            if (!excluir) for (int id : emUso) if (id == c.getId()) { excluir = true; break; }
+            for (AtribuicaoCarga ac : sel.getCargas())
+                if (ac.getCarga().getId() == c.getId()) {
+                    excluir = true;
+                    break;
+                }
+            if (!excluir) for (int id : emUso)
+                if (id == c.getId()) {
+                    excluir = true;
+                    break;
+                }
             if (!excluir) compativeis.add(c);
         }
 
@@ -279,9 +334,9 @@ public class ViagemViewController {
 
         mostrarDialogoAdicionarCarga(compativeis).ifPresent(dados -> {
             try {
-                Carga carga  = (Carga)  dados[0];
-                double peso  = (Double) dados[1];
-                double vol   = (Double) dados[2];
+                Carga carga = (Carga) dados[0];
+                double peso = (Double) dados[1];
+                double vol = (Double) dados[2];
                 viagemController.adicionarCarga(sel.getId(), carga, peso, vol);
                 carregarDados();
                 tabelaViagens.getSelectionModel().select(
@@ -297,14 +352,20 @@ public class ViagemViewController {
     @FXML
     private void removerCarga() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem.");
+            return;
+        }
         if (sel.getEstado() != EstadoViagem.PLANEADA) {
             AlertUtils.aviso("Só é possível remover cargas de viagens no estado PLANEADA.");
             return;
         }
 
         AtribuicaoCarga ac = tabelaCargas.getSelectionModel().getSelectedItem();
-        if (ac == null) { AlertUtils.aviso("Selecione uma carga na tabela de cargas."); return; }
+        if (ac == null) {
+            AlertUtils.aviso("Selecione uma carga na tabela de cargas.");
+            return;
+        }
 
         if (AlertUtils.confirmar("Remover carga '" + ac.getCarga().getDesignacao() + "' da viagem?")) {
             try {
@@ -325,7 +386,10 @@ public class ViagemViewController {
     @FXML
     private void adicionarTripulante() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem.");
+            return;
+        }
         if (sel.getEstado() != EstadoViagem.PLANEADA) {
             AlertUtils.aviso("Só é possível adicionar tripulantes a viagens no estado PLANEADA.");
             return;
@@ -339,10 +403,10 @@ public class ViagemViewController {
 
         mostrarDialogoAdicionarTripulante(disponiveis).ifPresent(dados -> {
             try {
-                Tripulante      t        = (Tripulante)      dados[0];
-                FuncaoTripulante funcao  = (FuncaoTripulante) dados[1];
-                LocalDate       embarque = (LocalDate)        dados[2];
-                LocalDate       desemb   = (LocalDate)        dados[3];
+                Tripulante t = (Tripulante) dados[0];
+                FuncaoTripulante funcao = (FuncaoTripulante) dados[1];
+                LocalDate embarque = (LocalDate) dados[2];
+                LocalDate desemb = (LocalDate) dados[3];
                 viagemController.adicionarTripulante(sel.getId(), t, funcao, embarque, desemb);
                 carregarDados();
                 tabelaViagens.getSelectionModel().select(
@@ -358,14 +422,20 @@ public class ViagemViewController {
     @FXML
     private void removerTripulante() {
         Viagem sel = tabelaViagens.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione uma viagem."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione uma viagem.");
+            return;
+        }
         if (sel.getEstado() != EstadoViagem.PLANEADA) {
             AlertUtils.aviso("Só é possível remover tripulantes de viagens no estado PLANEADA.");
             return;
         }
 
         TripulacaoViagem tv = tabelaTripulacao.getSelectionModel().getSelectedItem();
-        if (tv == null) { AlertUtils.aviso("Selecione um tripulante na tabela de tripulação."); return; }
+        if (tv == null) {
+            AlertUtils.aviso("Selecione um tripulante na tabela de tripulação.");
+            return;
+        }
 
         if (AlertUtils.confirmar("Remover '" + tv.getTripulante().getNome() + "' da viagem?")) {
             try {
@@ -404,51 +474,79 @@ public class ViagemViewController {
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
 
         GridPane form = new GridPane();
-        form.setHgap(10); form.setVgap(10); form.setPadding(new Insets(20));
+        form.setHgap(10);
+        form.setVgap(10);
+        form.setPadding(new Insets(20));
 
         javafx.util.StringConverter<Navio> navioConv = new javafx.util.StringConverter<>() {
-            @Override public String toString(Navio n)   { return n == null ? "" : n.getNome() + " (IMO: " + n.getCodigoIMO() + ")"; }
-            @Override public Navio fromString(String s) { return null; }
+            @Override
+            public String toString(Navio n) {
+                return n == null ? "" : n.getNome() + " (IMO: " + n.getCodigoIMO() + ")";
+            }
+
+            @Override
+            public Navio fromString(String s) {
+                return null;
+            }
         };
         javafx.util.StringConverter<Porto> portoConv = new javafx.util.StringConverter<>() {
-            @Override public String toString(Porto p)   { return p == null ? "" : p.getNome() + " (" + p.getCodigoUNLOCODE() + ")"; }
-            @Override public Porto fromString(String s) { return null; }
+            @Override
+            public String toString(Porto p) {
+                return p == null ? "" : p.getNome() + " (" + p.getCodigoUNLOCODE() + ")";
+            }
+
+            @Override
+            public Porto fromString(String s) {
+                return null;
+            }
         };
 
-        ComboBox<Navio>  cbNavio   = new ComboBox<>(FXCollections.observableArrayList(navios));  cbNavio.setConverter(navioConv);
-        ComboBox<Porto>  cbOrigem  = new ComboBox<>(FXCollections.observableArrayList(portos)); cbOrigem.setConverter(portoConv);
-        ComboBox<Porto>  cbDestino = new ComboBox<>(FXCollections.observableArrayList(portos)); cbDestino.setConverter(portoConv);
-        DatePicker dpPartida  = new DatePicker(LocalDate.now());
-        DatePicker dpChegada  = new DatePicker(LocalDate.now().plusDays(7));
-        TextField  tfObs      = new TextField(); tfObs.setPromptText("(opcional)");
+        ComboBox<Navio> cbNavio = new ComboBox<>(FXCollections.observableArrayList(navios));
+        cbNavio.setConverter(navioConv);
+        ComboBox<Porto> cbOrigem = new ComboBox<>(FXCollections.observableArrayList(portos));
+        cbOrigem.setConverter(portoConv);
+        ComboBox<Porto> cbDestino = new ComboBox<>(FXCollections.observableArrayList(portos));
+        cbDestino.setConverter(portoConv);
+        DatePicker dpPartida = new DatePicker(LocalDate.now());
+        DatePicker dpChegada = new DatePicker(LocalDate.now().plusDays(7));
+        TextField tfObs = new TextField();
+        tfObs.setPromptText("(opcional)");
 
         int r = 0;
-        form.add(new Label("Navio:"), 0, r);           form.add(cbNavio, 1, r++);
-        form.add(new Label("Porto de origem:"), 0, r); form.add(cbOrigem, 1, r++);
-        form.add(new Label("Porto de destino:"), 0, r);form.add(cbDestino, 1, r++);
-        form.add(new Label("Data de partida:"), 0, r); form.add(dpPartida, 1, r++);
-        form.add(new Label("Chegada prevista:"), 0, r);form.add(dpChegada, 1, r++);
-        form.add(new Label("Observações:"), 0, r);     form.add(tfObs, 1, r++);
+        form.add(new Label("Navio:"), 0, r);
+        form.add(cbNavio, 1, r++);
+        form.add(new Label("Porto de origem:"), 0, r);
+        form.add(cbOrigem, 1, r++);
+        form.add(new Label("Porto de destino:"), 0, r);
+        form.add(cbDestino, 1, r++);
+        form.add(new Label("Data de partida:"), 0, r);
+        form.add(dpPartida, 1, r++);
+        form.add(new Label("Chegada prevista:"), 0, r);
+        form.add(dpChegada, 1, r++);
+        form.add(new Label("Observações:"), 0, r);
+        form.add(tfObs, 1, r++);
 
-        cbNavio.setPrefWidth(280); cbOrigem.setPrefWidth(280); cbDestino.setPrefWidth(280);
+        cbNavio.setPrefWidth(280);
+        cbOrigem.setPrefWidth(280);
+        cbDestino.setPrefWidth(280);
         dialog.getDialogPane().setContent(form);
 
         Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
         btnOk.setDisable(true);
         Runnable check = () -> btnOk.setDisable(
                 cbNavio.getValue() == null || cbOrigem.getValue() == null ||
-                cbDestino.getValue() == null || dpPartida.getValue() == null || dpChegada.getValue() == null);
-        cbNavio.valueProperty().addListener((o,a,b) -> check.run());
-        cbOrigem.valueProperty().addListener((o,a,b) -> check.run());
-        cbDestino.valueProperty().addListener((o,a,b) -> check.run());
+                        cbDestino.getValue() == null || dpPartida.getValue() == null || dpChegada.getValue() == null);
+        cbNavio.valueProperty().addListener((o, a, b) -> check.run());
+        cbOrigem.valueProperty().addListener((o, a, b) -> check.run());
+        cbDestino.valueProperty().addListener((o, a, b) -> check.run());
 
         dialog.setResultConverter(bt -> {
             if (bt != btnGuardar) return null;
-            Navio n  = cbNavio.getValue();
+            Navio n = cbNavio.getValue();
             Porto or = cbOrigem.getValue();
             Porto de = cbDestino.getValue();
-            LocalDate part  = dpPartida.getValue();
-            LocalDate cheg  = dpChegada.getValue();
+            LocalDate part = dpPartida.getValue();
+            LocalDate cheg = dpChegada.getValue();
             String obs = tfObs.getText().trim();
             return new Viagem(0, part, cheg, null, or, de, obs.isEmpty() ? null : obs, n);
         });
@@ -456,7 +554,9 @@ public class ViagemViewController {
         return dialog.showAndWait();
     }
 
-    /** Returns Object[] {LocalDate partida, LocalDate chegada, String obs} */
+    /**
+     * Returns Object[] {LocalDate partida, LocalDate chegada, String obs}
+     */
     private Optional<Object[]> mostrarDialogoEditarViagem(Viagem v) {
         Dialog<Object[]> dialog = new Dialog<>();
         dialog.setTitle("Editar Viagem #" + v.getId());
@@ -466,15 +566,20 @@ public class ViagemViewController {
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
 
         GridPane form = new GridPane();
-        form.setHgap(10); form.setVgap(10); form.setPadding(new Insets(20));
+        form.setHgap(10);
+        form.setVgap(10);
+        form.setPadding(new Insets(20));
 
         DatePicker dpPartida = new DatePicker(v.getDataPartida());
         DatePicker dpChegada = new DatePicker(v.getDataChegadaPrevista());
-        TextField  tfObs     = new TextField(v.getObservacoes() != null ? v.getObservacoes() : "");
+        TextField tfObs = new TextField(v.getObservacoes() != null ? v.getObservacoes() : "");
 
-        form.add(new Label("Data de partida:"),  0, 0); form.add(dpPartida, 1, 0);
-        form.add(new Label("Chegada prevista:"),  0, 1); form.add(dpChegada, 1, 1);
-        form.add(new Label("Observações:"),       0, 2); form.add(tfObs, 1, 2);
+        form.add(new Label("Data de partida:"), 0, 0);
+        form.add(dpPartida, 1, 0);
+        form.add(new Label("Chegada prevista:"), 0, 1);
+        form.add(dpChegada, 1, 1);
+        form.add(new Label("Observações:"), 0, 2);
+        form.add(tfObs, 1, 2);
 
         tfObs.setPrefWidth(220);
         dialog.getDialogPane().setContent(form);
@@ -488,7 +593,9 @@ public class ViagemViewController {
         return dialog.showAndWait();
     }
 
-    /** Returns Object[] {Carga, Double peso, Double volume} */
+    /**
+     * Returns Object[] {Carga, Double peso, Double volume}
+     */
     private Optional<Object[]> mostrarDialogoAdicionarCarga(List<Carga> compativeis) {
         Dialog<Object[]> dialog = new Dialog<>();
         dialog.setTitle("Adicionar Carga à Viagem");
@@ -498,19 +605,28 @@ public class ViagemViewController {
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
 
         GridPane form = new GridPane();
-        form.setHgap(10); form.setVgap(10); form.setPadding(new Insets(20));
+        form.setHgap(10);
+        form.setVgap(10);
+        form.setPadding(new Insets(20));
 
         ComboBox<Carga> cbCarga = new ComboBox<>(FXCollections.observableArrayList(compativeis));
         cbCarga.setConverter(new javafx.util.StringConverter<>() {
-            @Override public String toString(Carga c)   {
+            @Override
+            public String toString(Carga c) {
                 return c == null ? "" : c.getDesignacao() + " — " +
                         (c.getTipoCarga() != null ? c.getTipoCarga().getDesignacao() : "?") +
                         " (" + c.getPeso() + " t)";
             }
-            @Override public Carga fromString(String s) { return null; }
+
+            @Override
+            public Carga fromString(String s) {
+                return null;
+            }
         });
-        TextField tfPeso = new TextField(); tfPeso.setPromptText("toneladas");
-        TextField tfVol  = new TextField(); tfVol.setPromptText("m³");
+        TextField tfPeso = new TextField();
+        tfPeso.setPromptText("toneladas");
+        TextField tfVol = new TextField();
+        tfVol.setPromptText("m³");
 
         cbCarga.valueProperty().addListener((obs, o, c) -> {
             if (c != null) {
@@ -519,11 +635,16 @@ public class ViagemViewController {
             }
         });
 
-        form.add(new Label("Carga:"), 0, 0);           form.add(cbCarga, 1, 0);
-        form.add(new Label("Peso atribuído (t):"), 0, 1); form.add(tfPeso, 1, 1);
-        form.add(new Label("Volume atribuído (m³):"), 0, 2); form.add(tfVol, 1, 2);
+        form.add(new Label("Carga:"), 0, 0);
+        form.add(cbCarga, 1, 0);
+        form.add(new Label("Peso atribuído (t):"), 0, 1);
+        form.add(tfPeso, 1, 1);
+        form.add(new Label("Volume atribuído (m³):"), 0, 2);
+        form.add(tfVol, 1, 2);
 
-        cbCarga.setPrefWidth(320); tfPeso.setPrefWidth(180); tfVol.setPrefWidth(180);
+        cbCarga.setPrefWidth(320);
+        tfPeso.setPrefWidth(180);
+        tfVol.setPrefWidth(180);
         dialog.getDialogPane().setContent(form);
 
         Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
@@ -535,7 +656,7 @@ public class ViagemViewController {
             try {
                 Carga c = cbCarga.getValue();
                 double peso = Double.parseDouble(tfPeso.getText().trim().replace(",", "."));
-                double vol  = Double.parseDouble(tfVol.getText().trim().replace(",", "."));
+                double vol = Double.parseDouble(tfVol.getText().trim().replace(",", "."));
                 return new Object[]{c, peso, vol};
             } catch (NumberFormatException e) {
                 AlertUtils.erro("Verifique os campos numéricos (peso, volume).");
@@ -546,7 +667,9 @@ public class ViagemViewController {
         return dialog.showAndWait();
     }
 
-    /** Returns Object[] {Tripulante, FuncaoTripulante, LocalDate embarque, LocalDate desembarque} */
+    /**
+     * Returns Object[] {Tripulante, FuncaoTripulante, LocalDate embarque, LocalDate desembarque}
+     */
     private Optional<Object[]> mostrarDialogoAdicionarTripulante(List<Tripulante> disponiveis) {
         Dialog<Object[]> dialog = new Dialog<>();
         dialog.setTitle("Adicionar Tripulante à Viagem");
@@ -556,30 +679,42 @@ public class ViagemViewController {
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
 
         GridPane form = new GridPane();
-        form.setHgap(10); form.setVgap(10); form.setPadding(new Insets(20));
+        form.setHgap(10);
+        form.setVgap(10);
+        form.setPadding(new Insets(20));
 
         ComboBox<Tripulante> cbTrip = new ComboBox<>(FXCollections.observableArrayList(disponiveis));
         cbTrip.setConverter(new javafx.util.StringConverter<>() {
-            @Override public String toString(Tripulante t)   {
+            @Override
+            public String toString(Tripulante t) {
                 return t == null ? "" : t.getNome() + " — " + t.getFuncao();
             }
-            @Override public Tripulante fromString(String s) { return null; }
+
+            @Override
+            public Tripulante fromString(String s) {
+                return null;
+            }
         });
         ComboBox<FuncaoTripulante> cbFuncao = new ComboBox<>(
                 FXCollections.observableArrayList(FuncaoTripulante.values()));
-        DatePicker dpEmbarque    = new DatePicker(LocalDate.now());
+        DatePicker dpEmbarque = new DatePicker(LocalDate.now());
         DatePicker dpDesembarque = new DatePicker(LocalDate.now().plusDays(30));
 
         cbTrip.valueProperty().addListener((obs, o, t) -> {
             if (t != null) cbFuncao.setValue(t.getFuncaoEnum());
         });
 
-        form.add(new Label("Tripulante:"), 0, 0);      form.add(cbTrip, 1, 0);
-        form.add(new Label("Função na viagem:"), 0, 1); form.add(cbFuncao, 1, 1);
-        form.add(new Label("Data de embarque:"), 0, 2); form.add(dpEmbarque, 1, 2);
-        form.add(new Label("Data de desembarque:"), 0, 3); form.add(dpDesembarque, 1, 3);
+        form.add(new Label("Tripulante:"), 0, 0);
+        form.add(cbTrip, 1, 0);
+        form.add(new Label("Função na viagem:"), 0, 1);
+        form.add(cbFuncao, 1, 1);
+        form.add(new Label("Data de embarque:"), 0, 2);
+        form.add(dpEmbarque, 1, 2);
+        form.add(new Label("Data de desembarque:"), 0, 3);
+        form.add(dpDesembarque, 1, 3);
 
-        cbTrip.setPrefWidth(280); cbFuncao.setPrefWidth(280);
+        cbTrip.setPrefWidth(280);
+        cbFuncao.setPrefWidth(280);
         dialog.getDialogPane().setContent(form);
 
         Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
