@@ -19,11 +19,11 @@ public class TripulacaoViagemDAL {
 
     private RowMapper<TripulacaoViagem> mapper() {
         return rs -> {
-            Tripulante tripulante   = tripulanteDAL.buscarPorId(rs.getInt("id_tripulante"));
+            Tripulante tripulante = tripulanteDAL.buscarPorId(rs.getInt("id_tripulante"));
             FuncaoTripulante funcao = FuncaoTripulante.valueOf(rs.getString("funcao_na_viagem"));
-            java.sql.Date embarqueSql    = rs.getDate("data_embarque");
+            java.sql.Date embarqueSql = rs.getDate("data_embarque");
             java.sql.Date desembarqueSql = rs.getDate("data_desembarque");
-            LocalDate embarque    = embarqueSql    != null ? embarqueSql.toLocalDate()    : null;
+            LocalDate embarque = embarqueSql != null ? embarqueSql.toLocalDate() : null;
             LocalDate desembarque = desembarqueSql != null ? desembarqueSql.toLocalDate() : null;
             return new TripulacaoViagem(0, tripulante, funcao, embarque, desembarque);
         };
@@ -35,7 +35,7 @@ public class TripulacaoViagemDAL {
     }
 
     public void adicionar(int idViagem, TripulacaoViagem tv) {
-        String embarque    = tv.getDataEmbarque()    != null ? "'" + tv.getDataEmbarque()    + "'" : "NULL";
+        String embarque = tv.getDataEmbarque() != null ? "'" + tv.getDataEmbarque() + "'" : "NULL";
         String desembarque = tv.getDataDesembarque() != null ? "'" + tv.getDataDesembarque() + "'" : "NULL";
         ConnectionManager.create(
                 "INSERT INTO TRIPULACAO_VIAGEM (id_viagem, id_tripulante, funcao_na_viagem, data_embarque, data_desembarque) VALUES ("

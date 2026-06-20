@@ -20,8 +20,10 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TripulanteBLLTest {
 
-    @Mock TripulanteDAL tripulanteDAL;
-    @Mock ViagemDAL viagemDAL;
+    @Mock
+    TripulanteDAL tripulanteDAL;
+    @Mock
+    ViagemDAL viagemDAL;
 
     TripulanteBLL tripulanteBLL;
 

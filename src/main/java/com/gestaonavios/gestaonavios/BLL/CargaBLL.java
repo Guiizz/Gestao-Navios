@@ -11,11 +11,11 @@ import java.util.List;
 
 public class CargaBLL {
 
-    private final CargaDAL  cargaDAL;
+    private final CargaDAL cargaDAL;
     private final ViagemDAL viagemDAL;
 
     public CargaBLL(CargaDAL cargaDAL, ViagemDAL viagemDAL) {
-        this.cargaDAL  = cargaDAL;
+        this.cargaDAL = cargaDAL;
         this.viagemDAL = viagemDAL;
     }
 

@@ -1,6 +1,7 @@
 package com.gestaonavios.gestaonavios.Model;
 
 import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
+
 import java.time.LocalDate;
 
 public class TripulacaoViagem {
@@ -10,7 +11,8 @@ public class TripulacaoViagem {
     private LocalDate dataEmbarque;
     private LocalDate dataDesembarque;
 
-    public TripulacaoViagem() {}
+    public TripulacaoViagem() {
+    }
 
     public TripulacaoViagem(int id, Tripulante tripulante, FuncaoTripulante funcaoNaViagem,
                             LocalDate dataEmbarque, LocalDate dataDesembarque) {
@@ -21,20 +23,45 @@ public class TripulacaoViagem {
         this.dataDesembarque = dataDesembarque;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public Tripulante getTripulante() { return tripulante; }
-    public void setTripulante(Tripulante tripulante) { this.tripulante = tripulante; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public FuncaoTripulante getFuncaoNaViagem() { return funcaoNaViagem; }
-    public void setFuncaoNaViagem(FuncaoTripulante funcaoNaViagem) { this.funcaoNaViagem = funcaoNaViagem; }
+    public Tripulante getTripulante() {
+        return tripulante;
+    }
 
-    public LocalDate getDataEmbarque() { return dataEmbarque; }
-    public void setDataEmbarque(LocalDate dataEmbarque) { this.dataEmbarque = dataEmbarque; }
+    public void setTripulante(Tripulante tripulante) {
+        this.tripulante = tripulante;
+    }
 
-    public LocalDate getDataDesembarque() { return dataDesembarque; }
-    public void setDataDesembarque(LocalDate dataDesembarque) { this.dataDesembarque = dataDesembarque; }
+    public FuncaoTripulante getFuncaoNaViagem() {
+        return funcaoNaViagem;
+    }
+
+    public void setFuncaoNaViagem(FuncaoTripulante funcaoNaViagem) {
+        this.funcaoNaViagem = funcaoNaViagem;
+    }
+
+    public LocalDate getDataEmbarque() {
+        return dataEmbarque;
+    }
+
+    public void setDataEmbarque(LocalDate dataEmbarque) {
+        this.dataEmbarque = dataEmbarque;
+    }
+
+    public LocalDate getDataDesembarque() {
+        return dataDesembarque;
+    }
+
+    public void setDataDesembarque(LocalDate dataDesembarque) {
+        this.dataDesembarque = dataDesembarque;
+    }
 
     @Override
     public String toString() {

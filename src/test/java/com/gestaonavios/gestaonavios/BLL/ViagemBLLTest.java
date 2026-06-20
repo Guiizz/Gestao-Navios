@@ -24,15 +24,20 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ViagemBLLTest {
 
-    @Mock ViagemDAL viagemDAL;
-    @Mock NavioBLL navioBLL;
-    @Mock TripulanteBLL tripulanteBLL;
+    @Mock
+    ViagemDAL viagemDAL;
+    @Mock
+    NavioBLL navioBLL;
+    @Mock
+    TripulanteBLL tripulanteBLL;
+    @Mock
+    CompatibilidadeBLL compatibilidadeBLL;
 
     ViagemBLL viagemBLL;
 
     @BeforeEach
     void setUp() {
-        viagemBLL = new ViagemBLL(viagemDAL, navioBLL, tripulanteBLL);
+        viagemBLL = new ViagemBLL(viagemDAL, navioBLL, tripulanteBLL, compatibilidadeBLL);
     }
 
     private Porto porto(int id, String nome) {
@@ -212,8 +217,8 @@ class ViagemBLLTest {
     void editarViagem_planeada_atualizaDatas() throws Exception {
         Viagem viagem = viagemPlaneada();
         when(viagemDAL.buscarPorId(1)).thenReturn(viagem);
-        LocalDate novaPartida  = LocalDate.now().plusDays(3);
-        LocalDate novaChegada  = LocalDate.now().plusDays(15);
+        LocalDate novaPartida = LocalDate.now().plusDays(3);
+        LocalDate novaChegada = LocalDate.now().plusDays(15);
 
         viagemBLL.editarViagem(1, novaPartida, novaChegada, "Observação nova");
 

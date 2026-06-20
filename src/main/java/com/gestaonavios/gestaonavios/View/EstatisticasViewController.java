@@ -21,26 +21,42 @@ import java.util.List;
 
 public class EstatisticasViewController {
 
-    @FXML private Label lblTotalNavios;
-    @FXML private Label lblTotalViagens;
-    @FXML private Label lblTotalCargas;
-    @FXML private Label lblTotalTripulantes;
+    @FXML
+    private Label lblTotalNavios;
+    @FXML
+    private Label lblTotalViagens;
+    @FXML
+    private Label lblTotalCargas;
+    @FXML
+    private Label lblTotalTripulantes;
 
-    @FXML private Label lblNaviosAtivos;
-    @FXML private Label lblNaviosManutencao;
-    @FXML private Label lblNaviosInativos;
+    @FXML
+    private Label lblNaviosAtivos;
+    @FXML
+    private Label lblNaviosManutencao;
+    @FXML
+    private Label lblNaviosInativos;
 
-    @FXML private Label lblViagensPlaneadas;
-    @FXML private Label lblViagensEmCurso;
-    @FXML private Label lblViagensConcluidas;
-    @FXML private Label lblViagensCanceladas;
-    @FXML private Label lblTotalTransportado;
+    @FXML
+    private Label lblViagensPlaneadas;
+    @FXML
+    private Label lblViagensEmCurso;
+    @FXML
+    private Label lblViagensConcluidas;
+    @FXML
+    private Label lblViagensCanceladas;
+    @FXML
+    private Label lblTotalTransportado;
 
-    @FXML private Label lblTripDisp;
-    @FXML private Label lblTripEmViagem;
+    @FXML
+    private Label lblTripDisp;
+    @FXML
+    private Label lblTripEmViagem;
 
-    @FXML private Label lblTotalPortos;
-    @FXML private Label lblPesoTotalCargas;
+    @FXML
+    private Label lblTotalPortos;
+    @FXML
+    private Label lblPesoTotalCargas;
 
     @FXML
     public void initialize() {
@@ -49,21 +65,21 @@ public class EstatisticasViewController {
 
     @FXML
     public void atualizar() {
-        PortoDAL     portoDAL     = new PortoDAL();
+        PortoDAL portoDAL = new PortoDAL();
         TipoNavioDAL tipoNavioDAL = new TipoNavioDAL();
         TipoCargaDAL tipoCargaDAL = new TipoCargaDAL();
-        NavioDAL     navioDAL     = new NavioDAL(portoDAL, tipoNavioDAL);
-        CargaDAL     cargaDAL     = new CargaDAL(tipoCargaDAL, portoDAL);
+        NavioDAL navioDAL = new NavioDAL(portoDAL, tipoNavioDAL);
+        CargaDAL cargaDAL = new CargaDAL(tipoCargaDAL, portoDAL);
         TripulanteDAL tripulanteDAL = new TripulanteDAL();
-        ViagemDAL    viagemDAL    = new ViagemDAL(portoDAL, navioDAL);
+        ViagemDAL viagemDAL = new ViagemDAL(portoDAL, navioDAL);
 
         // Navios
         List<Navio> navios = navioDAL.listarTodos();
         int nAtivo = 0, nMan = 0, nInat = 0;
         for (Navio n : navios) {
-            if (n.getEstadoOperacional() == EstadoOperacional.ATIVO)              nAtivo++;
+            if (n.getEstadoOperacional() == EstadoOperacional.ATIVO) nAtivo++;
             else if (n.getEstadoOperacional() == EstadoOperacional.EM_MANUTENCAO) nMan++;
-            else                                                                   nInat++;
+            else nInat++;
         }
         lblTotalNavios.setText(String.valueOf(navios.size()));
         lblNaviosAtivos.setText(String.valueOf(nAtivo));
@@ -76,10 +92,19 @@ public class EstatisticasViewController {
         double totalTransp = 0;
         for (Viagem v : viagens) {
             switch (v.getEstado()) {
-                case PLANEADA:  vPlan++;  break;
-                case EM_CURSO:  vCur++;   break;
-                case CONCLUIDA: vConc++; totalTransp += v.getPesoTotalCargas(); break;
-                case CANCELADA: vCanc++;  break;
+                case PLANEADA:
+                    vPlan++;
+                    break;
+                case EM_CURSO:
+                    vCur++;
+                    break;
+                case CONCLUIDA:
+                    vConc++;
+                    totalTransp += v.getPesoTotalCargas();
+                    break;
+                case CANCELADA:
+                    vCanc++;
+                    break;
             }
         }
         lblTotalViagens.setText(String.valueOf(viagens.size()));
@@ -99,7 +124,10 @@ public class EstatisticasViewController {
         // Tripulantes
         List<Tripulante> trip = tripulanteDAL.listarTodos();
         int tDisp = 0, tViagem = 0;
-        for (Tripulante t : trip) { if (t.isDisponivel()) tDisp++; else tViagem++; }
+        for (Tripulante t : trip) {
+            if (t.isDisponivel()) tDisp++;
+            else tViagem++;
+        }
         lblTotalTripulantes.setText(String.valueOf(trip.size()));
         lblTripDisp.setText(String.valueOf(tDisp));
         lblTripEmViagem.setText(String.valueOf(tViagem));

@@ -41,8 +41,8 @@ public class TipoCargaDAL {
                         + tipoCarga.getDesignacao() + "', '"
                         + categoriaOuPadrao(tipoCarga) + "', "
                         + (tipoCarga.isInflamavel() ? 1 : 0) + ", "
-                        + (tipoCarga.isCorrosiva()  ? 1 : 0) + ", "
-                        + (tipoCarga.isToxica()     ? 1 : 0) + ")");
+                        + (tipoCarga.isCorrosiva() ? 1 : 0) + ", "
+                        + (tipoCarga.isToxica() ? 1 : 0) + ")");
     }
 
     public boolean atualizar(TipoCarga tipoCarga) {
@@ -50,8 +50,8 @@ public class TipoCargaDAL {
                 "UPDATE TIPO_CARGA SET designacao='" + tipoCarga.getDesignacao()
                         + "', categoria='" + categoriaOuPadrao(tipoCarga)
                         + "', inflamavel=" + (tipoCarga.isInflamavel() ? 1 : 0)
-                        + ", corrosiva="  + (tipoCarga.isCorrosiva()  ? 1 : 0)
-                        + ", toxica="     + (tipoCarga.isToxica()     ? 1 : 0)
+                        + ", corrosiva=" + (tipoCarga.isCorrosiva() ? 1 : 0)
+                        + ", toxica=" + (tipoCarga.isToxica() ? 1 : 0)
                         + " WHERE id_tipo_carga=" + tipoCarga.getId());
         return true;
     }

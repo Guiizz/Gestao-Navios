@@ -22,26 +22,26 @@ public class ViagemDAL {
     public ViagemDAL(PortoDAL portoDAL, NavioDAL navioDAL) {
         this.portoDAL = portoDAL;
         this.navioDAL = navioDAL;
-        TipoCargaDAL  tipoCargaDAL  = new TipoCargaDAL();
-        CargaDAL      cargaDAL      = new CargaDAL(tipoCargaDAL, portoDAL);
+        TipoCargaDAL tipoCargaDAL = new TipoCargaDAL();
+        CargaDAL cargaDAL = new CargaDAL(tipoCargaDAL, portoDAL);
         TripulanteDAL tripulanteDAL = new TripulanteDAL();
-        this.atribuicaoCargaDAL  = new AtribuicaoCargaDAL(cargaDAL);
+        this.atribuicaoCargaDAL = new AtribuicaoCargaDAL(cargaDAL);
         this.tripulacaoViagemDAL = new TripulacaoViagemDAL(tripulanteDAL);
     }
 
     private RowMapper<Viagem> mapper() {
         return rs -> {
-            int id                        = rs.getInt("id_viagem");
-            LocalDate dataPartida         = rs.getDate("data_partida").toLocalDate();
+            int id = rs.getInt("id_viagem");
+            LocalDate dataPartida = rs.getDate("data_partida").toLocalDate();
             LocalDate dataChegadaPrevista = rs.getDate("data_chegada_prevista").toLocalDate();
-            java.sql.Date dataRealSql     = rs.getDate("data_chegada_real");
-            LocalDate dataChegadaReal     = dataRealSql != null ? dataRealSql.toLocalDate() : null;
+            java.sql.Date dataRealSql = rs.getDate("data_chegada_real");
+            LocalDate dataChegadaReal = dataRealSql != null ? dataRealSql.toLocalDate() : null;
             // estado guardado como nome do enum (ex: PLANEADA)
             EstadoViagem estado = EstadoViagem.valueOf(rs.getString("estado"));
-            Porto origem  = portoDAL.buscarPorId(rs.getInt("id_porto_origem"));
+            Porto origem = portoDAL.buscarPorId(rs.getInt("id_porto_origem"));
             Porto destino = portoDAL.buscarPorId(rs.getInt("id_porto_destino"));
             String observacoes = rs.getString("observacoes");
-            Navio navio   = navioDAL.buscarPorId(rs.getInt("id_navio"));
+            Navio navio = navioDAL.buscarPorId(rs.getInt("id_navio"));
             Viagem viagem = new Viagem(id, dataPartida, dataChegadaPrevista,
                     estado, origem, destino, observacoes, navio);
             viagem.setDataChegadaReal(dataChegadaReal);
@@ -92,10 +92,10 @@ public class ViagemDAL {
     }
 
     public void adicionar(Viagem viagem) {
-        String dataReal  = viagem.getDataChegadaReal() != null ? "'" + viagem.getDataChegadaReal() + "'" : "NULL";
-        String idOrigem  = viagem.getOrigem()  != null ? String.valueOf(viagem.getOrigem().getId())  : "NULL";
+        String dataReal = viagem.getDataChegadaReal() != null ? "'" + viagem.getDataChegadaReal() + "'" : "NULL";
+        String idOrigem = viagem.getOrigem() != null ? String.valueOf(viagem.getOrigem().getId()) : "NULL";
         String idDestino = viagem.getDestino() != null ? String.valueOf(viagem.getDestino().getId()) : "NULL";
-        String idNavio   = viagem.getNavio()   != null ? String.valueOf(viagem.getNavio().getId())   : "NULL";
+        String idNavio = viagem.getNavio() != null ? String.valueOf(viagem.getNavio().getId()) : "NULL";
         ConnectionManager.create(
                 "INSERT INTO VIAGEM (data_partida, data_chegada_prevista, data_chegada_real, estado, id_porto_origem, id_porto_destino, observacoes, id_navio) VALUES ('"
                         + viagem.getDataPartida() + "', '"
@@ -109,10 +109,10 @@ public class ViagemDAL {
     }
 
     public boolean atualizar(Viagem viagem) {
-        String dataReal  = viagem.getDataChegadaReal() != null ? "'" + viagem.getDataChegadaReal() + "'" : "NULL";
-        String idOrigem  = viagem.getOrigem()  != null ? String.valueOf(viagem.getOrigem().getId())  : "NULL";
+        String dataReal = viagem.getDataChegadaReal() != null ? "'" + viagem.getDataChegadaReal() + "'" : "NULL";
+        String idOrigem = viagem.getOrigem() != null ? String.valueOf(viagem.getOrigem().getId()) : "NULL";
         String idDestino = viagem.getDestino() != null ? String.valueOf(viagem.getDestino().getId()) : "NULL";
-        String idNavio   = viagem.getNavio()   != null ? String.valueOf(viagem.getNavio().getId())   : "NULL";
+        String idNavio = viagem.getNavio() != null ? String.valueOf(viagem.getNavio().getId()) : "NULL";
         ConnectionManager.create(
                 "UPDATE VIAGEM SET data_partida='" + viagem.getDataPartida()
                         + "', data_chegada_prevista='" + viagem.getDataChegadaPrevista()

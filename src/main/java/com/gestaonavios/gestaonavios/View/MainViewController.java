@@ -11,13 +11,20 @@ import java.util.List;
 
 public class MainViewController {
 
-    @FXML private StackPane contentArea;
-    @FXML private Button btnNavios;
-    @FXML private Button btnViagens;
-    @FXML private Button btnCargas;
-    @FXML private Button btnTripulacao;
-    @FXML private Button btnPortos;
-    @FXML private Button btnEstatisticas;
+    @FXML
+    private StackPane contentArea;
+    @FXML
+    private Button btnNavios;
+    @FXML
+    private Button btnViagens;
+    @FXML
+    private Button btnCargas;
+    @FXML
+    private Button btnTripulacao;
+    @FXML
+    private Button btnPortos;
+    @FXML
+    private Button btnEstatisticas;
 
     private final List<Button> navButtons = new java.util.ArrayList<>();
 
@@ -28,12 +35,35 @@ public class MainViewController {
                 btnTripulacao, btnPortos, btnEstatisticas));
     }
 
-    @FXML private void mostrarNavios()       { carregar("/com/gestaonavios/gestaonavios/NavioView.fxml",       btnNavios); }
-    @FXML private void mostrarViagens()      { carregar("/com/gestaonavios/gestaonavios/ViagemView.fxml",      btnViagens); }
-    @FXML private void mostrarCargas()       { carregar("/com/gestaonavios/gestaonavios/CargaView.fxml",       btnCargas); }
-    @FXML private void mostrarTripulacao()   { carregar("/com/gestaonavios/gestaonavios/TripulanteView.fxml",  btnTripulacao); }
-    @FXML private void mostrarPortos()       { carregar("/com/gestaonavios/gestaonavios/PortoView.fxml",       btnPortos); }
-    @FXML private void mostrarEstatisticas() { carregar("/com/gestaonavios/gestaonavios/EstatisticasView.fxml",btnEstatisticas); }
+    @FXML
+    private void mostrarNavios() {
+        carregar("/com/gestaonavios/gestaonavios/NavioView.fxml", btnNavios);
+    }
+
+    @FXML
+    private void mostrarViagens() {
+        carregar("/com/gestaonavios/gestaonavios/ViagemView.fxml", btnViagens);
+    }
+
+    @FXML
+    private void mostrarCargas() {
+        carregar("/com/gestaonavios/gestaonavios/CargaView.fxml", btnCargas);
+    }
+
+    @FXML
+    private void mostrarTripulacao() {
+        carregar("/com/gestaonavios/gestaonavios/TripulanteView.fxml", btnTripulacao);
+    }
+
+    @FXML
+    private void mostrarPortos() {
+        carregar("/com/gestaonavios/gestaonavios/PortoView.fxml", btnPortos);
+    }
+
+    @FXML
+    private void mostrarEstatisticas() {
+        carregar("/com/gestaonavios/gestaonavios/EstatisticasView.fxml", btnEstatisticas);
+    }
 
     private void carregar(String caminho, Button botaoAtivo) {
         try {
