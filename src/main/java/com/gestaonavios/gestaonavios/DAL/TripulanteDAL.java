@@ -14,20 +14,25 @@ import java.util.List;
 public class TripulanteDAL {
 
     private static final RowMapper<Tripulante> MAPPER = rs -> {
-        int id                   = rs.getInt("id_tripulante");
-        String nome              = rs.getString("nome");
-        String nif               = rs.getString("nif");
+        int id = rs.getInt("id_tripulante");
+        String nome = rs.getString("nome");
+        String nif = rs.getString("nif");
         // funcao guardada como nome do enum (ex: CAPITAO)
-        FuncaoTripulante funcao  = FuncaoTripulante.valueOf(rs.getString("funcao"));
-        boolean disponivel       = rs.getBoolean("disponivel");
-        String nacionalidade     = rs.getString("nacionalidade");
-        String certificacoes     = rs.getString("certificacoes");
+        FuncaoTripulante funcao = FuncaoTripulante.valueOf(rs.getString("funcao"));
+        boolean disponivel = rs.getBoolean("disponivel");
+        String nacionalidade = rs.getString("nacionalidade");
+        String certificacoes = rs.getString("certificacoes");
         switch (funcao) {
-            case CAPITAO:    return new Capitao(id, nome, nif, disponivel, nacionalidade, certificacoes);
-            case OFICIAL:    return new Oficial(id, nome, nif, disponivel, nacionalidade, certificacoes);
-            case ENGENHEIRO: return new Engenheiro(id, nome, nif, disponivel, nacionalidade, certificacoes);
-            case OPERADOR:   return new Operador(id, nome, nif, disponivel, nacionalidade, certificacoes);
-            default: throw new IllegalArgumentException("Função desconhecida: " + funcao);
+            case CAPITAO:
+                return new Capitao(id, nome, nif, disponivel, nacionalidade, certificacoes);
+            case OFICIAL:
+                return new Oficial(id, nome, nif, disponivel, nacionalidade, certificacoes);
+            case ENGENHEIRO:
+                return new Engenheiro(id, nome, nif, disponivel, nacionalidade, certificacoes);
+            case OPERADOR:
+                return new Operador(id, nome, nif, disponivel, nacionalidade, certificacoes);
+            default:
+                throw new IllegalArgumentException("Função desconhecida: " + funcao);
         }
     };
 

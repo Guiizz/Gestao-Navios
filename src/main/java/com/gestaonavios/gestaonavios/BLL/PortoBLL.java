@@ -14,9 +14,9 @@ import java.util.List;
 
 public class PortoBLL {
 
-    private final PortoDAL  portoDAL;
-    private final NavioDAL  navioDAL;
-    private final CargaDAL  cargaDAL;
+    private final PortoDAL portoDAL;
+    private final NavioDAL navioDAL;
+    private final CargaDAL cargaDAL;
     private final ViagemDAL viagemDAL;
 
     public PortoBLL(PortoDAL portoDAL) {
@@ -25,9 +25,9 @@ public class PortoBLL {
 
     public PortoBLL(PortoDAL portoDAL, NavioDAL navioDAL,
                     CargaDAL cargaDAL, ViagemDAL viagemDAL) {
-        this.portoDAL  = portoDAL;
-        this.navioDAL  = navioDAL;
-        this.cargaDAL  = cargaDAL;
+        this.portoDAL = portoDAL;
+        this.navioDAL = navioDAL;
+        this.cargaDAL = cargaDAL;
         this.viagemDAL = viagemDAL;
     }
 

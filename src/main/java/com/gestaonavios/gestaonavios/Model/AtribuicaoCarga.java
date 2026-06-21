@@ -8,7 +8,8 @@ public class AtribuicaoCarga {
     private double pesoAtribuido;
     private Tanque tanque;
 
-    public AtribuicaoCarga() {}
+    public AtribuicaoCarga() {
+    }
 
     public AtribuicaoCarga(int id, Carga carga, double volumeAtribuido,
                            double pesoAtribuido, Tanque tanque) {
@@ -19,18 +20,43 @@ public class AtribuicaoCarga {
         this.tanque = tanque;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public Carga getCarga() { return carga; }
-    public void setCarga(Carga carga) { this.carga = carga; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public double getVolumeAtribuido() { return volumeAtribuido; }
-    public void setVolumeAtribuido(double volumeAtribuido) { this.volumeAtribuido = volumeAtribuido; }
+    public Carga getCarga() {
+        return carga;
+    }
 
-    public double getPesoAtribuido() { return pesoAtribuido; }
-    public void setPesoAtribuido(double pesoAtribuido) { this.pesoAtribuido = pesoAtribuido; }
+    public void setCarga(Carga carga) {
+        this.carga = carga;
+    }
 
-    public Tanque getTanque() { return tanque; }
-    public void setTanque(Tanque tanque) { this.tanque = tanque; }
+    public double getVolumeAtribuido() {
+        return volumeAtribuido;
+    }
+
+    public void setVolumeAtribuido(double volumeAtribuido) {
+        this.volumeAtribuido = volumeAtribuido;
+    }
+
+    public double getPesoAtribuido() {
+        return pesoAtribuido;
+    }
+
+    public void setPesoAtribuido(double pesoAtribuido) {
+        this.pesoAtribuido = pesoAtribuido;
+    }
+
+    public Tanque getTanque() {
+        return tanque;
+    }
+
+    public void setTanque(Tanque tanque) {
+        this.tanque = tanque;
+    }
 }

@@ -18,8 +18,8 @@
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Portos" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Novo"    onAction="#novo"    styleClass="btn-primary"/>
-        <Button text="Editar"  onAction="#editar"/>
+        <Button text="Novo" onAction="#novo" styleClass="btn-primary"/>
+        <Button text="Editar" onAction="#editar"/>
         <Button text="Remover" onAction="#remover" styleClass="btn-danger"/>
         <Separator orientation="VERTICAL" prefHeight="20"/>
         <Button text="Atualizar" onAction="#atualizar"/>
@@ -28,9 +28,9 @@
     <!-- TABLE -->
     <TableView fx:id="tabela" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
         <columns>
-            <TableColumn fx:id="colId"     text="ID"      prefWidth="50"  minWidth="40"/>
-            <TableColumn fx:id="colNome"   text="Nome"    prefWidth="250" minWidth="150"/>
-            <TableColumn fx:id="colPais"   text="País"    prefWidth="160" minWidth="100"/>
+            <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
+            <TableColumn fx:id="colNome" text="Nome" prefWidth="250" minWidth="150"/>
+            <TableColumn fx:id="colPais" text="País" prefWidth="160" minWidth="100"/>
             <TableColumn fx:id="colLocode" text="UNLOCODE" prefWidth="120" minWidth="80"/>
         </columns>
         <placeholder>

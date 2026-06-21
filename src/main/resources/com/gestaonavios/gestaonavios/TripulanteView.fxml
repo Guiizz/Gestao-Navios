@@ -23,10 +23,10 @@
                    onAction="#pesquisar"/>
         <Button text="Pesquisar" onAction="#pesquisar"/>
         <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Novo"      onAction="#novo"      styleClass="btn-primary"/>
-        <Button text="Editar"    onAction="#editar"/>
+        <Button text="Novo" onAction="#novo" styleClass="btn-primary"/>
+        <Button text="Editar" onAction="#editar"/>
         <Button text="Histórico" onAction="#historico"/>
-        <Button text="Remover"   onAction="#remover"   styleClass="btn-danger"/>
+        <Button text="Remover" onAction="#remover" styleClass="btn-danger"/>
         <Separator orientation="VERTICAL" prefHeight="20"/>
         <Button text="Atualizar" onAction="#atualizar"/>
     </HBox>
@@ -34,12 +34,12 @@
     <!-- TABLE -->
     <TableView fx:id="tabela" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
         <columns>
-            <TableColumn fx:id="colId"            text="ID"           prefWidth="50"  minWidth="40"/>
-            <TableColumn fx:id="colNome"          text="Nome"         prefWidth="200" minWidth="120"/>
-            <TableColumn fx:id="colNif"           text="NIF"          prefWidth="100" minWidth="80"/>
-            <TableColumn fx:id="colFuncao"        text="Função"       prefWidth="120" minWidth="90"/>
+            <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
+            <TableColumn fx:id="colNome" text="Nome" prefWidth="200" minWidth="120"/>
+            <TableColumn fx:id="colNif" text="NIF" prefWidth="100" minWidth="80"/>
+            <TableColumn fx:id="colFuncao" text="Função" prefWidth="120" minWidth="90"/>
             <TableColumn fx:id="colNacionalidade" text="Nacionalidade" prefWidth="120" minWidth="90"/>
-            <TableColumn fx:id="colDisponivel"    text="Disponível"   prefWidth="90"  minWidth="70"/>
+            <TableColumn fx:id="colDisponivel" text="Disponível" prefWidth="90" minWidth="70"/>
             <TableColumn fx:id="colCertificacoes" text="Certificações" prefWidth="200" minWidth="100"/>
         </columns>
         <placeholder>

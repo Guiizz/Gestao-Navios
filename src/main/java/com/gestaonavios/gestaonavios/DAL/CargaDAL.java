@@ -21,7 +21,7 @@ public class CargaDAL {
     private RowMapper<Carga> mapper() {
         return rs -> {
             TipoCarga tipoCarga = tipoCargaDAL.buscarPorId(rs.getInt("id_tipo_carga"));
-            Porto portoCarga    = portoDAL.buscarPorId(rs.getInt("id_porto_carga"));
+            Porto portoCarga = portoDAL.buscarPorId(rs.getInt("id_porto_carga"));
             Porto portoDescarga = portoDAL.buscarPorId(rs.getInt("id_porto_descarga"));
             return new Carga(
                     rs.getInt("id_carga"),
@@ -46,8 +46,8 @@ public class CargaDAL {
     }
 
     public void adicionar(Carga carga) {
-        String idTipoCarga    = carga.getTipoCarga()     != null ? String.valueOf(carga.getTipoCarga().getId())     : "NULL";
-        String idPortoCarga   = carga.getPortoCarga()    != null ? String.valueOf(carga.getPortoCarga().getId())    : "NULL";
+        String idTipoCarga = carga.getTipoCarga() != null ? String.valueOf(carga.getTipoCarga().getId()) : "NULL";
+        String idPortoCarga = carga.getPortoCarga() != null ? String.valueOf(carga.getPortoCarga().getId()) : "NULL";
         String idPortoDescarga = carga.getPortoDescarga() != null ? String.valueOf(carga.getPortoDescarga().getId()) : "NULL";
         ConnectionManager.create(
                 "INSERT INTO CARGA (designacao, id_tipo_carga, volume, peso, id_porto_carga, id_porto_descarga) VALUES ('"
@@ -60,8 +60,8 @@ public class CargaDAL {
     }
 
     public void atualizar(Carga carga) {
-        String idTipoCarga    = carga.getTipoCarga()     != null ? String.valueOf(carga.getTipoCarga().getId())     : "NULL";
-        String idPortoCarga   = carga.getPortoCarga()    != null ? String.valueOf(carga.getPortoCarga().getId())    : "NULL";
+        String idTipoCarga = carga.getTipoCarga() != null ? String.valueOf(carga.getTipoCarga().getId()) : "NULL";
+        String idPortoCarga = carga.getPortoCarga() != null ? String.valueOf(carga.getPortoCarga().getId()) : "NULL";
         String idPortoDescarga = carga.getPortoDescarga() != null ? String.valueOf(carga.getPortoDescarga().getId()) : "NULL";
         ConnectionManager.create(
                 "UPDATE CARGA SET designacao='" + carga.getDesignacao()

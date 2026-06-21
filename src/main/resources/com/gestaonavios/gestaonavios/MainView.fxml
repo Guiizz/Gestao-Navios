@@ -16,7 +16,9 @@
     <!-- HEADER -->
     <top>
         <HBox styleClass="header" alignment="CENTER_LEFT" spacing="12" minHeight="52">
-            <padding><Insets top="12" bottom="12" left="20" right="20"/></padding>
+            <padding>
+                <Insets top="12" bottom="12" left="20" right="20"/>
+            </padding>
             <Label text="Sistema de Gestão de Navios Petroleiros" styleClass="header-title"/>
         </HBox>
     </top>
@@ -24,14 +26,22 @@
     <!-- SIDEBAR -->
     <left>
         <VBox styleClass="sidebar" spacing="4" prefWidth="210">
-            <padding><Insets top="24" bottom="24" left="10" right="10"/></padding>
-            <Button fx:id="btnNavios"      text="Navios"       styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarNavios"/>
-            <Button fx:id="btnViagens"     text="Viagens"      styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarViagens"/>
-            <Button fx:id="btnCargas"      text="Cargas"       styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarCargas"/>
-            <Button fx:id="btnTripulacao"  text="Tripulação"   styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarTripulacao"/>
-            <Button fx:id="btnPortos"      text="Portos"       styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarPortos"/>
+            <padding>
+                <Insets top="24" bottom="24" left="10" right="10"/>
+            </padding>
+            <Button fx:id="btnNavios" text="Navios" styleClass="nav-button" maxWidth="Infinity"
+                    onAction="#mostrarNavios"/>
+            <Button fx:id="btnViagens" text="Viagens" styleClass="nav-button" maxWidth="Infinity"
+                    onAction="#mostrarViagens"/>
+            <Button fx:id="btnCargas" text="Cargas" styleClass="nav-button" maxWidth="Infinity"
+                    onAction="#mostrarCargas"/>
+            <Button fx:id="btnTripulacao" text="Tripulação" styleClass="nav-button" maxWidth="Infinity"
+                    onAction="#mostrarTripulacao"/>
+            <Button fx:id="btnPortos" text="Portos" styleClass="nav-button" maxWidth="Infinity"
+                    onAction="#mostrarPortos"/>
             <Separator style="-fx-background-color: #283593;" VBox.vgrow="NEVER"/>
-            <Button fx:id="btnEstatisticas" text="Estatísticas" styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarEstatisticas"/>
+            <Button fx:id="btnEstatisticas" text="Estatísticas" styleClass="nav-button" maxWidth="Infinity"
+                    onAction="#mostrarEstatisticas"/>
             <Region VBox.vgrow="ALWAYS"/>
         </VBox>
     </left>

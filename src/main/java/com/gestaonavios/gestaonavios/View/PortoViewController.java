@@ -23,23 +23,28 @@ import java.util.Optional;
 
 public class PortoViewController {
 
-    @FXML private TableView<Porto> tabela;
-    @FXML private TableColumn<Porto, Integer> colId;
-    @FXML private TableColumn<Porto, String>  colNome;
-    @FXML private TableColumn<Porto, String>  colPais;
-    @FXML private TableColumn<Porto, String>  colLocode;
+    @FXML
+    private TableView<Porto> tabela;
+    @FXML
+    private TableColumn<Porto, Integer> colId;
+    @FXML
+    private TableColumn<Porto, String> colNome;
+    @FXML
+    private TableColumn<Porto, String> colPais;
+    @FXML
+    private TableColumn<Porto, String> colLocode;
 
     private PortoController portoController;
 
     @FXML
     public void initialize() {
-        PortoDAL    portoDAL    = new PortoDAL();
+        PortoDAL portoDAL = new PortoDAL();
         TipoNavioDAL tipoNavioDAL = new TipoNavioDAL();
         TipoCargaDAL tipoCargaDAL = new TipoCargaDAL();
-        NavioDAL    navioDAL    = new NavioDAL(portoDAL, tipoNavioDAL);
-        CargaDAL    cargaDAL    = new CargaDAL(tipoCargaDAL, portoDAL);
-        ViagemDAL   viagemDAL   = new ViagemDAL(portoDAL, navioDAL);
-        PortoBLL    portoBLL    = new PortoBLL(portoDAL, navioDAL, cargaDAL, viagemDAL);
+        NavioDAL navioDAL = new NavioDAL(portoDAL, tipoNavioDAL);
+        CargaDAL cargaDAL = new CargaDAL(tipoCargaDAL, portoDAL);
+        ViagemDAL viagemDAL = new ViagemDAL(portoDAL, navioDAL);
+        PortoBLL portoBLL = new PortoBLL(portoDAL, navioDAL, cargaDAL, viagemDAL);
         portoController = new PortoController(portoBLL);
 
         colId.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
@@ -50,7 +55,10 @@ public class PortoViewController {
         carregarDados();
     }
 
-    @FXML private void atualizar() { carregarDados(); }
+    @FXML
+    private void atualizar() {
+        carregarDados();
+    }
 
     @FXML
     private void novo() {
@@ -68,7 +76,10 @@ public class PortoViewController {
     @FXML
     private void editar() {
         Porto sel = tabela.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione um porto para editar."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione um porto para editar.");
+            return;
+        }
         mostrarDialogoPorto(sel).ifPresent(p -> {
             try {
                 portoController.atualizar(p);
@@ -83,7 +94,10 @@ public class PortoViewController {
     @FXML
     private void remover() {
         Porto sel = tabela.getSelectionModel().getSelectedItem();
-        if (sel == null) { AlertUtils.aviso("Selecione um porto para remover."); return; }
+        if (sel == null) {
+            AlertUtils.aviso("Selecione um porto para remover.");
+            return;
+        }
         if (AlertUtils.confirmar("Confirma a remoção do porto '" + sel.getNome() + "'?")) {
             try {
                 portoController.remover(sel.getId());
@@ -106,11 +120,12 @@ public class PortoViewController {
         dialog.getDialogPane().getButtonTypes().addAll(btnGuardar, ButtonType.CANCEL);
 
         GridPane form = new GridPane();
-        form.setHgap(10); form.setVgap(10);
+        form.setHgap(10);
+        form.setVgap(10);
         form.setPadding(new Insets(20));
 
-        TextField tfNome   = new TextField();
-        TextField tfPais   = new TextField();
+        TextField tfNome = new TextField();
+        TextField tfPais = new TextField();
         TextField tfLocode = new TextField();
         tfLocode.setPromptText("ex: PTLEI, GBLON");
 
@@ -120,11 +135,16 @@ public class PortoViewController {
             tfLocode.setText(existente.getCodigoUNLOCODE());
         }
 
-        form.add(new Label("Nome:"), 0, 0);    form.add(tfNome, 1, 0);
-        form.add(new Label("País:"), 0, 1);    form.add(tfPais, 1, 1);
-        form.add(new Label("UNLOCODE:"), 0, 2); form.add(tfLocode, 1, 2);
+        form.add(new Label("Nome:"), 0, 0);
+        form.add(tfNome, 1, 0);
+        form.add(new Label("País:"), 0, 1);
+        form.add(tfPais, 1, 1);
+        form.add(new Label("UNLOCODE:"), 0, 2);
+        form.add(tfLocode, 1, 2);
 
-        tfNome.setPrefWidth(220); tfPais.setPrefWidth(220); tfLocode.setPrefWidth(220);
+        tfNome.setPrefWidth(220);
+        tfPais.setPrefWidth(220);
+        tfLocode.setPrefWidth(220);
         dialog.getDialogPane().setContent(form);
 
         Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
