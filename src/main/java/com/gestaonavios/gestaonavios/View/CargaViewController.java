@@ -14,6 +14,9 @@ import com.gestaonavios.gestaonavios.Model.Carga;
 import com.gestaonavios.gestaonavios.Model.Porto;
 import com.gestaonavios.gestaonavios.Model.TipoCarga;
 import com.gestaonavios.gestaonavios.Utils.AlertUtils;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUI;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUtils;
+import javafx.event.ActionEvent;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -98,14 +101,8 @@ public class CargaViewController {
     @FXML
     private void nova() {
         mostrarDialogoCarga(null).ifPresent(c -> {
-            try {
-                cargaController.registar(c.getDesignacao(), c.getTipoCarga(),
-                        c.getVolume(), c.getPeso(), c.getPortoCarga(), c.getPortoDescarga());
-                carregarDados();
-                AlertUtils.sucesso("Carga registada com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+            carregarDados();
+            AlertUtils.sucesso("Carga registada com sucesso.");
         });
     }
 
@@ -117,13 +114,8 @@ public class CargaViewController {
             return;
         }
         mostrarDialogoCarga(sel).ifPresent(c -> {
-            try {
-                cargaController.atualizar(c);
-                carregarDados();
-                AlertUtils.sucesso("Carga atualizada com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+            carregarDados();
+            AlertUtils.sucesso("Carga atualizada com sucesso.");
         });
     }
 
@@ -226,29 +218,71 @@ public class CargaViewController {
         cbPortoCarga.setPrefWidth(220);
         cbPortoDescarga.setPrefWidth(220);
 
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(320);
+        form.add(lblErro, 0, r, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
-        btnOk.setDisable(tfDesignacao.getText().isBlank());
-        tfDesignacao.textProperty().addListener((obs, o, n) -> btnOk.setDisable(n.trim().isBlank()));
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(tfDesignacao, tfPeso, tfVolume);
+        ValidacaoUI.limparAoEditar(cbTipo, cbPortoCarga, cbPortoDescarga);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
+        Carga[] resultado = new Carga[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+
+            String des = tfDesignacao.getText().trim();
+            val.verificar(tfDesignacao, () -> ValidacaoUtils.exigirTexto(des, "A designação da carga"));
+            if (cbTipo.getValue() == null) val.marcar(cbTipo, "O tipo de carga é obrigatório.");
+
+            double peso = 0;
             try {
-                int id = existente != null ? existente.getId() : 0;
-                String des = tfDesignacao.getText().trim();
-                double peso = Double.parseDouble(tfPeso.getText().trim().replace(",", "."));
-                double volume = Double.parseDouble(tfVolume.getText().trim().replace(",", "."));
-                TipoCarga tipo = cbTipo.getValue();
-                Porto portoCarga = cbPortoCarga.getValue();
-                Porto portoDescarga = cbPortoDescarga.getValue();
-                return new Carga(id, des, tipo, volume, peso, portoCarga, portoDescarga);
+                peso = Double.parseDouble(tfPeso.getText().trim().replace(",", "."));
+                double p = peso;
+                val.verificar(tfPeso, () -> ValidacaoUtils.exigirPositivo(p, "O peso"));
             } catch (NumberFormatException e) {
-                AlertUtils.erro("Verifique os campos numéricos (peso, volume).");
-                return null;
+                val.marcar(tfPeso, "Peso inválido — indique um número (ex: 25000).");
+            }
+
+            double volume = 0;
+            try {
+                volume = Double.parseDouble(tfVolume.getText().trim().replace(",", "."));
+                double v = volume;
+                val.verificar(tfVolume, () -> ValidacaoUtils.exigirPositivo(v, "O volume"));
+            } catch (NumberFormatException e) {
+                val.marcar(tfVolume, "Volume inválido — indique um número (ex: 26000).");
+            }
+
+            Porto pCarga = cbPortoCarga.getValue();
+            Porto pDescarga = cbPortoDescarga.getValue();
+            if (pCarga == null) val.marcar(cbPortoCarga, "O porto de carga é obrigatório.");
+            if (pDescarga == null) val.marcar(cbPortoDescarga, "O porto de descarga é obrigatório.");
+            if (pCarga != null && pDescarga != null && pCarga.getId() == pDescarga.getId())
+                val.marcar(cbPortoDescarga, "O porto de carga e o porto de descarga não podem ser o mesmo.");
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            Carga carga = new Carga(existente != null ? existente.getId() : 0,
+                    des, cbTipo.getValue(), volume, peso, pCarga, pDescarga);
+            try {
+                if (existente == null) cargaController.registar(carga.getDesignacao(), carga.getTipoCarga(),
+                        carga.getVolume(), carga.getPeso(), carga.getPortoCarga(), carga.getPortoDescarga());
+                else cargaController.atualizar(carga);
+                resultado[0] = carga;
+            } catch (Exception e) {
+                lblErro.setText(e.getMessage());
+                ev.consume();
             }
         });
 
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 

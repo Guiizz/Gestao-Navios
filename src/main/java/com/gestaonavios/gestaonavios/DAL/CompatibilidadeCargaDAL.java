@@ -33,25 +33,23 @@ public class CompatibilidadeCargaDAL {
 
     public List<CompatibilidadeCarga> listarPorTipoNavio(int idTipoNavio) {
         return ConnectionManager.select(
-                "SELECT * FROM COMPATIBILIDADE_CARGA WHERE id_tipo_navio = " + idTipoNavio, mapper());
+                "SELECT * FROM COMPATIBILIDADE_CARGA WHERE id_tipo_navio = ?", mapper(), idTipoNavio);
     }
 
     public void adicionar(CompatibilidadeCarga compatibilidade) {
-        String idTipoNavio = compatibilidade.getTipoNavio() != null
-                ? String.valueOf(compatibilidade.getTipoNavio().getId()) : "NULL";
-        String idTipoCarga = compatibilidade.getTipoCarga() != null
-                ? String.valueOf(compatibilidade.getTipoCarga().getId()) : "NULL";
+        Integer idTipoNavio = compatibilidade.getTipoNavio() != null
+                ? compatibilidade.getTipoNavio().getId() : null;
+        Integer idTipoCarga = compatibilidade.getTipoCarga() != null
+                ? compatibilidade.getTipoCarga().getId() : null;
         ConnectionManager.create(
-                "INSERT INTO COMPATIBILIDADE_CARGA (id_tipo_navio, id_tipo_carga, limite_cargas) VALUES ("
-                        + idTipoNavio + ", "
-                        + idTipoCarga + ", "
-                        + compatibilidade.getLimiteCarga() + ")");
+                "INSERT INTO COMPATIBILIDADE_CARGA (id_tipo_navio, id_tipo_carga, limite_cargas) VALUES (?, ?, ?)",
+                idTipoNavio, idTipoCarga, compatibilidade.getLimiteCarga());
     }
 
     public boolean remover(int idTipoNavio, int idTipoCarga) {
         ConnectionManager.create(
-                "DELETE FROM COMPATIBILIDADE_CARGA WHERE id_tipo_navio=" + idTipoNavio
-                        + " AND id_tipo_carga=" + idTipoCarga);
+                "DELETE FROM COMPATIBILIDADE_CARGA WHERE id_tipo_navio=? AND id_tipo_carga=?",
+                idTipoNavio, idTipoCarga);
         return true;
     }
 }

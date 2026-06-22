@@ -76,6 +76,8 @@ public class TripulanteBLL {
         ValidacaoUtils.exigirExistencia(tripulanteDAL.buscarPorId(id), "Tripulante", id);
         if (viagemDAL.tripulanteEmViagemAtiva(id))
             throw new Exception("Não é possível remover este tripulante — está associado a uma viagem ativa.");
+        if (!viagemDAL.listarPorTripulante(id).isEmpty())
+            throw new Exception("Não é possível remover este tripulante porque tem histórico de viagens associado.");
         tripulanteDAL.remover(id);
     }
 }

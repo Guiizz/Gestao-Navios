@@ -2,8 +2,10 @@ package com.gestaonavios.gestaonavios.BLL;
 
 import com.gestaonavios.gestaonavios.DAL.CargaDAL;
 import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
+import com.gestaonavios.gestaonavios.Model.AtribuicaoCarga;
 import com.gestaonavios.gestaonavios.Model.Carga;
 import com.gestaonavios.gestaonavios.Model.TipoCarga;
+import com.gestaonavios.gestaonavios.Model.Viagem;
 import com.gestaonavios.gestaonavios.Utils.ValidacaoUtils;
 
 import java.util.ArrayList;
@@ -65,6 +67,10 @@ public class CargaBLL {
         ValidacaoUtils.exigirExistencia(cargaDAL.buscarPorId(id), "Carga", id);
         if (viagemDAL.cargaEmViagemAtiva(id))
             throw new Exception("Não é possível remover esta carga — está associada a uma viagem ativa.");
+        for (Viagem v : viagemDAL.listarTodos())
+            for (AtribuicaoCarga ac : v.getCargas())
+                if (ac.getCarga() != null && ac.getCarga().getId() == id)
+                    throw new Exception("Não é possível remover esta carga porque tem histórico de viagens associado.");
         cargaDAL.remover(id);
     }
 

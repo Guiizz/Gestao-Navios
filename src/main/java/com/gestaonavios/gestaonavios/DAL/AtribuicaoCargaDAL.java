@@ -46,28 +46,23 @@ public class AtribuicaoCargaDAL {
                         + "t.id_navio AS t_id_navio "
                         + "FROM ATRIBUICAO_CARGA ac "
                         + "LEFT JOIN TANQUE t ON ac.id_tanque = t.id_tanque "
-                        + "WHERE ac.id_viagem = " + idViagem, mapper());
+                        + "WHERE ac.id_viagem = ?", mapper(), idViagem);
     }
 
     public void adicionar(int idViagem, AtribuicaoCarga ac) {
-        String idTanque = ac.getTanque() != null ? String.valueOf(ac.getTanque().getId()) : "NULL";
+        Integer idTanque = ac.getTanque() != null ? ac.getTanque().getId() : null;
         ConnectionManager.create(
-                "INSERT INTO ATRIBUICAO_CARGA (id_viagem, id_carga, id_tanque, volume_atribuido, peso_atribuido) VALUES ("
-                        + idViagem + ", "
-                        + ac.getCarga().getId() + ", "
-                        + idTanque + ", "
-                        + ac.getVolumeAtribuido() + ", "
-                        + ac.getPesoAtribuido() + ")");
+                "INSERT INTO ATRIBUICAO_CARGA (id_viagem, id_carga, id_tanque, volume_atribuido, peso_atribuido) VALUES (?, ?, ?, ?, ?)",
+                idViagem, ac.getCarga().getId(), idTanque, ac.getVolumeAtribuido(), ac.getPesoAtribuido());
     }
 
     public void removerPorViagem(int idViagem) {
-        ConnectionManager.create("DELETE FROM ATRIBUICAO_CARGA WHERE id_viagem=" + idViagem);
+        ConnectionManager.create("DELETE FROM ATRIBUICAO_CARGA WHERE id_viagem=?", idViagem);
     }
 
     public boolean removerPorViagemECarga(int idViagem, int idCarga) {
         ConnectionManager.create(
-                "DELETE FROM ATRIBUICAO_CARGA WHERE id_viagem=" + idViagem
-                        + " AND id_carga=" + idCarga);
+                "DELETE FROM ATRIBUICAO_CARGA WHERE id_viagem=? AND id_carga=?", idViagem, idCarga);
         return true;
     }
 }
