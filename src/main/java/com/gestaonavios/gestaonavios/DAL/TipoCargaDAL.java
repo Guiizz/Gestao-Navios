@@ -31,33 +31,27 @@ public class TipoCargaDAL {
 
     public TipoCarga buscarPorId(int id) {
         List<TipoCarga> result = ConnectionManager.select(
-                "SELECT * FROM TIPO_CARGA WHERE id_tipo_carga = " + id, MAPPER);
+                "SELECT * FROM TIPO_CARGA WHERE id_tipo_carga = ?", MAPPER, id);
         return result.isEmpty() ? null : result.get(0);
     }
 
     public void adicionar(TipoCarga tipoCarga) {
         ConnectionManager.create(
-                "INSERT INTO TIPO_CARGA (designacao, categoria, inflamavel, corrosiva, toxica) VALUES ('"
-                        + tipoCarga.getDesignacao() + "', '"
-                        + categoriaOuPadrao(tipoCarga) + "', "
-                        + (tipoCarga.isInflamavel() ? 1 : 0) + ", "
-                        + (tipoCarga.isCorrosiva() ? 1 : 0) + ", "
-                        + (tipoCarga.isToxica() ? 1 : 0) + ")");
+                "INSERT INTO TIPO_CARGA (designacao, categoria, inflamavel, corrosiva, toxica) VALUES (?, ?, ?, ?, ?)",
+                tipoCarga.getDesignacao(), categoriaOuPadrao(tipoCarga),
+                tipoCarga.isInflamavel(), tipoCarga.isCorrosiva(), tipoCarga.isToxica());
     }
 
     public boolean atualizar(TipoCarga tipoCarga) {
         ConnectionManager.create(
-                "UPDATE TIPO_CARGA SET designacao='" + tipoCarga.getDesignacao()
-                        + "', categoria='" + categoriaOuPadrao(tipoCarga)
-                        + "', inflamavel=" + (tipoCarga.isInflamavel() ? 1 : 0)
-                        + ", corrosiva=" + (tipoCarga.isCorrosiva() ? 1 : 0)
-                        + ", toxica=" + (tipoCarga.isToxica() ? 1 : 0)
-                        + " WHERE id_tipo_carga=" + tipoCarga.getId());
+                "UPDATE TIPO_CARGA SET designacao=?, categoria=?, inflamavel=?, corrosiva=?, toxica=? WHERE id_tipo_carga=?",
+                tipoCarga.getDesignacao(), categoriaOuPadrao(tipoCarga),
+                tipoCarga.isInflamavel(), tipoCarga.isCorrosiva(), tipoCarga.isToxica(), tipoCarga.getId());
         return true;
     }
 
     public boolean remover(int id) {
-        ConnectionManager.create("DELETE FROM TIPO_CARGA WHERE id_tipo_carga=" + id);
+        ConnectionManager.create("DELETE FROM TIPO_CARGA WHERE id_tipo_carga=?", id);
         return true;
     }
 }

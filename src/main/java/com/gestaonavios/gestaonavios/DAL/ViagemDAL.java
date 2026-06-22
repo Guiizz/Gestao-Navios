@@ -57,20 +57,20 @@ public class ViagemDAL {
 
     public Viagem buscarPorId(int id) {
         List<Viagem> result = ConnectionManager.select(
-                "SELECT * FROM VIAGEM WHERE id_viagem = " + id, mapper());
+                "SELECT * FROM VIAGEM WHERE id_viagem = ?", mapper(), id);
         return result.isEmpty() ? null : result.get(0);
     }
 
     public List<Viagem> listarPorNavio(int idNavio) {
         return ConnectionManager.select(
-                "SELECT * FROM VIAGEM WHERE id_navio = " + idNavio, mapper());
+                "SELECT * FROM VIAGEM WHERE id_navio = ?", mapper(), idNavio);
     }
 
     public List<Viagem> listarPorTripulante(int idTripulante) {
         return ConnectionManager.select(
                 "SELECT v.* FROM VIAGEM v"
                         + " INNER JOIN TRIPULACAO_VIAGEM tv ON v.id_viagem = tv.id_viagem"
-                        + " WHERE tv.id_tripulante = " + idTripulante, mapper());
+                        + " WHERE tv.id_tripulante = ?", mapper(), idTripulante);
     }
 
     public boolean cargaEmViagemAtiva(int idCarga) {
@@ -92,44 +92,30 @@ public class ViagemDAL {
     }
 
     public void adicionar(Viagem viagem) {
-        String dataReal = viagem.getDataChegadaReal() != null ? "'" + viagem.getDataChegadaReal() + "'" : "NULL";
-        String idOrigem = viagem.getOrigem() != null ? String.valueOf(viagem.getOrigem().getId()) : "NULL";
-        String idDestino = viagem.getDestino() != null ? String.valueOf(viagem.getDestino().getId()) : "NULL";
-        String idNavio = viagem.getNavio() != null ? String.valueOf(viagem.getNavio().getId()) : "NULL";
+        Integer idOrigem = viagem.getOrigem() != null ? viagem.getOrigem().getId() : null;
+        Integer idDestino = viagem.getDestino() != null ? viagem.getDestino().getId() : null;
+        Integer idNavio = viagem.getNavio() != null ? viagem.getNavio().getId() : null;
         ConnectionManager.create(
-                "INSERT INTO VIAGEM (data_partida, data_chegada_prevista, data_chegada_real, estado, id_porto_origem, id_porto_destino, observacoes, id_navio) VALUES ('"
-                        + viagem.getDataPartida() + "', '"
-                        + viagem.getDataChegadaPrevista() + "', "
-                        + dataReal + ", '"
-                        + viagem.getEstado().name() + "', "
-                        + idOrigem + ", "
-                        + idDestino + ", '"
-                        + viagem.getObservacoes() + "', "
-                        + idNavio + ")");
+                "INSERT INTO VIAGEM (data_partida, data_chegada_prevista, data_chegada_real, estado, id_porto_origem, id_porto_destino, observacoes, id_navio) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                viagem.getDataPartida(), viagem.getDataChegadaPrevista(), viagem.getDataChegadaReal(),
+                viagem.getEstado().name(), idOrigem, idDestino, viagem.getObservacoes(), idNavio);
     }
 
     public boolean atualizar(Viagem viagem) {
-        String dataReal = viagem.getDataChegadaReal() != null ? "'" + viagem.getDataChegadaReal() + "'" : "NULL";
-        String idOrigem = viagem.getOrigem() != null ? String.valueOf(viagem.getOrigem().getId()) : "NULL";
-        String idDestino = viagem.getDestino() != null ? String.valueOf(viagem.getDestino().getId()) : "NULL";
-        String idNavio = viagem.getNavio() != null ? String.valueOf(viagem.getNavio().getId()) : "NULL";
+        Integer idOrigem = viagem.getOrigem() != null ? viagem.getOrigem().getId() : null;
+        Integer idDestino = viagem.getDestino() != null ? viagem.getDestino().getId() : null;
+        Integer idNavio = viagem.getNavio() != null ? viagem.getNavio().getId() : null;
         ConnectionManager.create(
-                "UPDATE VIAGEM SET data_partida='" + viagem.getDataPartida()
-                        + "', data_chegada_prevista='" + viagem.getDataChegadaPrevista()
-                        + "', data_chegada_real=" + dataReal
-                        + ", estado='" + viagem.getEstado().name()
-                        + "', id_porto_origem=" + idOrigem
-                        + ", id_porto_destino=" + idDestino
-                        + ", observacoes='" + viagem.getObservacoes()
-                        + "', id_navio=" + idNavio
-                        + " WHERE id_viagem=" + viagem.getId());
+                "UPDATE VIAGEM SET data_partida=?, data_chegada_prevista=?, data_chegada_real=?, estado=?, id_porto_origem=?, id_porto_destino=?, observacoes=?, id_navio=? WHERE id_viagem=?",
+                viagem.getDataPartida(), viagem.getDataChegadaPrevista(), viagem.getDataChegadaReal(),
+                viagem.getEstado().name(), idOrigem, idDestino, viagem.getObservacoes(), idNavio, viagem.getId());
         return true;
     }
 
     public boolean remover(int id) {
         atribuicaoCargaDAL.removerPorViagem(id);
         tripulacaoViagemDAL.removerPorViagem(id);
-        ConnectionManager.create("DELETE FROM VIAGEM WHERE id_viagem=" + id);
+        ConnectionManager.create("DELETE FROM VIAGEM WHERE id_viagem=?", id);
         return true;
     }
 

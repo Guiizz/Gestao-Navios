@@ -46,35 +46,28 @@ public class TripulanteDAL {
 
     public Tripulante buscarPorId(int id) {
         List<Tripulante> result = ConnectionManager.select(
-                "SELECT * FROM TRIPULANTE WHERE id_tripulante = " + id, MAPPER);
+                "SELECT * FROM TRIPULANTE WHERE id_tripulante = ?", MAPPER, id);
         return result.isEmpty() ? null : result.get(0);
     }
 
     public void adicionar(Tripulante tripulante) {
         ConnectionManager.create(
-                "INSERT INTO TRIPULANTE (nome, nif, funcao, disponivel, nacionalidade, certificacoes) VALUES ('"
-                        + tripulante.getNome() + "', '"
-                        + tripulante.getNif() + "', '"
-                        + tripulante.getFuncaoEnum().name() + "', "
-                        + (tripulante.isDisponivel() ? 1 : 0) + ", '"
-                        + tripulante.getNacionalidade() + "', '"
-                        + tripulante.getCertificacoes() + "')");
+                "INSERT INTO TRIPULANTE (nome, nif, funcao, disponivel, nacionalidade, certificacoes) VALUES (?, ?, ?, ?, ?, ?)",
+                tripulante.getNome(), tripulante.getNif(), tripulante.getFuncaoEnum().name(),
+                tripulante.isDisponivel(), tripulante.getNacionalidade(), tripulante.getCertificacoes());
     }
 
     public boolean atualizar(Tripulante tripulante) {
         ConnectionManager.create(
-                "UPDATE TRIPULANTE SET nome='" + tripulante.getNome()
-                        + "', nif='" + tripulante.getNif()
-                        + "', funcao='" + tripulante.getFuncaoEnum().name()
-                        + "', disponivel=" + (tripulante.isDisponivel() ? 1 : 0)
-                        + ", nacionalidade='" + tripulante.getNacionalidade()
-                        + "', certificacoes='" + tripulante.getCertificacoes()
-                        + "' WHERE id_tripulante=" + tripulante.getId());
+                "UPDATE TRIPULANTE SET nome=?, nif=?, funcao=?, disponivel=?, nacionalidade=?, certificacoes=? WHERE id_tripulante=?",
+                tripulante.getNome(), tripulante.getNif(), tripulante.getFuncaoEnum().name(),
+                tripulante.isDisponivel(), tripulante.getNacionalidade(),
+                tripulante.getCertificacoes(), tripulante.getId());
         return true;
     }
 
     public boolean remover(int id) {
-        ConnectionManager.create("DELETE FROM TRIPULANTE WHERE id_tripulante=" + id);
+        ConnectionManager.create("DELETE FROM TRIPULANTE WHERE id_tripulante=?", id);
         return true;
     }
 }
