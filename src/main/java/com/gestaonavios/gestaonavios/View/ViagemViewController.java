@@ -25,6 +25,9 @@ import com.gestaonavios.gestaonavios.Model.Viagem;
 import com.gestaonavios.gestaonavios.Model.enums.EstadoViagem;
 import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 import com.gestaonavios.gestaonavios.Utils.AlertUtils;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUI;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUtils;
+import javafx.event.ActionEvent;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -176,15 +179,9 @@ public class ViagemViewController {
             return;
         }
 
-        mostrarDialogoCriarViagem(navios, portos).ifPresent(v -> {
-            try {
-                viagemController.criarViagem(v.getNavio(), v.getOrigem(), v.getDestino(),
-                        v.getDataPartida(), v.getDataChegadaPrevista(), v.getObservacoes());
-                carregarDados();
-                AlertUtils.sucesso("Viagem criada com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+        mostrarDialogoCriarViagem(navios, portos).ifPresent(ok -> {
+            carregarDados();
+            AlertUtils.sucesso("Viagem criada com sucesso.");
         });
     }
 
@@ -199,15 +196,9 @@ public class ViagemViewController {
             AlertUtils.aviso("Só é possível editar viagens no estado PLANEADA.");
             return;
         }
-        mostrarDialogoEditarViagem(sel).ifPresent(dados -> {
-            try {
-                viagemController.editarViagem(sel.getId(),
-                        (LocalDate) dados[0], (LocalDate) dados[1], (String) dados[2]);
-                carregarDados();
-                AlertUtils.sucesso("Viagem atualizada.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+        mostrarDialogoEditarViagem(sel).ifPresent(ok -> {
+            carregarDados();
+            AlertUtils.sucesso("Viagem atualizada.");
         });
     }
 
@@ -332,20 +323,12 @@ public class ViagemViewController {
             return;
         }
 
-        mostrarDialogoAdicionarCarga(compativeis).ifPresent(dados -> {
-            try {
-                Carga carga = (Carga) dados[0];
-                double peso = (Double) dados[1];
-                double vol = (Double) dados[2];
-                viagemController.adicionarCarga(sel.getId(), carga, peso, vol);
-                carregarDados();
-                tabelaViagens.getSelectionModel().select(
-                        tabelaViagens.getItems().stream()
-                                .filter(v -> v.getId() == sel.getId()).findFirst().orElse(null));
-                AlertUtils.sucesso("Carga adicionada à viagem.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+        mostrarDialogoAdicionarCarga(sel, compativeis).ifPresent(ok -> {
+            carregarDados();
+            tabelaViagens.getSelectionModel().select(
+                    tabelaViagens.getItems().stream()
+                            .filter(v -> v.getId() == sel.getId()).findFirst().orElse(null));
+            AlertUtils.sucesso("Carga adicionada à viagem.");
         });
     }
 
@@ -401,21 +384,12 @@ public class ViagemViewController {
             return;
         }
 
-        mostrarDialogoAdicionarTripulante(disponiveis).ifPresent(dados -> {
-            try {
-                Tripulante t = (Tripulante) dados[0];
-                FuncaoTripulante funcao = (FuncaoTripulante) dados[1];
-                LocalDate embarque = (LocalDate) dados[2];
-                LocalDate desemb = (LocalDate) dados[3];
-                viagemController.adicionarTripulante(sel.getId(), t, funcao, embarque, desemb);
-                carregarDados();
-                tabelaViagens.getSelectionModel().select(
-                        tabelaViagens.getItems().stream()
-                                .filter(v -> v.getId() == sel.getId()).findFirst().orElse(null));
-                AlertUtils.sucesso("Tripulante adicionado à viagem.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+        mostrarDialogoAdicionarTripulante(sel, disponiveis).ifPresent(ok -> {
+            carregarDados();
+            tabelaViagens.getSelectionModel().select(
+                    tabelaViagens.getItems().stream()
+                            .filter(v -> v.getId() == sel.getId()).findFirst().orElse(null));
+            AlertUtils.sucesso("Tripulante adicionado à viagem.");
         });
     }
 
@@ -465,8 +439,8 @@ public class ViagemViewController {
 
     // ── Dialogs ───────────────────────────────────────────────────────────────
 
-    private Optional<Viagem> mostrarDialogoCriarViagem(List<Navio> navios, List<Porto> portos) {
-        Dialog<Viagem> dialog = new Dialog<>();
+    private Optional<Boolean> mostrarDialogoCriarViagem(List<Navio> navios, List<Porto> portos) {
+        Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Nova Viagem");
         dialog.setHeaderText(null);
 
@@ -529,36 +503,67 @@ public class ViagemViewController {
         cbNavio.setPrefWidth(280);
         cbOrigem.setPrefWidth(280);
         cbDestino.setPrefWidth(280);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(360);
+        form.add(lblErro, 0, r, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
-        btnOk.setDisable(true);
-        Runnable check = () -> btnOk.setDisable(
-                cbNavio.getValue() == null || cbOrigem.getValue() == null ||
-                        cbDestino.getValue() == null || dpPartida.getValue() == null || dpChegada.getValue() == null);
-        cbNavio.valueProperty().addListener((o, a, b) -> check.run());
-        cbOrigem.valueProperty().addListener((o, a, b) -> check.run());
-        cbDestino.valueProperty().addListener((o, a, b) -> check.run());
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(cbNavio, cbOrigem, cbDestino);
+        ValidacaoUI.limparAoEditar(dpPartida, dpChegada);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
+        Boolean[] resultado = new Boolean[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
             Navio n = cbNavio.getValue();
             Porto or = cbOrigem.getValue();
             Porto de = cbDestino.getValue();
             LocalDate part = dpPartida.getValue();
             LocalDate cheg = dpChegada.getValue();
             String obs = tfObs.getText().trim();
-            return new Viagem(0, part, cheg, null, or, de, obs.isEmpty() ? null : obs, n);
+
+            if (n == null) val.marcar(cbNavio, "O navio é obrigatório.");
+            if (or == null) val.marcar(cbOrigem, "O porto de origem é obrigatório.");
+            if (de == null) val.marcar(cbDestino, "O porto de destino é obrigatório.");
+            if (part == null) val.marcar(dpPartida, "A data de partida é obrigatória.");
+            if (cheg == null) val.marcar(dpChegada, "A chegada prevista é obrigatória.");
+            if (or != null && de != null && or.getId() == de.getId())
+                val.marcar(cbDestino, "A origem e o destino têm de ser diferentes.");
+            if (part != null && part.isBefore(LocalDate.now()))
+                val.marcar(dpPartida, "A data de partida não pode ser no passado.");
+            if (part != null && cheg != null && !cheg.isAfter(part))
+                val.marcar(dpChegada, "A chegada prevista tem de ser posterior à partida.");
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            try {
+                viagemController.criarViagem(n, or, de, part, cheg, obs.isEmpty() ? null : obs);
+                resultado[0] = Boolean.TRUE;
+            } catch (Exception e) {
+                String m = e.getMessage();
+                if (m != null && m.toLowerCase().contains("navio")) val.marcar(cbNavio, m);
+                else lblErro.setText(m);
+                ev.consume();
+            }
         });
 
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 
     /**
      * Returns Object[] {LocalDate partida, LocalDate chegada, String obs}
      */
-    private Optional<Object[]> mostrarDialogoEditarViagem(Viagem v) {
-        Dialog<Object[]> dialog = new Dialog<>();
+    private Optional<Boolean> mostrarDialogoEditarViagem(Viagem v) {
+        Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Editar Viagem #" + v.getId());
         dialog.setHeaderText(null);
 
@@ -582,22 +587,56 @@ public class ViagemViewController {
         form.add(tfObs, 1, 2);
 
         tfObs.setPrefWidth(220);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(360);
+        form.add(lblErro, 0, 3, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(dpPartida, dpChegada);
+
+        Boolean[] resultado = new Boolean[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+            LocalDate part = dpPartida.getValue();
+            LocalDate cheg = dpChegada.getValue();
             String obs = tfObs.getText().trim();
-            return new Object[]{dpPartida.getValue(), dpChegada.getValue(), obs.isEmpty() ? null : obs};
+
+            if (part == null) val.marcar(dpPartida, "A data de partida é obrigatória.");
+            if (cheg == null) val.marcar(dpChegada, "A chegada prevista é obrigatória.");
+            if (part != null && part.isBefore(LocalDate.now()))
+                val.marcar(dpPartida, "A data de partida não pode ser no passado.");
+            if (part != null && cheg != null && !cheg.isAfter(part))
+                val.marcar(dpChegada, "A chegada prevista tem de ser posterior à partida.");
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            try {
+                viagemController.editarViagem(v.getId(), part, cheg, obs.isEmpty() ? null : obs);
+                resultado[0] = Boolean.TRUE;
+            } catch (Exception e) {
+                lblErro.setText(e.getMessage());
+                ev.consume();
+            }
         });
 
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 
     /**
      * Returns Object[] {Carga, Double peso, Double volume}
      */
-    private Optional<Object[]> mostrarDialogoAdicionarCarga(List<Carga> compativeis) {
-        Dialog<Object[]> dialog = new Dialog<>();
+    private Optional<Boolean> mostrarDialogoAdicionarCarga(Viagem sel, List<Carga> compativeis) {
+        Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Adicionar Carga à Viagem");
         dialog.setHeaderText(null);
 
@@ -645,33 +684,69 @@ public class ViagemViewController {
         cbCarga.setPrefWidth(320);
         tfPeso.setPrefWidth(180);
         tfVol.setPrefWidth(180);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(360);
+        form.add(lblErro, 0, 3, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
-        btnOk.setDisable(true);
-        cbCarga.valueProperty().addListener((o, a, b) -> btnOk.setDisable(b == null));
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(tfPeso, tfVol);
+        ValidacaoUI.limparAoEditar(cbCarga);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
+        Boolean[] resultado = new Boolean[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+            Carga c = cbCarga.getValue();
+            if (c == null) val.marcar(cbCarga, "Selecione uma carga.");
+
+            double peso = 0;
             try {
-                Carga c = cbCarga.getValue();
-                double peso = Double.parseDouble(tfPeso.getText().trim().replace(",", "."));
-                double vol = Double.parseDouble(tfVol.getText().trim().replace(",", "."));
-                return new Object[]{c, peso, vol};
+                peso = Double.parseDouble(tfPeso.getText().trim().replace(",", "."));
+                double p = peso;
+                val.verificar(tfPeso, () -> ValidacaoUtils.exigirPositivo(p, "O peso atribuído"));
             } catch (NumberFormatException e) {
-                AlertUtils.erro("Verifique os campos numéricos (peso, volume).");
-                return null;
+                val.marcar(tfPeso, "Peso inválido — indique um número.");
+            }
+
+            double vol = 0;
+            try {
+                vol = Double.parseDouble(tfVol.getText().trim().replace(",", "."));
+                double vv = vol;
+                val.verificar(tfVol, () -> ValidacaoUtils.exigirPositivo(vv, "O volume atribuído"));
+            } catch (NumberFormatException e) {
+                val.marcar(tfVol, "Volume inválido — indique um número.");
+            }
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            try {
+                viagemController.adicionarCarga(sel.getId(), c, peso, vol);
+                resultado[0] = Boolean.TRUE;
+            } catch (Exception e) {
+                String m = e.getMessage();
+                if (m != null && m.toLowerCase().contains("capacidade")) val.marcar(tfPeso, m);
+                else lblErro.setText(m);
+                ev.consume();
             }
         });
 
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 
     /**
      * Returns Object[] {Tripulante, FuncaoTripulante, LocalDate embarque, LocalDate desembarque}
      */
-    private Optional<Object[]> mostrarDialogoAdicionarTripulante(List<Tripulante> disponiveis) {
-        Dialog<Object[]> dialog = new Dialog<>();
+    private Optional<Boolean> mostrarDialogoAdicionarTripulante(Viagem sel, List<Tripulante> disponiveis) {
+        Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Adicionar Tripulante à Viagem");
         dialog.setHeaderText(null);
 
@@ -715,22 +790,51 @@ public class ViagemViewController {
 
         cbTrip.setPrefWidth(280);
         cbFuncao.setPrefWidth(280);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(360);
+        form.add(lblErro, 0, 4, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
-        btnOk.setDisable(true);
-        Runnable check = () -> btnOk.setDisable(cbTrip.getValue() == null || cbFuncao.getValue() == null);
-        cbTrip.valueProperty().addListener((o, a, b) -> check.run());
-        cbFuncao.valueProperty().addListener((o, a, b) -> check.run());
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(cbTrip, cbFuncao);
+        ValidacaoUI.limparAoEditar(dpEmbarque, dpDesembarque);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
-            return new Object[]{
-                    cbTrip.getValue(), cbFuncao.getValue(),
-                    dpEmbarque.getValue(), dpDesembarque.getValue()
-            };
+        Boolean[] resultado = new Boolean[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+            Tripulante t = cbTrip.getValue();
+            FuncaoTripulante funcao = cbFuncao.getValue();
+            LocalDate embarque = dpEmbarque.getValue();
+            LocalDate desemb = dpDesembarque.getValue();
+
+            if (t == null) val.marcar(cbTrip, "Selecione um tripulante.");
+            if (funcao == null) val.marcar(cbFuncao, "A função na viagem é obrigatória.");
+            if (embarque == null) val.marcar(dpEmbarque, "A data de embarque é obrigatória.");
+            if (embarque != null && desemb != null && desemb.isBefore(embarque))
+                val.marcar(dpDesembarque, "O desembarque não pode ser anterior ao embarque.");
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            try {
+                viagemController.adicionarTripulante(sel.getId(), t, funcao, embarque, desemb);
+                resultado[0] = Boolean.TRUE;
+            } catch (Exception e) {
+                String m = e.getMessage();
+                if (m != null && m.toLowerCase().contains("disponível")) val.marcar(cbTrip, m);
+                else lblErro.setText(m);
+                ev.consume();
+            }
         });
 
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 
