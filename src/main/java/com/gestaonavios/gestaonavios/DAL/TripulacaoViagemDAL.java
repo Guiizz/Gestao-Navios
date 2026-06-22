@@ -31,29 +31,23 @@ public class TripulacaoViagemDAL {
 
     public List<TripulacaoViagem> listarPorViagem(int idViagem) {
         return ConnectionManager.select(
-                "SELECT * FROM TRIPULACAO_VIAGEM WHERE id_viagem = " + idViagem, mapper());
+                "SELECT * FROM TRIPULACAO_VIAGEM WHERE id_viagem = ?", mapper(), idViagem);
     }
 
     public void adicionar(int idViagem, TripulacaoViagem tv) {
-        String embarque = tv.getDataEmbarque() != null ? "'" + tv.getDataEmbarque() + "'" : "NULL";
-        String desembarque = tv.getDataDesembarque() != null ? "'" + tv.getDataDesembarque() + "'" : "NULL";
         ConnectionManager.create(
-                "INSERT INTO TRIPULACAO_VIAGEM (id_viagem, id_tripulante, funcao_na_viagem, data_embarque, data_desembarque) VALUES ("
-                        + idViagem + ", "
-                        + tv.getTripulante().getId() + ", '"
-                        + tv.getFuncaoNaViagem().name() + "', "
-                        + embarque + ", "
-                        + desembarque + ")");
+                "INSERT INTO TRIPULACAO_VIAGEM (id_viagem, id_tripulante, funcao_na_viagem, data_embarque, data_desembarque) VALUES (?, ?, ?, ?, ?)",
+                idViagem, tv.getTripulante().getId(), tv.getFuncaoNaViagem().name(),
+                tv.getDataEmbarque(), tv.getDataDesembarque());
     }
 
     public void removerPorViagem(int idViagem) {
-        ConnectionManager.create("DELETE FROM TRIPULACAO_VIAGEM WHERE id_viagem=" + idViagem);
+        ConnectionManager.create("DELETE FROM TRIPULACAO_VIAGEM WHERE id_viagem=?", idViagem);
     }
 
     public boolean removerPorViagemETripulante(int idViagem, int idTripulante) {
         ConnectionManager.create(
-                "DELETE FROM TRIPULACAO_VIAGEM WHERE id_viagem=" + idViagem
-                        + " AND id_tripulante=" + idTripulante);
+                "DELETE FROM TRIPULACAO_VIAGEM WHERE id_viagem=? AND id_tripulante=?", idViagem, idTripulante);
         return true;
     }
 }

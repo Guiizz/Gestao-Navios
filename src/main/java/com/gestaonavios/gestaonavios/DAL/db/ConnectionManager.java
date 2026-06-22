@@ -35,13 +35,24 @@ public class ConnectionManager {
                 config.getProperty("db.user"), config.getProperty("db.password"));
     }
 
-    public static <T> List<T> select(String sql, RowMapper<T> mapper) {
+    // Liga os parâmetros (?) de forma segura — evita injeção SQL e problemas com aspas/datas
+    private static void bind(PreparedStatement stmt, Object... params) throws SQLException {
+        if (params != null) {
+            for (int i = 0; i < params.length; i++) {
+                stmt.setObject(i + 1, params[i]);
+            }
+        }
+    }
+
+    public static <T> List<T> select(String sql, RowMapper<T> mapper, Object... params) {
         List<T> results = new ArrayList<>();
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                results.add(mapper.map(rs));
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            bind(stmt, params);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    results.add(mapper.map(rs));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,12 +60,18 @@ public class ConnectionManager {
         return results;
     }
 
-    public static void create(String sql) {
+    public static int create(String sql, Object... params) {
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(sql);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            bind(stmt, params);
+            return stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            // 547 = violação de constraint (FK/CHECK) no SQL Server
+            if (e.getErrorCode() == 547) {
+                throw new RuntimeException(
+                        "Não é possível concluir a operação porque o registo está associado a outros dados.", e);
+            }
+            throw new RuntimeException("Erro na base de dados: " + e.getMessage(), e);
         }
     }
 }
