@@ -17,6 +17,9 @@ import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
 import com.gestaonavios.gestaonavios.Model.Viagem;
 import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 import com.gestaonavios.gestaonavios.Utils.AlertUtils;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUI;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUtils;
+import javafx.event.ActionEvent;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -95,17 +98,9 @@ public class TripulanteViewController {
 
     @FXML
     private void novo() {
-        mostrarDialogoTripulante(null).ifPresent(dados -> {
-            try {
-                tripulanteController.registar(
-                        (String) dados[0], (String) dados[1],
-                        (FuncaoTripulante) dados[2], (String) dados[3],
-                        (String) dados[4], (Boolean) dados[5]);
-                carregarDados();
-                AlertUtils.sucesso("Tripulante registado com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+        mostrarDialogoTripulante(null).ifPresent(ok -> {
+            carregarDados();
+            AlertUtils.sucesso("Tripulante registado com sucesso.");
         });
     }
 
@@ -116,30 +111,9 @@ public class TripulanteViewController {
             AlertUtils.aviso("Selecione um tripulante para editar.");
             return;
         }
-        mostrarDialogoEditar(sel).ifPresent(dados -> {
-            try {
-                FuncaoTripulante novaFuncao = (FuncaoTripulante) dados[0];
-                Tripulante atualizado = (Tripulante) dados[1];
-                if (novaFuncao != sel.getFuncaoEnum()) {
-                    tripulanteController.alterarFuncao(sel, novaFuncao);
-                    // re-load to get updated object, then atualizar remaining fields
-                    Tripulante reloaded = tripulanteController.buscarPorId(sel.getId());
-                    if (reloaded != null) {
-                        reloaded.setNome(atualizado.getNome());
-                        reloaded.setNif(atualizado.getNif());
-                        reloaded.setNacionalidade(atualizado.getNacionalidade());
-                        reloaded.setCertificacoes(atualizado.getCertificacoes());
-                        reloaded.setDisponivel(atualizado.isDisponivel());
-                        tripulanteController.atualizar(reloaded);
-                    }
-                } else {
-                    tripulanteController.atualizar(atualizado);
-                }
-                carregarDados();
-                AlertUtils.sucesso("Tripulante atualizado.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+        mostrarDialogoEditar(sel).ifPresent(ok -> {
+            carregarDados();
+            AlertUtils.sucesso("Tripulante atualizado.");
         });
     }
 
@@ -206,8 +180,8 @@ public class TripulanteViewController {
     /**
      * Returns Object[] {nome, nif, funcao, nacionalidade, certificacoes, disponivel}
      */
-    private Optional<Object[]> mostrarDialogoTripulante(Tripulante existente) {
-        Dialog<Object[]> dialog = new Dialog<>();
+    private Optional<Boolean> mostrarDialogoTripulante(Tripulante existente) {
+        Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Novo Tripulante");
         dialog.setHeaderText(null);
 
@@ -245,31 +219,60 @@ public class TripulanteViewController {
 
         tfN.setPrefWidth(220);
         cbFunc.setPrefWidth(220);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(320);
+        form.add(lblErro, 0, r, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
-        btnOk.setDisable(true);
-        tfN.textProperty().addListener((obs, o, n) ->
-                btnOk.setDisable(n.trim().isBlank() || cbFunc.getValue() == null));
-        cbFunc.valueProperty().addListener((obs, o, n) ->
-                btnOk.setDisable(tfN.getText().trim().isBlank() || n == null));
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(tfN, tfNif, tfNac, tfCert);
+        ValidacaoUI.limparAoEditar(cbFunc);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
-            return new Object[]{
-                    tfN.getText().trim(), tfNif.getText().trim(),
-                    cbFunc.getValue(), tfNac.getText().trim(),
-                    tfCert.getText().trim(), cbDisp.isSelected()
-            };
+        Boolean[] resultado = new Boolean[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+            String nome = tfN.getText().trim();
+            String nif = tfNif.getText().trim();
+            String nac = tfNac.getText().trim();
+            String cert = tfCert.getText().trim();
+            FuncaoTripulante func = cbFunc.getValue();
+
+            val.verificar(tfN, () -> ValidacaoUtils.exigirTexto(nome, "O nome do tripulante"));
+            val.verificar(tfNif, () -> ValidacaoUtils.exigirTexto(nif, "O NIF do tripulante"));
+            if (!nif.isEmpty()) val.verificar(tfNif, () -> ValidacaoUtils.exigirFormatoNif(nif));
+            val.verificar(tfNac, () -> ValidacaoUtils.exigirTexto(nac, "A nacionalidade do tripulante"));
+            if (func == null) val.marcar(cbFunc, "A função do tripulante é obrigatória.");
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            try {
+                tripulanteController.registar(nome, nif, func, nac, cert, cbDisp.isSelected());
+                resultado[0] = Boolean.TRUE;
+            } catch (Exception e) {
+                String m = e.getMessage();
+                if (m != null && m.toUpperCase().contains("NIF")) val.marcar(tfNif, m);
+                else lblErro.setText(m);
+                ev.consume();
+            }
         });
+
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 
     /**
      * Returns Object[] {novaFuncao, tripulanteAtualizado}
      */
-    private Optional<Object[]> mostrarDialogoEditar(Tripulante existente) {
-        Dialog<Object[]> dialog = new Dialog<>();
+    private Optional<Boolean> mostrarDialogoEditar(Tripulante existente) {
+        Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Editar Tripulante");
         dialog.setHeaderText(null);
 
@@ -306,18 +309,70 @@ public class TripulanteViewController {
 
         tfN.setPrefWidth(220);
         cbFunc.setPrefWidth(220);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(320);
+        form.add(lblErro, 0, r, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(tfN, tfNif, tfNac, tfCert);
+        ValidacaoUI.limparAoEditar(cbFunc);
+
+        Boolean[] resultado = new Boolean[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+            String nome = tfN.getText().trim();
+            String nif = tfNif.getText().trim();
+            String nac = tfNac.getText().trim();
+            String cert = tfCert.getText().trim();
             FuncaoTripulante novaFuncao = cbFunc.getValue();
-            existente.setNome(tfN.getText().trim());
-            existente.setNif(tfNif.getText().trim());
-            existente.setNacionalidade(tfNac.getText().trim());
-            existente.setCertificacoes(tfCert.getText().trim());
-            existente.setDisponivel(cbDisp.isSelected());
-            return new Object[]{novaFuncao, existente};
+
+            val.verificar(tfN, () -> ValidacaoUtils.exigirTexto(nome, "O nome do tripulante"));
+            val.verificar(tfNif, () -> ValidacaoUtils.exigirTexto(nif, "O NIF do tripulante"));
+            if (!nif.isEmpty()) val.verificar(tfNif, () -> ValidacaoUtils.exigirFormatoNif(nif));
+            val.verificar(tfNac, () -> ValidacaoUtils.exigirTexto(nac, "A nacionalidade do tripulante"));
+            if (novaFuncao == null) val.marcar(cbFunc, "A função do tripulante é obrigatória.");
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            try {
+                existente.setNome(nome);
+                existente.setNif(nif);
+                existente.setNacionalidade(nac);
+                existente.setCertificacoes(cert);
+                existente.setDisponivel(cbDisp.isSelected());
+                if (novaFuncao != existente.getFuncaoEnum()) {
+                    tripulanteController.alterarFuncao(existente, novaFuncao);
+                    Tripulante reloaded = tripulanteController.buscarPorId(existente.getId());
+                    if (reloaded != null) {
+                        reloaded.setNome(nome);
+                        reloaded.setNif(nif);
+                        reloaded.setNacionalidade(nac);
+                        reloaded.setCertificacoes(cert);
+                        reloaded.setDisponivel(cbDisp.isSelected());
+                        tripulanteController.atualizar(reloaded);
+                    }
+                } else {
+                    tripulanteController.atualizar(existente);
+                }
+                resultado[0] = Boolean.TRUE;
+            } catch (Exception e) {
+                String m = e.getMessage();
+                if (m != null && m.toUpperCase().contains("NIF")) val.marcar(tfNif, m);
+                else lblErro.setText(m);
+                ev.consume();
+            }
         });
+
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 

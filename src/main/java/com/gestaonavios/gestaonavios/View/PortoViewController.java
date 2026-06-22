@@ -10,6 +10,9 @@ import com.gestaonavios.gestaonavios.DAL.TipoNavioDAL;
 import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
 import com.gestaonavios.gestaonavios.Model.Porto;
 import com.gestaonavios.gestaonavios.Utils.AlertUtils;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUI;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUtils;
+import javafx.event.ActionEvent;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -63,13 +66,8 @@ public class PortoViewController {
     @FXML
     private void novo() {
         mostrarDialogoPorto(null).ifPresent(p -> {
-            try {
-                portoController.registar(p.getNome(), p.getPais(), p.getCodigoUNLOCODE());
-                carregarDados();
-                AlertUtils.sucesso("Porto registado com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+            carregarDados();
+            AlertUtils.sucesso("Porto registado com sucesso.");
         });
     }
 
@@ -81,13 +79,8 @@ public class PortoViewController {
             return;
         }
         mostrarDialogoPorto(sel).ifPresent(p -> {
-            try {
-                portoController.atualizar(p);
-                carregarDados();
-                AlertUtils.sucesso("Porto atualizado com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+            carregarDados();
+            AlertUtils.sucesso("Porto atualizado com sucesso.");
         });
     }
 
@@ -145,19 +138,52 @@ public class PortoViewController {
         tfNome.setPrefWidth(220);
         tfPais.setPrefWidth(220);
         tfLocode.setPrefWidth(220);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(320);
+        form.add(lblErro, 0, 3, 2, 1);
+
         dialog.getDialogPane().setContent(form);
 
-        Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
-        btnOk.setDisable(tfNome.getText().isBlank());
-        tfNome.textProperty().addListener((obs, o, n) -> btnOk.setDisable(n.trim().isBlank()));
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(tfNome, tfPais, tfLocode);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
-            int id = existente != null ? existente.getId() : 0;
-            Porto p = new Porto(id, tfNome.getText().trim(), tfPais.getText().trim(), tfLocode.getText().trim());
-            return p;
+        Porto[] resultado = new Porto[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+
+            String nome = tfNome.getText().trim();
+            String pais = tfPais.getText().trim();
+            String locode = tfLocode.getText().trim().toUpperCase();
+
+            val.verificar(tfNome, () -> ValidacaoUtils.exigirTexto(nome, "O nome do porto"));
+            val.verificar(tfPais, () -> ValidacaoUtils.exigirTexto(pais, "O país do porto"));
+            val.verificar(tfLocode, () -> ValidacaoUtils.exigirTexto(locode, "O código UNLOCODE"));
+            if (!locode.isEmpty())
+                val.verificar(tfLocode, () -> ValidacaoUtils.exigirFormatoUnlocode(locode));
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            Porto porto = new Porto(existente != null ? existente.getId() : 0, nome, pais, locode);
+            try {
+                if (existente == null) portoController.registar(porto.getNome(), porto.getPais(), porto.getCodigoUNLOCODE());
+                else portoController.atualizar(porto);
+                resultado[0] = porto;
+            } catch (Exception e) {
+                String m = e.getMessage();
+                if (m != null && m.toUpperCase().contains("UNLOCODE")) val.marcar(tfLocode, m);
+                else lblErro.setText(m);
+                ev.consume();
+            }
         });
 
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 
