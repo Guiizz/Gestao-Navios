@@ -59,6 +59,13 @@
     </dependencies>
 
     <build>
+        <!-- Os testes unitários foram movidos para src/TestesUni (em vez do default src/test/java) -->
+        <testSourceDirectory>src/TestesUni/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/TestesUni/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
