@@ -46,8 +46,7 @@ public class TripulacaoViagemDAL {
     }
 
     public boolean removerPorViagemETripulante(int idViagem, int idTripulante) {
-        ConnectionManager.create(
-                "DELETE FROM TRIPULACAO_VIAGEM WHERE id_viagem=? AND id_tripulante=?", idViagem, idTripulante);
-        return true;
+        return ConnectionManager.create(
+                "DELETE FROM TRIPULACAO_VIAGEM WHERE id_viagem=? AND id_tripulante=?", idViagem, idTripulante) > 0;
     }
 }

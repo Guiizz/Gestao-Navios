@@ -13,16 +13,38 @@ public class ConnectionManager {
 
     private static final Properties config = carregarConfig();
 
-    // Lê a configuração da BD a partir de src/bd.properties
+    // Lê a configuração da BD. Procura, por esta ordem:
+    //   1) no classpath (bd.properties empacotado em resources/JAR);
+    //   2) em src/bd.properties (localização usada em desenvolvimento);
+    //   3) em bd.properties na pasta de trabalho atual.
+    // Assim funciona tanto a correr pelo Maven a partir da raiz como num JAR.
     private static Properties carregarConfig() {
         Properties props = new Properties();
-        Path ficheiro = Path.of("src", "bd.properties");
-        try (InputStream in = Files.newInputStream(ficheiro)) {
-            props.load(in);
-        } catch (IOException e) {
-            throw new RuntimeException("Não foi possível ler " + ficheiro.toAbsolutePath(), e);
+
+        // 1) classpath
+        try (InputStream in = ConnectionManager.class.getResourceAsStream("/bd.properties")) {
+            if (in != null) {
+                props.load(in);
+                return props;
+            }
+        } catch (IOException ignored) {
+            // tenta as alternativas no sistema de ficheiros
         }
-        return props;
+
+        // 2) e 3) sistema de ficheiros
+        for (Path ficheiro : new Path[]{Path.of("src", "bd.properties"), Path.of("bd.properties")}) {
+            if (Files.exists(ficheiro)) {
+                try (InputStream in = Files.newInputStream(ficheiro)) {
+                    props.load(in);
+                    return props;
+                } catch (IOException e) {
+                    throw new RuntimeException("Não foi possível ler " + ficheiro.toAbsolutePath(), e);
+                }
+            }
+        }
+
+        throw new RuntimeException("Configuração da BD não encontrada "
+                + "(bd.properties no classpath, em src/ ou na pasta de trabalho).");
     }
 
     private static Connection getConnection() throws SQLException {
@@ -55,7 +77,8 @@ public class ConnectionManager {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            // Não engolir o erro: uma falha de leitura não pode passar por "sem dados".
+            throw new RuntimeException("Erro ao consultar a base de dados: " + e.getMessage(), e);
         }
         return results;
     }

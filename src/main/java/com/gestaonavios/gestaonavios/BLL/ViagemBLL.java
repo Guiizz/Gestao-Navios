@@ -8,6 +8,7 @@ import com.gestaonavios.gestaonavios.Model.Tripulante;
 import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
 import com.gestaonavios.gestaonavios.Model.Viagem;
 import com.gestaonavios.gestaonavios.Model.enums.EstadoViagem;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 import com.gestaonavios.gestaonavios.Utils.ValidacaoUtils;
 
 import java.time.LocalDate;
@@ -75,6 +76,7 @@ public class ViagemBLL {
 
         switch (viagem.getEstado()) {
             case PLANEADA:
+                exigirCondicoesArranque(viagem);
                 viagem.setEstado(EstadoViagem.EM_CURSO);
                 break;
             case EM_CURSO:
@@ -109,6 +111,21 @@ public class ViagemBLL {
         viagem.setEstado(EstadoViagem.CANCELADA);
         libertarTripulantes(viagem);
         viagemDAL.atualizar(viagem);
+    }
+
+    /** Uma viagem só pode passar a EM_CURSO se tiver carga e um capitão a bordo. */
+    private void exigirCondicoesArranque(Viagem viagem) throws Exception {
+        if (viagem.getCargas() == null || viagem.getCargas().isEmpty())
+            throw new Exception("Não é possível iniciar a viagem: não tem nenhuma carga atribuída.");
+        boolean temCapitao = false;
+        if (viagem.getTripulacao() != null)
+            for (TripulacaoViagem tv : viagem.getTripulacao())
+                if (tv.getFuncaoNaViagem() == FuncaoTripulante.CAPITAO) {
+                    temCapitao = true;
+                    break;
+                }
+        if (!temCapitao)
+            throw new Exception("Não é possível iniciar a viagem: é obrigatório um capitão na tripulação.");
     }
 
     private void libertarTripulantes(Viagem viagem) throws Exception {

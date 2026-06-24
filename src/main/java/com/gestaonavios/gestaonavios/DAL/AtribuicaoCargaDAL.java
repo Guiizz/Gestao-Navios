@@ -61,8 +61,7 @@ public class AtribuicaoCargaDAL {
     }
 
     public boolean removerPorViagemECarga(int idViagem, int idCarga) {
-        ConnectionManager.create(
-                "DELETE FROM ATRIBUICAO_CARGA WHERE id_viagem=? AND id_carga=?", idViagem, idCarga);
-        return true;
+        return ConnectionManager.create(
+                "DELETE FROM ATRIBUICAO_CARGA WHERE id_viagem=? AND id_carga=?", idViagem, idCarga) > 0;
     }
 }

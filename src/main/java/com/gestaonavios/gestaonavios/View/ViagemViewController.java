@@ -4,6 +4,7 @@ import com.gestaonavios.gestaonavios.BLL.CargaBLL;
 import com.gestaonavios.gestaonavios.BLL.CompatibilidadeBLL;
 import com.gestaonavios.gestaonavios.BLL.NavioBLL;
 import com.gestaonavios.gestaonavios.BLL.PortoBLL;
+import com.gestaonavios.gestaonavios.BLL.TanqueBLL;
 import com.gestaonavios.gestaonavios.BLL.TripulanteBLL;
 import com.gestaonavios.gestaonavios.BLL.ViagemBLL;
 import com.gestaonavios.gestaonavios.Controller.ViagemController;
@@ -11,6 +12,7 @@ import com.gestaonavios.gestaonavios.DAL.CargaDAL;
 import com.gestaonavios.gestaonavios.DAL.CompatibilidadeCargaDAL;
 import com.gestaonavios.gestaonavios.DAL.NavioDAL;
 import com.gestaonavios.gestaonavios.DAL.PortoDAL;
+import com.gestaonavios.gestaonavios.DAL.TanqueDAL;
 import com.gestaonavios.gestaonavios.DAL.TipoCargaDAL;
 import com.gestaonavios.gestaonavios.DAL.TipoNavioDAL;
 import com.gestaonavios.gestaonavios.DAL.TripulanteDAL;
@@ -19,6 +21,7 @@ import com.gestaonavios.gestaonavios.Model.AtribuicaoCarga;
 import com.gestaonavios.gestaonavios.Model.Carga;
 import com.gestaonavios.gestaonavios.Model.Navio;
 import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.Tanque;
 import com.gestaonavios.gestaonavios.Model.Tripulante;
 import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
 import com.gestaonavios.gestaonavios.Model.Viagem;
@@ -111,7 +114,8 @@ public class ViagemViewController {
         CompatibilidadeCargaDAL compatibilidadeCargaDAL = new CompatibilidadeCargaDAL(tipoNavioDAL, tipoCargaDAL);
         CompatibilidadeBLL compatibilidadeBLL = new CompatibilidadeBLL(tipoNavioDAL, compatibilidadeCargaDAL);
         ViagemBLL viagemBLL = new ViagemBLL(viagemDAL, navioBLL, tripulanteBLL, compatibilidadeBLL);
-        viagemController = new ViagemController(viagemBLL, navioBLL, portoBLL, cargaBLL, tripulanteBLL);
+        TanqueBLL tanqueBLL = new TanqueBLL(new TanqueDAL());
+        viagemController = new ViagemController(viagemBLL, navioBLL, portoBLL, cargaBLL, tripulanteBLL, tanqueBLL);
 
         // Viagens table columns
         colId.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
@@ -667,6 +671,26 @@ public class ViagemViewController {
         TextField tfVol = new TextField();
         tfVol.setPromptText("m³");
 
+        // Tanque (compartimento) do navio onde a carga é alojada — opcional.
+        // Os tanques são gerados na BD automaticamente se ainda não existirem.
+        List<Tanque> tanques = new ArrayList<>();
+        tanques.add(null); // opção "sem tanque específico"
+        tanques.addAll(viagemController.listarTanquesDoNavio(sel.getNavio()));
+        ComboBox<Tanque> cbTanque = new ComboBox<>(FXCollections.observableArrayList(tanques));
+        cbTanque.getSelectionModel().selectFirst();
+        cbTanque.setConverter(new javafx.util.StringConverter<>() {
+            @Override
+            public String toString(Tanque t) {
+                return t == null ? "— sem tanque específico —"
+                        : "Tanque #" + t.getNumero() + " (" + t.getCapacidade() + " t)";
+            }
+
+            @Override
+            public Tanque fromString(String s) {
+                return null;
+            }
+        });
+
         cbCarga.valueProperty().addListener((obs, o, c) -> {
             if (c != null) {
                 tfPeso.setText(String.valueOf(c.getPeso()));
@@ -680,16 +704,19 @@ public class ViagemViewController {
         form.add(tfPeso, 1, 1);
         form.add(new Label("Volume atribuído (m³):"), 0, 2);
         form.add(tfVol, 1, 2);
+        form.add(new Label("Tanque:"), 0, 3);
+        form.add(cbTanque, 1, 3);
 
         cbCarga.setPrefWidth(320);
         tfPeso.setPrefWidth(180);
         tfVol.setPrefWidth(180);
+        cbTanque.setPrefWidth(320);
 
         Label lblErro = new Label();
         lblErro.setStyle("-fx-text-fill: #d33;");
         lblErro.setWrapText(true);
         lblErro.setMaxWidth(360);
-        form.add(lblErro, 0, 3, 2, 1);
+        form.add(lblErro, 0, 4, 2, 1);
 
         dialog.getDialogPane().setContent(form);
 
@@ -728,7 +755,7 @@ public class ViagemViewController {
             }
 
             try {
-                viagemController.adicionarCarga(sel.getId(), c, peso, vol);
+                viagemController.adicionarCarga(sel.getId(), c, peso, vol, cbTanque.getValue());
                 resultado[0] = Boolean.TRUE;
             } catch (Exception e) {
                 String m = e.getMessage();

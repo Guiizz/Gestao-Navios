@@ -3,12 +3,14 @@ package com.gestaonavios.gestaonavios.Controller;
 import com.gestaonavios.gestaonavios.BLL.CargaBLL;
 import com.gestaonavios.gestaonavios.BLL.NavioBLL;
 import com.gestaonavios.gestaonavios.BLL.PortoBLL;
+import com.gestaonavios.gestaonavios.BLL.TanqueBLL;
 import com.gestaonavios.gestaonavios.BLL.TripulanteBLL;
 import com.gestaonavios.gestaonavios.BLL.ViagemBLL;
 import com.gestaonavios.gestaonavios.Model.AtribuicaoCarga;
 import com.gestaonavios.gestaonavios.Model.Carga;
 import com.gestaonavios.gestaonavios.Model.Navio;
 import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.Tanque;
 import com.gestaonavios.gestaonavios.Model.Tripulante;
 import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
 import com.gestaonavios.gestaonavios.Model.Viagem;
@@ -26,15 +28,22 @@ public class ViagemController {
     private final PortoBLL portoBLL;
     private final CargaBLL cargaBLL;
     private final TripulanteBLL tripulanteBLL;
+    private final TanqueBLL tanqueBLL;
 
     public ViagemController(ViagemBLL viagemBLL, NavioBLL navioBLL,
                             PortoBLL portoBLL, CargaBLL cargaBLL,
-                            TripulanteBLL tripulanteBLL) {
+                            TripulanteBLL tripulanteBLL, TanqueBLL tanqueBLL) {
         this.viagemBLL = viagemBLL;
         this.navioBLL = navioBLL;
         this.portoBLL = portoBLL;
         this.cargaBLL = cargaBLL;
         this.tripulanteBLL = tripulanteBLL;
+        this.tanqueBLL = tanqueBLL;
+    }
+
+    /** Tanques do navio (gera-os automaticamente na BD se ainda não existirem). */
+    public List<Tanque> listarTanquesDoNavio(Navio navio) {
+        return tanqueBLL.garantirTanques(navio);
     }
 
     public List<Viagem> listarTodos() {
@@ -97,8 +106,8 @@ public class ViagemController {
         viagemBLL.cancelarViagem(idViagem);
     }
 
-    public void adicionarCarga(int idViagem, Carga carga, double peso, double volume) throws Exception {
-        viagemBLL.adicionarCarga(idViagem, new AtribuicaoCarga(0, carga, volume, peso, null));
+    public void adicionarCarga(int idViagem, Carga carga, double peso, double volume, Tanque tanque) throws Exception {
+        viagemBLL.adicionarCarga(idViagem, new AtribuicaoCarga(0, carga, volume, peso, tanque));
     }
 
     public void adicionarTripulante(int idViagem, Tripulante tripulante,

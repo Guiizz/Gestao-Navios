@@ -25,10 +25,14 @@ public class TipoNavioDAL {
         return result.isEmpty() ? null : result.get(0);
     }
 
-    // Usado pelo NavioDAL para obter o id a partir do nome do enum Java
+    // Usado pelo NavioDAL para obter o id a partir do nome do enum Java.
+    // Tolerante a diferenças de espaços/maiúsculas para reduzir o acoplamento
+    // entre o name() do enum e a designação gravada na BD.
     public TipoNavio buscarPorDesignacao(String designacao) {
+        if (designacao == null) return null;
         List<TipoNavio> result = ConnectionManager.select(
-                "SELECT * FROM TIPO_NAVIO WHERE designacao = ?", MAPPER, designacao);
+                "SELECT * FROM TIPO_NAVIO WHERE UPPER(LTRIM(RTRIM(designacao))) = UPPER(LTRIM(RTRIM(?)))",
+                MAPPER, designacao);
         return result.isEmpty() ? null : result.get(0);
     }
 
