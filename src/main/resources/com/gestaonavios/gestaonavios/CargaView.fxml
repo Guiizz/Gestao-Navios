@@ -15,34 +15,39 @@
       fx:controller="com.gestaonavios.gestaonavios.View.CargaViewController"
       styleClass="section-container" spacing="0">
 
-    <!-- TOOLBAR -->
+    <!-- TOOLBAR: título + pesquisa -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Cargas" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <TextField fx:id="campoPesquisa" promptText="Pesquisar por nome..." prefWidth="190"
+        <TextField fx:id="campoPesquisa" promptText="Pesquisar por nome..." prefWidth="220"
                    onAction="#pesquisar"/>
-        <Button text="Pesquisar" onAction="#pesquisar"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Nova" onAction="#nova" styleClass="btn-primary"/>
-        <Button text="Editar" onAction="#editar"/>
-        <Button text="Remover" onAction="#remover" styleClass="btn-danger"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
+        <Button text="🔍 Pesquisar" onAction="#pesquisar"/>
     </HBox>
 
-    <!-- TABLE -->
-    <TableView fx:id="tabela" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
-        <columns>
-            <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
-            <TableColumn fx:id="colDesignacao" text="Designação" prefWidth="200" minWidth="120"/>
-            <TableColumn fx:id="colTipo" text="Tipo de Carga" prefWidth="180" minWidth="120"/>
-            <TableColumn fx:id="colPeso" text="Peso (t)" prefWidth="90" minWidth="70"/>
-            <TableColumn fx:id="colVolume" text="Volume (m³)" prefWidth="90" minWidth="70"/>
-            <TableColumn fx:id="colPortoCarga" text="Porto de Carga" prefWidth="150" minWidth="100"/>
-            <TableColumn fx:id="colPortoDescarga" text="Porto Descarga" prefWidth="150" minWidth="100"/>
-        </columns>
-        <placeholder>
-            <Label text="Nenhuma carga registada"/>
-        </placeholder>
-    </TableView>
+    <!-- TABELA + RAIL DE AÇÕES (direita) -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+        <TableView fx:id="tabela" HBox.hgrow="ALWAYS" tableMenuButtonVisible="true">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
+                <TableColumn fx:id="colDesignacao" text="Designação" prefWidth="200" minWidth="120"/>
+                <TableColumn fx:id="colTipo" text="Tipo de Carga" prefWidth="180" minWidth="120"/>
+                <TableColumn fx:id="colPeso" text="Peso (t)" prefWidth="90" minWidth="70"/>
+                <TableColumn fx:id="colVolume" text="Volume (m³)" prefWidth="90" minWidth="70"/>
+                <TableColumn fx:id="colPortoCarga" text="Porto de Carga" prefWidth="150" minWidth="100"/>
+                <TableColumn fx:id="colPortoDescarga" text="Porto Descarga" prefWidth="150" minWidth="100"/>
+            </columns>
+            <placeholder>
+                <Label text="Nenhuma carga registada"/>
+            </placeholder>
+        </TableView>
+
+        <VBox styleClass="action-rail" spacing="6">
+            <Label text="AÇÕES" styleClass="action-rail-title"/>
+            <Button text="➕  Nova" onAction="#nova" styleClass="btn-primary" maxWidth="Infinity"/>
+            <Button text="✏  Editar" onAction="#editar" maxWidth="Infinity"/>
+            <Button text="🗑  Remover" onAction="#remover" styleClass="btn-danger" maxWidth="Infinity"/>
+            <Separator/>
+            <Button text="🔄  Atualizar" onAction="#atualizar" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
 </VBox>

@@ -14,6 +14,8 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/com/gestaonavios/gestaonavios/MainView.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 1280, 760);
+        scene.getStylesheets().add(
+                Main.class.getResource("/com/gestaonavios/gestaonavios/styles.css").toExternalForm());
         primaryStage.setTitle("Sistema de Gestão de Navios Petroleiros");
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(900);

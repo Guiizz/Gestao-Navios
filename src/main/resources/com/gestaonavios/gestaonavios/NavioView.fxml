@@ -15,41 +15,43 @@
       fx:controller="com.gestaonavios.gestaonavios.View.NavioViewController"
       styleClass="section-container" spacing="0">
 
-    <!-- TOOLBAR -->
+    <!-- TOOLBAR: título + pesquisa -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Navios" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <TextField fx:id="campoPesquisa" promptText="Pesquisar por nome..." prefWidth="190"
+        <TextField fx:id="campoPesquisa" promptText="Pesquisar por nome..." prefWidth="220"
                    onAction="#pesquisar"/>
-        <Button text="Pesquisar" onAction="#pesquisar"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Novo" onAction="#novo" styleClass="btn-primary"/>
-        <Button text="Editar" onAction="#editar"/>
-        <Button text="Detalhes" onAction="#verDetalhes"/>
-        <Button text="Remover" onAction="#remover" styleClass="btn-danger"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
+        <Button text="🔍 Pesquisar" onAction="#pesquisar"/>
     </HBox>
 
-    <!-- TABLE -->
-    <TableView fx:id="tabela" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
-        <padding>
-            <Insets top="0" right="0" bottom="0" left="0"/>
-        </padding>
-        <columns>
-            <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
-            <TableColumn fx:id="colNome" text="Nome" prefWidth="180" minWidth="120"/>
-            <TableColumn fx:id="colImo" text="Código IMO" prefWidth="120" minWidth="100"/>
-            <TableColumn fx:id="colTipo" text="Tipo" prefWidth="170" minWidth="140"/>
-            <TableColumn fx:id="colEstado" text="Estado" prefWidth="120" minWidth="100"/>
-            <TableColumn fx:id="colCapacidade" text="Capacidade (t)" prefWidth="115" minWidth="90"/>
-            <TableColumn fx:id="colTanques" text="Nº Tanques" prefWidth="90" minWidth="70"/>
-            <TableColumn fx:id="colBandeira" text="Bandeira" prefWidth="100" minWidth="80"/>
-            <TableColumn fx:id="colAno" text="Ano Fabrico" prefWidth="90" minWidth="70"/>
-            <TableColumn fx:id="colPorto" text="Porto Atual" prefWidth="160" minWidth="100"/>
-        </columns>
-        <placeholder>
-            <Label text="Nenhum navio registado"/>
-        </placeholder>
-    </TableView>
+    <!-- TABELA + RAIL DE AÇÕES (direita) -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+        <TableView fx:id="tabela" HBox.hgrow="ALWAYS" tableMenuButtonVisible="true">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
+                <TableColumn fx:id="colNome" text="Nome" prefWidth="180" minWidth="120"/>
+                <TableColumn fx:id="colImo" text="Código IMO" prefWidth="120" minWidth="100"/>
+                <TableColumn fx:id="colTipo" text="Tipo" prefWidth="170" minWidth="140"/>
+                <TableColumn fx:id="colEstado" text="Estado" prefWidth="120" minWidth="100"/>
+                <TableColumn fx:id="colCapacidade" text="Capacidade (t)" prefWidth="115" minWidth="90"/>
+                <TableColumn fx:id="colTanques" text="Nº Tanques" prefWidth="90" minWidth="70"/>
+                <TableColumn fx:id="colBandeira" text="Bandeira" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="colAno" text="Ano Fabrico" prefWidth="90" minWidth="70"/>
+                <TableColumn fx:id="colPorto" text="Porto Atual" prefWidth="160" minWidth="100"/>
+            </columns>
+            <placeholder>
+                <Label text="Nenhum navio registado"/>
+            </placeholder>
+        </TableView>
+
+        <VBox styleClass="action-rail" spacing="6">
+            <Label text="AÇÕES" styleClass="action-rail-title"/>
+            <Button text="➕  Novo" onAction="#novo" styleClass="btn-primary" maxWidth="Infinity"/>
+            <Button text="✏  Editar" onAction="#editar" maxWidth="Infinity"/>
+            <Button text="🔍  Detalhes" onAction="#verDetalhes" maxWidth="Infinity"/>
+            <Button text="🗑  Remover" onAction="#remover" styleClass="btn-danger" maxWidth="Infinity"/>
+            <Separator/>
+            <Button text="🔄  Atualizar" onAction="#atualizar" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
 </VBox>

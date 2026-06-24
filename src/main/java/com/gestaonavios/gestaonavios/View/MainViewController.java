@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
 import java.util.List;
@@ -12,7 +14,11 @@ import java.util.List;
 public class MainViewController {
 
     @FXML
+    private BorderPane root;
+    @FXML
     private StackPane contentArea;
+    @FXML
+    private ImageView imgEntrada;
     @FXML
     private Button btnNavios;
     @FXML
@@ -30,6 +36,13 @@ public class MainViewController {
 
     @FXML
     public void initialize() {
+        // A imagem de entrada (splash) ajusta-se ao tamanho da área de conteúdo,
+        // mantendo o rácio. Quando uma secção é carregada, esta área é substituída.
+        if (imgEntrada != null) {
+            imgEntrada.fitWidthProperty().bind(contentArea.widthProperty());
+            imgEntrada.fitHeightProperty().bind(contentArea.heightProperty());
+        }
+
         navButtons.addAll(List.of(
                 btnNavios, btnViagens, btnCargas,
                 btnTripulacao, btnPortos, btnEstatisticas));

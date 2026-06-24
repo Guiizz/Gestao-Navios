@@ -15,35 +15,40 @@
       fx:controller="com.gestaonavios.gestaonavios.View.TripulanteViewController"
       styleClass="section-container" spacing="0">
 
-    <!-- TOOLBAR -->
+    <!-- TOOLBAR: título + pesquisa -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Tripulação" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <TextField fx:id="campoPesquisa" promptText="Pesquisar por nome..." prefWidth="190"
+        <TextField fx:id="campoPesquisa" promptText="Pesquisar por nome..." prefWidth="220"
                    onAction="#pesquisar"/>
-        <Button text="Pesquisar" onAction="#pesquisar"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Novo" onAction="#novo" styleClass="btn-primary"/>
-        <Button text="Editar" onAction="#editar"/>
-        <Button text="Histórico" onAction="#historico"/>
-        <Button text="Remover" onAction="#remover" styleClass="btn-danger"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
+        <Button text="🔍 Pesquisar" onAction="#pesquisar"/>
     </HBox>
 
-    <!-- TABLE -->
-    <TableView fx:id="tabela" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
-        <columns>
-            <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
-            <TableColumn fx:id="colNome" text="Nome" prefWidth="200" minWidth="120"/>
-            <TableColumn fx:id="colNif" text="NIF" prefWidth="100" minWidth="80"/>
-            <TableColumn fx:id="colFuncao" text="Função" prefWidth="120" minWidth="90"/>
-            <TableColumn fx:id="colNacionalidade" text="Nacionalidade" prefWidth="120" minWidth="90"/>
-            <TableColumn fx:id="colDisponivel" text="Disponível" prefWidth="90" minWidth="70"/>
-            <TableColumn fx:id="colCertificacoes" text="Certificações" prefWidth="200" minWidth="100"/>
-        </columns>
-        <placeholder>
-            <Label text="Nenhum tripulante registado"/>
-        </placeholder>
-    </TableView>
+    <!-- TABELA + RAIL DE AÇÕES (direita) -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+        <TableView fx:id="tabela" HBox.hgrow="ALWAYS" tableMenuButtonVisible="true">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
+                <TableColumn fx:id="colNome" text="Nome" prefWidth="200" minWidth="120"/>
+                <TableColumn fx:id="colNif" text="NIF" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="colFuncao" text="Função" prefWidth="120" minWidth="90"/>
+                <TableColumn fx:id="colNacionalidade" text="Nacionalidade" prefWidth="120" minWidth="90"/>
+                <TableColumn fx:id="colDisponivel" text="Disponível" prefWidth="90" minWidth="70"/>
+                <TableColumn fx:id="colCertificacoes" text="Certificações" prefWidth="200" minWidth="100"/>
+            </columns>
+            <placeholder>
+                <Label text="Nenhum tripulante registado"/>
+            </placeholder>
+        </TableView>
+
+        <VBox styleClass="action-rail" spacing="6">
+            <Label text="AÇÕES" styleClass="action-rail-title"/>
+            <Button text="➕  Novo" onAction="#novo" styleClass="btn-primary" maxWidth="Infinity"/>
+            <Button text="✏  Editar" onAction="#editar" maxWidth="Infinity"/>
+            <Button text="📜  Histórico" onAction="#historico" maxWidth="Infinity"/>
+            <Button text="🗑  Remover" onAction="#remover" styleClass="btn-danger" maxWidth="Infinity"/>
+            <Separator/>
+            <Button text="🔄  Atualizar" onAction="#atualizar" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
 </VBox>
