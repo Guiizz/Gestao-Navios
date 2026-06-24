@@ -19,7 +19,7 @@
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Estatísticas" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
+        <Button text="🔄 Atualizar" onAction="#atualizar"/>
     </HBox>
 
     <!-- SCROLLABLE CONTENT -->

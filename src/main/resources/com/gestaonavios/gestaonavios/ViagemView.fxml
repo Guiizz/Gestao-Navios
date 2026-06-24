@@ -17,21 +17,15 @@
       fx:controller="com.gestaonavios.gestaonavios.View.ViagemViewController"
       styleClass="section-container" spacing="0">
 
-    <!-- TOOLBAR -->
+    <!-- TOOLBAR: título -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Viagens" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Nova" onAction="#nova" styleClass="btn-primary"/>
-        <Button text="Editar" onAction="#editar"/>
-        <Button text="Avançar Estado" onAction="#avancarEstado" styleClass="btn-success"/>
-        <Button text="Cancelar" onAction="#cancelar" styleClass="btn-warning"/>
-        <Button text="Remover" onAction="#remover" styleClass="btn-danger"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
     </HBox>
 
-    <!-- SPLIT: viagens (top) + detalhes (bottom) -->
-    <SplitPane fx:id="splitPane" orientation="VERTICAL" VBox.vgrow="ALWAYS" dividerPositions="0.55">
+    <!-- SPLIT (viagens + detalhes) + RAIL DE AÇÕES (direita) -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+    <SplitPane fx:id="splitPane" orientation="VERTICAL" HBox.hgrow="ALWAYS" dividerPositions="0.55">
 
         <!-- VIAGENS TABLE -->
         <TableView fx:id="tabelaViagens" tableMenuButtonVisible="true">
@@ -58,8 +52,8 @@
             <Tab text="Cargas da Viagem">
                 <VBox spacing="0">
                     <HBox spacing="8" style="-fx-padding: 8; -fx-background-color: #fafafa;">
-                        <Button text="Adicionar Carga" onAction="#adicionarCarga" styleClass="btn-primary"/>
-                        <Button text="Remover Carga" onAction="#removerCarga" styleClass="btn-danger"/>
+                        <Button text="➕ Adicionar Carga" onAction="#adicionarCarga" styleClass="btn-primary"/>
+                        <Button text="🗑 Remover Carga" onAction="#removerCarga" styleClass="btn-danger"/>
                     </HBox>
                     <TableView fx:id="tabelaCargas" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
                         <columns>
@@ -78,8 +72,8 @@
             <Tab text="Tripulação da Viagem">
                 <VBox spacing="0">
                     <HBox spacing="8" style="-fx-padding: 8; -fx-background-color: #fafafa;">
-                        <Button text="Adicionar Tripulante" onAction="#adicionarTripulante" styleClass="btn-primary"/>
-                        <Button text="Remover Tripulante" onAction="#removerTripulante" styleClass="btn-danger"/>
+                        <Button text="➕ Adicionar Tripulante" onAction="#adicionarTripulante" styleClass="btn-primary"/>
+                        <Button text="🗑 Remover Tripulante" onAction="#removerTripulante" styleClass="btn-danger"/>
                     </HBox>
                     <TableView fx:id="tabelaTripulacao" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
                         <columns>
@@ -96,4 +90,16 @@
             </Tab>
         </TabPane>
     </SplitPane>
+
+        <VBox styleClass="action-rail" spacing="6">
+            <Label text="AÇÕES" styleClass="action-rail-title"/>
+            <Button text="➕  Nova" onAction="#nova" styleClass="btn-primary" maxWidth="Infinity"/>
+            <Button text="✏  Editar" onAction="#editar" maxWidth="Infinity"/>
+            <Button text="⏩  Avançar Estado" onAction="#avancarEstado" styleClass="btn-success" maxWidth="Infinity"/>
+            <Button text="✖  Cancelar" onAction="#cancelar" styleClass="btn-warning" maxWidth="Infinity"/>
+            <Button text="🗑  Remover" onAction="#remover" styleClass="btn-danger" maxWidth="Infinity"/>
+            <Separator/>
+            <Button text="🔄  Atualizar" onAction="#atualizar" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
 </VBox>
