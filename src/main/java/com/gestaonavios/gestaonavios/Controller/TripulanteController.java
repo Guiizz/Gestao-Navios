@@ -15,11 +15,11 @@ import java.util.List;
 public class TripulanteController {
 
     private final TripulanteBLL tripulanteBLL;
-    private final ViagemBLL     viagemBLL;
+    private final ViagemBLL viagemBLL;
 
     public TripulanteController(TripulanteBLL tripulanteBLL, ViagemBLL viagemBLL) {
         this.tripulanteBLL = tripulanteBLL;
-        this.viagemBLL     = viagemBLL;
+        this.viagemBLL = viagemBLL;
     }
 
     public List<Tripulante> listarTodos() {

@@ -1,8 +1,8 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.Porto;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.Porto;
 
 import java.util.List;
 
@@ -21,29 +21,25 @@ public class PortoDAL {
 
     public Porto buscarPorId(int id) {
         List<Porto> result = ConnectionManager.select(
-                "SELECT * FROM PORTO WHERE id_porto = " + id, MAPPER);
+                "SELECT * FROM PORTO WHERE id_porto = ?", MAPPER, id);
         return result.isEmpty() ? null : result.get(0);
     }
 
     public void adicionar(Porto porto) {
         ConnectionManager.create(
-                "INSERT INTO PORTO (nome, pais, locode) VALUES ('"
-                        + porto.getNome() + "', '"
-                        + porto.getPais() + "', '"
-                        + porto.getCodigoUNLOCODE() + "')");
+                "INSERT INTO PORTO (nome, pais, locode) VALUES (?, ?, ?)",
+                porto.getNome(), porto.getPais(), porto.getCodigoUNLOCODE());
     }
 
     public boolean atualizar(Porto porto) {
         ConnectionManager.create(
-                "UPDATE PORTO SET nome='" + porto.getNome()
-                        + "', pais='" + porto.getPais()
-                        + "', locode='" + porto.getCodigoUNLOCODE()
-                        + "' WHERE id_porto=" + porto.getId());
+                "UPDATE PORTO SET nome=?, pais=?, locode=? WHERE id_porto=?",
+                porto.getNome(), porto.getPais(), porto.getCodigoUNLOCODE(), porto.getId());
         return true;
     }
 
     public boolean remover(int id) {
-        ConnectionManager.create("DELETE FROM PORTO WHERE id_porto=" + id);
+        ConnectionManager.create("DELETE FROM PORTO WHERE id_porto=?", id);
         return true;
     }
 }

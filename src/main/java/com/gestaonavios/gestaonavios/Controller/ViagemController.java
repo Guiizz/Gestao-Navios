@@ -21,19 +21,19 @@ import java.util.List;
 
 public class ViagemController {
 
-    private final ViagemBLL     viagemBLL;
-    private final NavioBLL      navioBLL;
-    private final PortoBLL      portoBLL;
-    private final CargaBLL      cargaBLL;
+    private final ViagemBLL viagemBLL;
+    private final NavioBLL navioBLL;
+    private final PortoBLL portoBLL;
+    private final CargaBLL cargaBLL;
     private final TripulanteBLL tripulanteBLL;
 
     public ViagemController(ViagemBLL viagemBLL, NavioBLL navioBLL,
                             PortoBLL portoBLL, CargaBLL cargaBLL,
                             TripulanteBLL tripulanteBLL) {
-        this.viagemBLL     = viagemBLL;
-        this.navioBLL      = navioBLL;
-        this.portoBLL      = portoBLL;
-        this.cargaBLL      = cargaBLL;
+        this.viagemBLL = viagemBLL;
+        this.navioBLL = navioBLL;
+        this.portoBLL = portoBLL;
+        this.cargaBLL = cargaBLL;
         this.tripulanteBLL = tripulanteBLL;
     }
 
@@ -45,7 +45,9 @@ public class ViagemController {
         return viagemBLL.listarPorEstado(estado);
     }
 
-    /** Viagens que ainda podem avançar ou ser canceladas (PLANEADA ou EM_CURSO). */
+    /**
+     * Viagens que ainda podem avançar ou ser canceladas (PLANEADA ou EM_CURSO).
+     */
     public List<Viagem> listarViagensAtivas() {
         List<Viagem> resultado = new ArrayList<>();
         for (Viagem v : viagemBLL.listarTodos()) {
@@ -55,7 +57,9 @@ public class ViagemController {
         return resultado;
     }
 
-    /** Viagens apenas no estado PLANEADA (editáveis, com cargas/tripulantes modificáveis). */
+    /**
+     * Viagens apenas no estado PLANEADA (editáveis, com cargas/tripulantes modificáveis).
+     */
     public List<Viagem> listarViagensPlaneadas() {
         return viagemBLL.listarPorEstado(EstadoViagem.PLANEADA);
     }
@@ -118,5 +122,9 @@ public class ViagemController {
 
     public boolean remover(int idViagem) {
         return viagemBLL.remover(idViagem);
+    }
+
+    public boolean aceitaCarga(Navio navio, Carga carga) {
+        return viagemBLL.aceitaCarga(navio, carga);
     }
 }

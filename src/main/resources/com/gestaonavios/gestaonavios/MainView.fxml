@@ -3,46 +3,54 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17"
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="View.MainViewController">
+            fx:controller="com.gestaonavios.gestaonavios.View.MainViewController">
 
-    <!-- HEADER -->
+    <!-- HEADER + NAVEGAÇÃO DE TOPO -->
     <top>
-        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="12" minHeight="52">
-            <padding><Insets top="12" bottom="12" left="20" right="20"/></padding>
-            <Label text="Sistema de Gestão de Navios Petroleiros" styleClass="header-title"/>
-        </HBox>
-    </top>
-
-    <!-- SIDEBAR -->
-    <left>
-        <VBox styleClass="sidebar" spacing="4" prefWidth="210">
-            <padding><Insets top="24" bottom="24" left="10" right="10"/></padding>
-            <Button fx:id="btnNavios"      text="Navios"       styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarNavios"/>
-            <Button fx:id="btnViagens"     text="Viagens"      styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarViagens"/>
-            <Button fx:id="btnCargas"      text="Cargas"       styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarCargas"/>
-            <Button fx:id="btnTripulacao"  text="Tripulação"   styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarTripulacao"/>
-            <Button fx:id="btnPortos"      text="Portos"       styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarPortos"/>
-            <Separator style="-fx-background-color: #283593;" VBox.vgrow="NEVER"/>
-            <Button fx:id="btnEstatisticas" text="Estatísticas" styleClass="nav-button" maxWidth="Infinity" onAction="#mostrarEstatisticas"/>
-            <Region VBox.vgrow="ALWAYS"/>
+        <VBox>
+            <HBox styleClass="header" alignment="CENTER_LEFT" spacing="12" minHeight="52">
+                <padding>
+                    <Insets top="12" bottom="12" left="20" right="20"/>
+                </padding>
+                <Label text="🚢  Sistema de Gestão de Navios Petroleiros" styleClass="header-title"/>
+            </HBox>
+            <HBox styleClass="topnav" alignment="CENTER_LEFT">
+                <Button fx:id="btnNavios" text="Navios" styleClass="nav-button"
+                        onAction="#mostrarNavios"/>
+                <Button fx:id="btnViagens" text="Viagens" styleClass="nav-button"
+                        onAction="#mostrarViagens"/>
+                <Button fx:id="btnCargas" text="Cargas" styleClass="nav-button"
+                        onAction="#mostrarCargas"/>
+                <Button fx:id="btnTripulacao" text="Tripulação" styleClass="nav-button"
+                        onAction="#mostrarTripulacao"/>
+                <Button fx:id="btnPortos" text="Portos" styleClass="nav-button"
+                        onAction="#mostrarPortos"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnEstatisticas" text="Estatísticas" styleClass="nav-button"
+                        onAction="#mostrarEstatisticas"/>
+            </HBox>
         </VBox>
-    </left>
+    </top>
 
     <!-- CONTENT AREA -->
     <center>
         <StackPane fx:id="contentArea" styleClass="content-area">
-            <VBox alignment="CENTER" spacing="16">
-                <Label text="Bem-vindo ao Sistema de Gestão de Navios" styleClass="welcome-title"/>
-                <Label text="Selecione uma secção no menu lateral para começar." styleClass="welcome-subtitle"/>
-            </VBox>
+            <!-- Ecrã de entrada: imagem splash (o tamanho é ajustado no controller) -->
+            <ImageView fx:id="imgEntrada" preserveRatio="true">
+                <image>
+                    <Image url="@img/splash_navios.png"/>
+                </image>
+            </ImageView>
         </StackPane>
     </center>
 </BorderPane>

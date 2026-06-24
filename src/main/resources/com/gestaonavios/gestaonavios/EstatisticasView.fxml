@@ -12,14 +12,14 @@
 
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="View.EstatisticasViewController"
+      fx:controller="com.gestaonavios.gestaonavios.View.EstatisticasViewController"
       styleClass="section-container" spacing="0">
 
     <!-- TOOLBAR -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Estatísticas" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
+        <Button text="🔄 Atualizar" onAction="#atualizar"/>
     </HBox>
 
     <!-- SCROLLABLE CONTENT -->
@@ -67,20 +67,52 @@
                 <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="0">
                     <Label text="Navios por Estado" styleClass="stat-card-title"/>
                     <Separator/>
-                    <HBox spacing="8"><Label text="Ativos:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblNaviosAtivos" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Em manutenção:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblNaviosManutencao" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Inativos:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblNaviosInativos" text="—"/></HBox>
+                    <HBox spacing="8">
+                        <Label text="Ativos:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblNaviosAtivos" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Em manutenção:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblNaviosManutencao" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Inativos:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblNaviosInativos" text="—"/>
+                    </HBox>
                 </VBox>
 
                 <!-- Viagens detalhe -->
                 <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="1">
                     <Label text="Viagens por Estado" styleClass="stat-card-title"/>
                     <Separator/>
-                    <HBox spacing="8"><Label text="Planeadas:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblViagensPlaneadas" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Em curso:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblViagensEmCurso" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Concluídas:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblViagensConcluidas" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Canceladas:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblViagensCanceladas" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Total transportado (concluídas):" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblTotalTransportado" text="—"/></HBox>
+                    <HBox spacing="8">
+                        <Label text="Planeadas:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblViagensPlaneadas" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Em curso:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblViagensEmCurso" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Concluídas:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblViagensConcluidas" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Canceladas:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblViagensCanceladas" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Total transportado (concluídas):" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblTotalTransportado" text="—"/>
+                    </HBox>
                 </VBox>
             </GridPane>
 
@@ -94,16 +126,32 @@
                 <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="0">
                     <Label text="Tripulantes" styleClass="stat-card-title"/>
                     <Separator/>
-                    <HBox spacing="8"><Label text="Disponíveis:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblTripDisp" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Em viagem:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblTripEmViagem" text="—"/></HBox>
+                    <HBox spacing="8">
+                        <Label text="Disponíveis:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblTripDisp" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Em viagem:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblTripEmViagem" text="—"/>
+                    </HBox>
                 </VBox>
 
                 <!-- Portos detalhe -->
                 <VBox styleClass="stat-card" spacing="10" GridPane.columnIndex="1">
                     <Label text="Portos" styleClass="stat-card-title"/>
                     <Separator/>
-                    <HBox spacing="8"><Label text="Registados:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblTotalPortos" text="—"/></HBox>
-                    <HBox spacing="8"><Label text="Peso total de cargas:" style="-fx-font-weight:bold;"/><Region HBox.hgrow="ALWAYS"/><Label fx:id="lblPesoTotalCargas" text="—"/></HBox>
+                    <HBox spacing="8">
+                        <Label text="Registados:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblTotalPortos" text="—"/>
+                    </HBox>
+                    <HBox spacing="8">
+                        <Label text="Peso total de cargas:" style="-fx-font-weight:bold;"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="lblPesoTotalCargas" text="—"/>
+                    </HBox>
                 </VBox>
             </GridPane>
 

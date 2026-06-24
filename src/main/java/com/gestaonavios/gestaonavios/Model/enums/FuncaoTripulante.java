@@ -1,4 +1,4 @@
-package Model.enums;
+package com.gestaonavios.gestaonavios.Model.enums;
 
 public enum FuncaoTripulante {
     CAPITAO,

@@ -1,6 +1,7 @@
-package Model;
+package com.gestaonavios.gestaonavios.Model;
 
-import Model.enums.EstadoViagem;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoViagem;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,38 +39,93 @@ public class Viagem {
         this.cargas = new ArrayList<>();
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public LocalDate getDataPartida() { return dataPartida; }
-    public void setDataPartida(LocalDate dataPartida) { this.dataPartida = dataPartida; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public LocalDate getDataChegadaPrevista() { return dataChegadaPrevista; }
-    public void setDataChegadaPrevista(LocalDate d) { this.dataChegadaPrevista = d; }
+    public LocalDate getDataPartida() {
+        return dataPartida;
+    }
 
-    public LocalDate getDataChegadaReal() { return dataChegadaReal; }
-    public void setDataChegadaReal(LocalDate dataChegadaReal) { this.dataChegadaReal = dataChegadaReal; }
+    public void setDataPartida(LocalDate dataPartida) {
+        this.dataPartida = dataPartida;
+    }
 
-    public EstadoViagem getEstado() { return estado; }
-    public void setEstado(EstadoViagem estado) { this.estado = estado; }
+    public LocalDate getDataChegadaPrevista() {
+        return dataChegadaPrevista;
+    }
 
-    public Porto getOrigem() { return origem; }
-    public void setOrigem(Porto origem) { this.origem = origem; }
+    public void setDataChegadaPrevista(LocalDate d) {
+        this.dataChegadaPrevista = d;
+    }
 
-    public Porto getDestino() { return destino; }
-    public void setDestino(Porto destino) { this.destino = destino; }
+    public LocalDate getDataChegadaReal() {
+        return dataChegadaReal;
+    }
 
-    public String getObservacoes() { return observacoes; }
-    public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+    public void setDataChegadaReal(LocalDate dataChegadaReal) {
+        this.dataChegadaReal = dataChegadaReal;
+    }
 
-    public Navio getNavio() { return navio; }
-    public void setNavio(Navio navio) { this.navio = navio; }
+    public EstadoViagem getEstado() {
+        return estado;
+    }
 
-    public List<TripulacaoViagem> getTripulacao() { return tripulacao; }
-    public void setTripulacao(List<TripulacaoViagem> tripulacao) { this.tripulacao = tripulacao; }
+    public void setEstado(EstadoViagem estado) {
+        this.estado = estado;
+    }
 
-    public List<AtribuicaoCarga> getCargas() { return cargas; }
-    public void setCargas(List<AtribuicaoCarga> cargas) { this.cargas = cargas; }
+    public Porto getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(Porto origem) {
+        this.origem = origem;
+    }
+
+    public Porto getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Porto destino) {
+        this.destino = destino;
+    }
+
+    public String getObservacoes() {
+        return observacoes;
+    }
+
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
+    }
+
+    public Navio getNavio() {
+        return navio;
+    }
+
+    public void setNavio(Navio navio) {
+        this.navio = navio;
+    }
+
+    public List<TripulacaoViagem> getTripulacao() {
+        return tripulacao;
+    }
+
+    public void setTripulacao(List<TripulacaoViagem> tripulacao) {
+        this.tripulacao = tripulacao;
+    }
+
+    public List<AtribuicaoCarga> getCargas() {
+        return cargas;
+    }
+
+    public void setCargas(List<AtribuicaoCarga> cargas) {
+        this.cargas = cargas;
+    }
 
     public double getPesoTotalCargas() {
         double total = 0;

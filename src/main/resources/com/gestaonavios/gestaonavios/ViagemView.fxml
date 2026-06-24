@@ -14,38 +14,32 @@
 
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="View.ViagemViewController"
+      fx:controller="com.gestaonavios.gestaonavios.View.ViagemViewController"
       styleClass="section-container" spacing="0">
 
-    <!-- TOOLBAR -->
+    <!-- TOOLBAR: título -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Viagens" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Nova"           onAction="#nova"          styleClass="btn-primary"/>
-        <Button text="Editar"         onAction="#editar"/>
-        <Button text="Avançar Estado" onAction="#avancarEstado" styleClass="btn-success"/>
-        <Button text="Cancelar"       onAction="#cancelar"      styleClass="btn-warning"/>
-        <Button text="Remover"        onAction="#remover"        styleClass="btn-danger"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
     </HBox>
 
-    <!-- SPLIT: viagens (top) + detalhes (bottom) -->
-    <SplitPane fx:id="splitPane" orientation="VERTICAL" VBox.vgrow="ALWAYS" dividerPositions="0.55">
+    <!-- SPLIT (viagens + detalhes) + RAIL DE AÇÕES (direita) -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+    <SplitPane fx:id="splitPane" orientation="VERTICAL" HBox.hgrow="ALWAYS" dividerPositions="0.55">
 
         <!-- VIAGENS TABLE -->
         <TableView fx:id="tabelaViagens" tableMenuButtonVisible="true">
             <columns>
-                <TableColumn fx:id="colId"        text="ID"             prefWidth="50"  minWidth="40"/>
-                <TableColumn fx:id="colOrigem"     text="Origem"         prefWidth="150" minWidth="100"/>
-                <TableColumn fx:id="colDestino"    text="Destino"        prefWidth="150" minWidth="100"/>
-                <TableColumn fx:id="colPartida"    text="Partida"        prefWidth="100" minWidth="80"/>
-                <TableColumn fx:id="colChegadaP"  text="Chegada Prev."  prefWidth="110" minWidth="80"/>
-                <TableColumn fx:id="colChegadaR"  text="Chegada Real"   prefWidth="110" minWidth="80"/>
-                <TableColumn fx:id="colEstado"     text="Estado"         prefWidth="100" minWidth="80"/>
-                <TableColumn fx:id="colNavio"      text="Navio"          prefWidth="160" minWidth="100"/>
-                <TableColumn fx:id="colNCargas"    text="Cargas"         prefWidth="65"  minWidth="50"/>
-                <TableColumn fx:id="colNTrip"      text="Tripulantes"    prefWidth="90"  minWidth="70"/>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
+                <TableColumn fx:id="colOrigem" text="Origem" prefWidth="150" minWidth="100"/>
+                <TableColumn fx:id="colDestino" text="Destino" prefWidth="150" minWidth="100"/>
+                <TableColumn fx:id="colPartida" text="Partida" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="colChegadaP" text="Chegada Prev." prefWidth="110" minWidth="80"/>
+                <TableColumn fx:id="colChegadaR" text="Chegada Real" prefWidth="110" minWidth="80"/>
+                <TableColumn fx:id="colEstado" text="Estado" prefWidth="100" minWidth="80"/>
+                <TableColumn fx:id="colNavio" text="Navio" prefWidth="160" minWidth="100"/>
+                <TableColumn fx:id="colNCargas" text="Cargas" prefWidth="65" minWidth="50"/>
+                <TableColumn fx:id="colNTrip" text="Tripulantes" prefWidth="90" minWidth="70"/>
             </columns>
             <placeholder>
                 <Label text="Nenhuma viagem registada"/>
@@ -58,15 +52,15 @@
             <Tab text="Cargas da Viagem">
                 <VBox spacing="0">
                     <HBox spacing="8" style="-fx-padding: 8; -fx-background-color: #fafafa;">
-                        <Button text="Adicionar Carga"  onAction="#adicionarCarga"  styleClass="btn-primary"/>
-                        <Button text="Remover Carga"    onAction="#removerCarga"    styleClass="btn-danger"/>
+                        <Button text="➕ Adicionar Carga" onAction="#adicionarCarga" styleClass="btn-primary"/>
+                        <Button text="🗑 Remover Carga" onAction="#removerCarga" styleClass="btn-danger"/>
                     </HBox>
                     <TableView fx:id="tabelaCargas" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
                         <columns>
-                            <TableColumn fx:id="colCargaDesig"  text="Designação"   prefWidth="200" minWidth="120"/>
-                            <TableColumn fx:id="colCargaTipo"   text="Tipo"         prefWidth="180" minWidth="120"/>
-                            <TableColumn fx:id="colCargaPeso"   text="Peso (t)"     prefWidth="90"  minWidth="70"/>
-                            <TableColumn fx:id="colCargaVolume" text="Volume (m³)"  prefWidth="90"  minWidth="70"/>
+                            <TableColumn fx:id="colCargaDesig" text="Designação" prefWidth="200" minWidth="120"/>
+                            <TableColumn fx:id="colCargaTipo" text="Tipo" prefWidth="180" minWidth="120"/>
+                            <TableColumn fx:id="colCargaPeso" text="Peso (t)" prefWidth="90" minWidth="70"/>
+                            <TableColumn fx:id="colCargaVolume" text="Volume (m³)" prefWidth="90" minWidth="70"/>
                         </columns>
                         <placeholder>
                             <Label text="Selecione uma viagem para ver as cargas"/>
@@ -78,15 +72,15 @@
             <Tab text="Tripulação da Viagem">
                 <VBox spacing="0">
                     <HBox spacing="8" style="-fx-padding: 8; -fx-background-color: #fafafa;">
-                        <Button text="Adicionar Tripulante" onAction="#adicionarTripulante" styleClass="btn-primary"/>
-                        <Button text="Remover Tripulante"   onAction="#removerTripulante"   styleClass="btn-danger"/>
+                        <Button text="➕ Adicionar Tripulante" onAction="#adicionarTripulante" styleClass="btn-primary"/>
+                        <Button text="🗑 Remover Tripulante" onAction="#removerTripulante" styleClass="btn-danger"/>
                     </HBox>
                     <TableView fx:id="tabelaTripulacao" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
                         <columns>
-                            <TableColumn fx:id="colTripNome"        text="Nome"         prefWidth="180" minWidth="120"/>
-                            <TableColumn fx:id="colTripFuncao"      text="Função"       prefWidth="120" minWidth="90"/>
-                            <TableColumn fx:id="colTripEmbarque"    text="Embarque"     prefWidth="100" minWidth="80"/>
-                            <TableColumn fx:id="colTripDesembarque" text="Desembarque"  prefWidth="100" minWidth="80"/>
+                            <TableColumn fx:id="colTripNome" text="Nome" prefWidth="180" minWidth="120"/>
+                            <TableColumn fx:id="colTripFuncao" text="Função" prefWidth="120" minWidth="90"/>
+                            <TableColumn fx:id="colTripEmbarque" text="Embarque" prefWidth="100" minWidth="80"/>
+                            <TableColumn fx:id="colTripDesembarque" text="Desembarque" prefWidth="100" minWidth="80"/>
                         </columns>
                         <placeholder>
                             <Label text="Selecione uma viagem para ver a tripulação"/>
@@ -96,4 +90,16 @@
             </Tab>
         </TabPane>
     </SplitPane>
+
+        <VBox styleClass="action-rail" spacing="6">
+            <Label text="AÇÕES" styleClass="action-rail-title"/>
+            <Button text="➕  Nova" onAction="#nova" styleClass="btn-primary" maxWidth="Infinity"/>
+            <Button text="✏  Editar" onAction="#editar" maxWidth="Infinity"/>
+            <Button text="⏩  Avançar Estado" onAction="#avancarEstado" styleClass="btn-success" maxWidth="Infinity"/>
+            <Button text="✖  Cancelar" onAction="#cancelar" styleClass="btn-warning" maxWidth="Infinity"/>
+            <Button text="🗑  Remover" onAction="#remover" styleClass="btn-danger" maxWidth="Infinity"/>
+            <Separator/>
+            <Button text="🔄  Atualizar" onAction="#atualizar" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
 </VBox>

@@ -11,30 +11,36 @@
 
 <VBox xmlns="http://javafx.com/javafx/17"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="View.PortoViewController"
+      fx:controller="com.gestaonavios.gestaonavios.View.PortoViewController"
       styleClass="section-container" spacing="0">
 
-    <!-- TOOLBAR -->
+    <!-- TOOLBAR: título -->
     <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="8">
         <Label text="Portos" styleClass="section-title"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="Novo"    onAction="#novo"    styleClass="btn-primary"/>
-        <Button text="Editar"  onAction="#editar"/>
-        <Button text="Remover" onAction="#remover" styleClass="btn-danger"/>
-        <Separator orientation="VERTICAL" prefHeight="20"/>
-        <Button text="Atualizar" onAction="#atualizar"/>
     </HBox>
 
-    <!-- TABLE -->
-    <TableView fx:id="tabela" VBox.vgrow="ALWAYS" tableMenuButtonVisible="true">
-        <columns>
-            <TableColumn fx:id="colId"     text="ID"      prefWidth="50"  minWidth="40"/>
-            <TableColumn fx:id="colNome"   text="Nome"    prefWidth="250" minWidth="150"/>
-            <TableColumn fx:id="colPais"   text="País"    prefWidth="160" minWidth="100"/>
-            <TableColumn fx:id="colLocode" text="UNLOCODE" prefWidth="120" minWidth="80"/>
-        </columns>
-        <placeholder>
-            <Label text="Nenhum porto registado"/>
-        </placeholder>
-    </TableView>
+    <!-- TABELA + RAIL DE AÇÕES (direita) -->
+    <HBox VBox.vgrow="ALWAYS" spacing="0">
+        <TableView fx:id="tabela" HBox.hgrow="ALWAYS" tableMenuButtonVisible="true">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50" minWidth="40"/>
+                <TableColumn fx:id="colNome" text="Nome" prefWidth="250" minWidth="150"/>
+                <TableColumn fx:id="colPais" text="País" prefWidth="160" minWidth="100"/>
+                <TableColumn fx:id="colLocode" text="UNLOCODE" prefWidth="120" minWidth="80"/>
+            </columns>
+            <placeholder>
+                <Label text="Nenhum porto registado"/>
+            </placeholder>
+        </TableView>
+
+        <VBox styleClass="action-rail" spacing="6">
+            <Label text="AÇÕES" styleClass="action-rail-title"/>
+            <Button text="➕  Novo" onAction="#novo" styleClass="btn-primary" maxWidth="Infinity"/>
+            <Button text="✏  Editar" onAction="#editar" maxWidth="Infinity"/>
+            <Button text="🗑  Remover" onAction="#remover" styleClass="btn-danger" maxWidth="Infinity"/>
+            <Separator/>
+            <Button text="🔄  Atualizar" onAction="#atualizar" maxWidth="Infinity"/>
+        </VBox>
+    </HBox>
 </VBox>

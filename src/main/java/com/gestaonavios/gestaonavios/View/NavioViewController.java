@@ -1,19 +1,25 @@
-package View;
+package com.gestaonavios.gestaonavios.View;
 
-import BLL.NavioBLL;
-import BLL.PortoBLL;
-import BLL.TipoNavioBLL;
-import Controller.NavioController;
-import DAL.NavioDAL;
-import DAL.PortoDAL;
-import DAL.TipoNavioDAL;
-import DAL.ViagemDAL;
-import Model.Navio;
-import Model.Porto;
-import Model.enums.EstadoOperacional;
-import Model.enums.TipoCargaEnums;
-import Model.enums.TipoNavioEnums;
-import Utils.AlertUtils;
+import com.gestaonavios.gestaonavios.BLL.CompatibilidadeBLL;
+import com.gestaonavios.gestaonavios.BLL.NavioBLL;
+import com.gestaonavios.gestaonavios.BLL.PortoBLL;
+import com.gestaonavios.gestaonavios.BLL.TipoNavioBLL;
+import com.gestaonavios.gestaonavios.Controller.NavioController;
+import com.gestaonavios.gestaonavios.DAL.CompatibilidadeCargaDAL;
+import com.gestaonavios.gestaonavios.DAL.NavioDAL;
+import com.gestaonavios.gestaonavios.DAL.PortoDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoCargaDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoNavioDAL;
+import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
+import com.gestaonavios.gestaonavios.Model.Navio;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.TipoCarga;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoOperacional;
+import com.gestaonavios.gestaonavios.Model.enums.TipoNavioEnums;
+import com.gestaonavios.gestaonavios.Utils.AlertUtils;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUI;
+import com.gestaonavios.gestaonavios.Utils.ValidacaoUtils;
+import javafx.event.ActionEvent;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -23,36 +29,53 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class NavioViewController {
 
-    @FXML private TextField campoPesquisa;
-    @FXML private TableView<Navio> tabela;
-    @FXML private TableColumn<Navio, Integer> colId;
-    @FXML private TableColumn<Navio, String>  colNome;
-    @FXML private TableColumn<Navio, String>  colImo;
-    @FXML private TableColumn<Navio, String>  colTipo;
-    @FXML private TableColumn<Navio, String>  colEstado;
-    @FXML private TableColumn<Navio, String>  colCapacidade;
-    @FXML private TableColumn<Navio, Integer> colTanques;
-    @FXML private TableColumn<Navio, String>  colBandeira;
-    @FXML private TableColumn<Navio, String>  colAno;
-    @FXML private TableColumn<Navio, String>  colPorto;
+    @FXML
+    private TextField campoPesquisa;
+    @FXML
+    private TableView<Navio> tabela;
+    @FXML
+    private TableColumn<Navio, Integer> colId;
+    @FXML
+    private TableColumn<Navio, String> colNome;
+    @FXML
+    private TableColumn<Navio, String> colImo;
+    @FXML
+    private TableColumn<Navio, String> colTipo;
+    @FXML
+    private TableColumn<Navio, String> colEstado;
+    @FXML
+    private TableColumn<Navio, String> colCapacidade;
+    @FXML
+    private TableColumn<Navio, Integer> colTanques;
+    @FXML
+    private TableColumn<Navio, String> colBandeira;
+    @FXML
+    private TableColumn<Navio, String> colAno;
+    @FXML
+    private TableColumn<Navio, String> colPorto;
 
     private NavioController navioController;
+    private CompatibilidadeBLL compatibilidadeBLL;
 
     @FXML
     public void initialize() {
-        PortoDAL    portoDAL    = new PortoDAL();
+        PortoDAL portoDAL = new PortoDAL();
         TipoNavioDAL tipoNavioDAL = new TipoNavioDAL();
-        NavioDAL    navioDAL    = new NavioDAL(portoDAL, tipoNavioDAL);
-        ViagemDAL   viagemDAL   = new ViagemDAL(portoDAL, navioDAL);
-        NavioBLL    navioBLL    = new NavioBLL(navioDAL, viagemDAL);
-        PortoBLL    portoBLL    = new PortoBLL(portoDAL);
+        NavioDAL navioDAL = new NavioDAL(portoDAL, tipoNavioDAL);
+        ViagemDAL viagemDAL = new ViagemDAL(portoDAL, navioDAL);
+        NavioBLL navioBLL = new NavioBLL(navioDAL, viagemDAL);
+        PortoBLL portoBLL = new PortoBLL(portoDAL);
         TipoNavioBLL tipoNavioBLL = new TipoNavioBLL(tipoNavioDAL);
         navioController = new NavioController(navioBLL, portoBLL, tipoNavioBLL);
+        TipoCargaDAL tipoCargaDAL = new TipoCargaDAL();
+        CompatibilidadeCargaDAL compatibilidadeCargaDAL = new CompatibilidadeCargaDAL(tipoNavioDAL, tipoCargaDAL);
+        compatibilidadeBLL = new CompatibilidadeBLL(tipoNavioDAL, compatibilidadeCargaDAL);
 
         colId.setCellValueFactory(d -> new SimpleIntegerProperty(d.getValue().getId()).asObject());
         colNome.setCellValueFactory(d -> new SimpleStringProperty(d.getValue().getNome()));
@@ -78,7 +101,10 @@ public class NavioViewController {
         carregarDados();
     }
 
-    @FXML private void atualizar() { carregarDados(); }
+    @FXML
+    private void atualizar() {
+        carregarDados();
+    }
 
     @FXML
     private void pesquisar() {
@@ -93,17 +119,8 @@ public class NavioViewController {
     @FXML
     private void novo() {
         mostrarDialogoNavio(null).ifPresent(navio -> {
-            try {
-                navioController.registar(navio.getNome(), navio.getCodigoIMO(),
-                        navio.getTipoNavio(), navio.getCapacidadeMaxima(),
-                        navio.getNumeroTanques(), navio.getBandeira(),
-                        navio.getAnoFabrico(), navio.getEstadoOperacional(),
-                        navio.getPortoAtual());
-                carregarDados();
-                AlertUtils.sucesso("Navio registado com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+            carregarDados();
+            AlertUtils.sucesso("Navio registado com sucesso.");
         });
     }
 
@@ -115,13 +132,8 @@ public class NavioViewController {
             return;
         }
         mostrarDialogoNavio(selecionado).ifPresent(navio -> {
-            try {
-                navioController.atualizar(navio);
-                carregarDados();
-                AlertUtils.sucesso("Navio atualizado com sucesso.");
-            } catch (Exception e) {
-                AlertUtils.erro(e.getMessage());
-            }
+            carregarDados();
+            AlertUtils.sucesso("Navio atualizado com sucesso.");
         });
     }
 
@@ -156,18 +168,24 @@ public class NavioViewController {
         sb.append("Estado:           ").append(n.getEstadoOperacional()).append("\n");
         sb.append("Capacidade máx.:  ").append(n.getCapacidadeMaxima()).append(" t\n");
         sb.append("Nº de tanques:    ").append(n.getNumeroTanques()).append("\n");
-        sb.append("Slots por viagem: ").append(n.getMaxCargasPorViagem()).append("\n");
+        sb.append("Slots por viagem: ").append(compatibilidadeBLL.maxCargasPorViagem(n.getTipoNavio())).append("\n");
         sb.append("Bandeira:         ").append(n.getBandeira()).append("\n");
         sb.append("Ano de fabrico:   ").append(n.getAnoFabrico()).append("\n");
         sb.append("Porto atual:      ").append(n.getPortoAtual() != null ? n.getPortoAtual().getNome() : "—").append("\n");
 
-        List<TipoCargaEnums> compat = n.getCargasCompativeis();
+        List<TipoCarga> compat = compatibilidadeBLL.cargasCompativeis(n.getTipoNavio());
         sb.append("\nCargas compatíveis:\n");
         if (compat.isEmpty()) {
             sb.append("  (nenhuma)\n");
         } else {
-            for (TipoCargaEnums tc : compat) {
-                sb.append("  • ").append(tc).append("  [").append(tc.propriedades()).append("]\n");
+            for (TipoCarga tc : compat) {
+                List<String> props = new ArrayList<>();
+                if (tc.isInflamavel()) props.add("inflamável");
+                if (tc.isCorrosiva()) props.add("corrosiva");
+                if (tc.isToxica()) props.add("tóxica");
+                sb.append("  • ").append(tc.getDesignacao());
+                if (!props.isEmpty()) sb.append("  [").append(String.join(", ", props)).append("]");
+                sb.append("\n");
             }
         }
 
@@ -196,19 +214,26 @@ public class NavioViewController {
         form.setVgap(10);
         form.setPadding(new Insets(20));
 
-        TextField tfNome      = new TextField();
-        TextField tfImo       = new TextField();
+        TextField tfNome = new TextField();
+        TextField tfImo = new TextField();
         TextField tfCapacidade = new TextField();
-        TextField tfTanques   = new TextField();
-        TextField tfBandeira  = new TextField();
-        TextField tfAno       = new TextField();
-        ComboBox<TipoNavioEnums>    cbTipo   = new ComboBox<>(FXCollections.observableArrayList(TipoNavioEnums.values()));
+        TextField tfTanques = new TextField();
+        TextField tfBandeira = new TextField();
+        TextField tfAno = new TextField();
+        ComboBox<TipoNavioEnums> cbTipo = new ComboBox<>(FXCollections.observableArrayList(TipoNavioEnums.values()));
         ComboBox<EstadoOperacional> cbEstado = new ComboBox<>(FXCollections.observableArrayList(EstadoOperacional.values()));
         ComboBox<Porto> cbPorto = new ComboBox<>(FXCollections.observableArrayList(navioController.listarPortos()));
         cbPorto.setPromptText("(nenhum)");
         cbPorto.setConverter(new javafx.util.StringConverter<>() {
-            @Override public String toString(Porto p)      { return p == null ? "" : p.getNome() + " (" + p.getCodigoUNLOCODE() + ")"; }
-            @Override public Porto fromString(String s)    { return null; }
+            @Override
+            public String toString(Porto p) {
+                return p == null ? "" : p.getNome() + " (" + p.getCodigoUNLOCODE() + ")";
+            }
+
+            @Override
+            public Porto fromString(String s) {
+                return null;
+            }
         });
 
         if (existente != null) {
@@ -226,46 +251,117 @@ public class NavioViewController {
         }
 
         int row = 0;
-        form.add(new Label("Nome:"), 0, row);            form.add(tfNome, 1, row++);
-        form.add(new Label("Código IMO:"), 0, row);      form.add(tfImo, 1, row++);
-        form.add(new Label("Tipo:"), 0, row);            form.add(cbTipo, 1, row++);
-        form.add(new Label("Capacidade máx. (t):"), 0, row); form.add(tfCapacidade, 1, row++);
-        form.add(new Label("Nº de tanques:"), 0, row);  form.add(tfTanques, 1, row++);
-        form.add(new Label("Bandeira:"), 0, row);        form.add(tfBandeira, 1, row++);
-        form.add(new Label("Ano de fabrico:"), 0, row); form.add(tfAno, 1, row++);
-        form.add(new Label("Estado operacional:"), 0, row); form.add(cbEstado, 1, row++);
-        form.add(new Label("Porto atual:"), 0, row);    form.add(cbPorto, 1, row++);
+        form.add(new Label("Nome:"), 0, row);
+        form.add(tfNome, 1, row++);
+        form.add(new Label("Código IMO:"), 0, row);
+        form.add(tfImo, 1, row++);
+        form.add(new Label("Tipo:"), 0, row);
+        form.add(cbTipo, 1, row++);
+        form.add(new Label("Capacidade máx. (t):"), 0, row);
+        form.add(tfCapacidade, 1, row++);
+        form.add(new Label("Nº de tanques:"), 0, row);
+        form.add(tfTanques, 1, row++);
+        form.add(new Label("Bandeira:"), 0, row);
+        form.add(tfBandeira, 1, row++);
+        form.add(new Label("Ano de fabrico:"), 0, row);
+        form.add(tfAno, 1, row++);
+        form.add(new Label("Estado operacional:"), 0, row);
+        form.add(cbEstado, 1, row++);
+        form.add(new Label("Porto atual:"), 0, row);
+        form.add(cbPorto, 1, row++);
 
-        tfNome.setPrefWidth(220); tfImo.setPrefWidth(220);
-        tfCapacidade.setPrefWidth(220); tfTanques.setPrefWidth(220);
-        cbTipo.setPrefWidth(220); cbEstado.setPrefWidth(220); cbPorto.setPrefWidth(220);
+        tfNome.setPrefWidth(220);
+        tfImo.setPrefWidth(220);
+        tfCapacidade.setPrefWidth(220);
+        tfTanques.setPrefWidth(220);
+        cbTipo.setPrefWidth(220);
+        cbEstado.setPrefWidth(220);
+        cbPorto.setPrefWidth(220);
+
+        Label lblErro = new Label();
+        lblErro.setStyle("-fx-text-fill: #d33;");
+        lblErro.setWrapText(true);
+        lblErro.setMaxWidth(320);
+        form.add(lblErro, 0, row, 2, 1);
 
         dialog.getDialogPane().setContent(form);
 
-        Node btnOk = dialog.getDialogPane().lookupButton(btnGuardar);
-        btnOk.setDisable(tfNome.getText().isBlank());
-        tfNome.textProperty().addListener((obs, o, n) -> btnOk.setDisable(n.trim().isBlank()));
+        ValidacaoUI val = new ValidacaoUI(lblErro);
+        ValidacaoUI.limparAoEditar(tfNome, tfImo, tfCapacidade, tfTanques, tfBandeira, tfAno);
+        ValidacaoUI.limparAoEditar(cbTipo, cbEstado);
 
-        dialog.setResultConverter(bt -> {
-            if (bt != btnGuardar) return null;
+        Navio[] resultado = new Navio[1];
+        Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
+        btnOk.addEventFilter(ActionEvent.ACTION, ev -> {
+            val.reset();
+
+            String nome = tfNome.getText().trim();
+            String imo = tfImo.getText().trim();
+            String bandeira = tfBandeira.getText().trim();
+
+            val.verificar(tfNome, () -> ValidacaoUtils.exigirTexto(nome, "O nome do navio"));
+            val.verificar(tfImo, () -> ValidacaoUtils.exigirFormatoIMO(imo));
+            val.verificar(tfBandeira, () -> ValidacaoUtils.exigirTexto(bandeira, "A bandeira do navio"));
+            if (cbTipo.getValue() == null) val.marcar(cbTipo, "O tipo de navio é obrigatório.");
+            if (cbEstado.getValue() == null) val.marcar(cbEstado, "O estado operacional é obrigatório.");
+
+            double capacidade = 0;
             try {
-                String nome      = tfNome.getText().trim();
-                String imo       = tfImo.getText().trim();
-                TipoNavioEnums tipo = cbTipo.getValue();
-                double capacidade  = Double.parseDouble(tfCapacidade.getText().trim().replace(",", "."));
-                int tanques        = Integer.parseInt(tfTanques.getText().trim());
-                String bandeira    = tfBandeira.getText().trim();
-                int ano            = Integer.parseInt(tfAno.getText().trim());
-                EstadoOperacional estado = cbEstado.getValue();
-                Porto porto        = cbPorto.getValue();
-                int id = existente != null ? existente.getId() : 0;
-                return new Navio(id, nome, imo, tipo, capacidade, tanques, bandeira, ano, estado, porto);
+                capacidade = Double.parseDouble(tfCapacidade.getText().trim().replace(",", "."));
+                double cap = capacidade;
+                val.verificar(tfCapacidade, () -> ValidacaoUtils.exigirPositivo(cap, "A capacidade máxima"));
             } catch (NumberFormatException e) {
-                AlertUtils.erro("Verifique os campos numéricos (capacidade, tanques, ano).");
-                return null;
+                val.marcar(tfCapacidade, "Capacidade inválida — indique um número (ex: 50000).");
+            }
+
+            int tanques = 0;
+            try {
+                tanques = Integer.parseInt(tfTanques.getText().trim());
+                int t = tanques;
+                val.verificar(tfTanques, () -> ValidacaoUtils.exigirPositivo(t, "O número de tanques"));
+            } catch (NumberFormatException e) {
+                val.marcar(tfTanques, "Nº de tanques inválido — indique um número inteiro.");
+            }
+
+            int ano = 0;
+            try {
+                ano = Integer.parseInt(tfAno.getText().trim());
+                int a = ano;
+                val.verificar(tfAno, () -> ValidacaoUtils.exigirAnoFabrico(a));
+            } catch (NumberFormatException e) {
+                val.marcar(tfAno, "Ano inválido — indique um ano (ex: 2015).");
+            }
+
+            if (!val.valido()) {
+                ev.consume();
+                return;
+            }
+
+            Navio navio = new Navio(
+                    existente != null ? existente.getId() : 0,
+                    nome, imo, cbTipo.getValue(), capacidade, tanques, bandeira, ano,
+                    cbEstado.getValue(), cbPorto.getValue());
+            try {
+                if (existente == null) {
+                    navioController.registar(navio.getNome(), navio.getCodigoIMO(),
+                            navio.getTipoNavio(), navio.getCapacidadeMaxima(),
+                            navio.getNumeroTanques(), navio.getBandeira(),
+                            navio.getAnoFabrico(), navio.getEstadoOperacional(),
+                            navio.getPortoAtual());
+                } else {
+                    navioController.atualizar(navio);
+                }
+                resultado[0] = navio;
+            } catch (Exception e) {
+                // erro de negócio (ex.: IMO duplicado) — mantém o diálogo aberto
+                String m = e.getMessage();
+                if (m != null && m.toUpperCase().contains("IMO")) val.marcar(tfImo, m);
+                else lblErro.setText(m);
+                ev.consume();
             }
         });
 
+        dialog.setResultConverter(bt -> bt == btnGuardar ? resultado[0] : null);
         return dialog.showAndWait();
     }
 

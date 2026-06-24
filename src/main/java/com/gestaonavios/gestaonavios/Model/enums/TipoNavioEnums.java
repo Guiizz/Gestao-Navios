@@ -1,10 +1,10 @@
-package Model.enums;
+package com.gestaonavios.gestaonavios.Model.enums;
 
 public enum TipoNavioEnums {
-    PETROLEIRO_CRUDE  (1),
+    PETROLEIRO_CRUDE(1),
     PRODUTOS_REFINADOS(4),
-    QUIMICO           (1),
-    QUIMICO_PRODUTOS  (4);
+    QUIMICO(1),
+    QUIMICO_PRODUTOS(4);
 
     private final int maxCargasPorViagem;
 
@@ -12,7 +12,9 @@ public enum TipoNavioEnums {
         this.maxCargasPorViagem = maxCargasPorViagem;
     }
 
-    public int getMaxCargasPorViagem() { return maxCargasPorViagem; }
+    public int getMaxCargasPorViagem() {
+        return maxCargasPorViagem;
+    }
 
     @Override
     public String toString() {

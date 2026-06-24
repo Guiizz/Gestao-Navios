@@ -1,19 +1,25 @@
-package View;
+package com.gestaonavios.gestaonavios.View;
 
-import DAL.CargaDAL;
-import DAL.NavioDAL;
-import DAL.PortoDAL;
-import DAL.TipoCargaDAL;
-import DAL.TipoNavioDAL;
-import DAL.TripulanteDAL;
-import DAL.ViagemDAL;
-import Model.Carga;
-import Model.Navio;
-import Model.Porto;
-import Model.Tripulante;
-import Model.Viagem;
-import Model.enums.EstadoOperacional;
-import Model.enums.EstadoViagem;
+import com.gestaonavios.gestaonavios.BLL.CargaBLL;
+import com.gestaonavios.gestaonavios.BLL.CompatibilidadeBLL;
+import com.gestaonavios.gestaonavios.BLL.NavioBLL;
+import com.gestaonavios.gestaonavios.BLL.PortoBLL;
+import com.gestaonavios.gestaonavios.BLL.TripulanteBLL;
+import com.gestaonavios.gestaonavios.BLL.ViagemBLL;
+import com.gestaonavios.gestaonavios.DAL.CargaDAL;
+import com.gestaonavios.gestaonavios.DAL.CompatibilidadeCargaDAL;
+import com.gestaonavios.gestaonavios.DAL.NavioDAL;
+import com.gestaonavios.gestaonavios.DAL.PortoDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoCargaDAL;
+import com.gestaonavios.gestaonavios.DAL.TipoNavioDAL;
+import com.gestaonavios.gestaonavios.DAL.TripulanteDAL;
+import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
+import com.gestaonavios.gestaonavios.Model.Carga;
+import com.gestaonavios.gestaonavios.Model.Navio;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.Tripulante;
+import com.gestaonavios.gestaonavios.Model.Viagem;
+import com.gestaonavios.gestaonavios.Model.enums.EstadoOperacional;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -21,49 +27,80 @@ import java.util.List;
 
 public class EstatisticasViewController {
 
-    @FXML private Label lblTotalNavios;
-    @FXML private Label lblTotalViagens;
-    @FXML private Label lblTotalCargas;
-    @FXML private Label lblTotalTripulantes;
+    @FXML
+    private Label lblTotalNavios;
+    @FXML
+    private Label lblTotalViagens;
+    @FXML
+    private Label lblTotalCargas;
+    @FXML
+    private Label lblTotalTripulantes;
 
-    @FXML private Label lblNaviosAtivos;
-    @FXML private Label lblNaviosManutencao;
-    @FXML private Label lblNaviosInativos;
+    @FXML
+    private Label lblNaviosAtivos;
+    @FXML
+    private Label lblNaviosManutencao;
+    @FXML
+    private Label lblNaviosInativos;
 
-    @FXML private Label lblViagensPlaneadas;
-    @FXML private Label lblViagensEmCurso;
-    @FXML private Label lblViagensConcluidas;
-    @FXML private Label lblViagensCanceladas;
-    @FXML private Label lblTotalTransportado;
+    @FXML
+    private Label lblViagensPlaneadas;
+    @FXML
+    private Label lblViagensEmCurso;
+    @FXML
+    private Label lblViagensConcluidas;
+    @FXML
+    private Label lblViagensCanceladas;
+    @FXML
+    private Label lblTotalTransportado;
 
-    @FXML private Label lblTripDisp;
-    @FXML private Label lblTripEmViagem;
+    @FXML
+    private Label lblTripDisp;
+    @FXML
+    private Label lblTripEmViagem;
 
-    @FXML private Label lblTotalPortos;
-    @FXML private Label lblPesoTotalCargas;
+    @FXML
+    private Label lblTotalPortos;
+    @FXML
+    private Label lblPesoTotalCargas;
+
+    // BLLs (a View acede aos dados pela camada de lógica, não diretamente pela DAL)
+    private NavioBLL navioBLL;
+    private ViagemBLL viagemBLL;
+    private CargaBLL cargaBLL;
+    private TripulanteBLL tripulanteBLL;
+    private PortoBLL portoBLL;
 
     @FXML
     public void initialize() {
+        PortoDAL portoDAL = new PortoDAL();
+        TipoNavioDAL tipoNavioDAL = new TipoNavioDAL();
+        TipoCargaDAL tipoCargaDAL = new TipoCargaDAL();
+        NavioDAL navioDAL = new NavioDAL(portoDAL, tipoNavioDAL);
+        CargaDAL cargaDAL = new CargaDAL(tipoCargaDAL, portoDAL);
+        TripulanteDAL tripulanteDAL = new TripulanteDAL();
+        ViagemDAL viagemDAL = new ViagemDAL(portoDAL, navioDAL);
+        CompatibilidadeCargaDAL compatibilidadeCargaDAL = new CompatibilidadeCargaDAL(tipoNavioDAL, tipoCargaDAL);
+
+        this.navioBLL = new NavioBLL(navioDAL, viagemDAL);
+        this.tripulanteBLL = new TripulanteBLL(tripulanteDAL, viagemDAL);
+        CompatibilidadeBLL compatibilidadeBLL = new CompatibilidadeBLL(tipoNavioDAL, compatibilidadeCargaDAL);
+        this.viagemBLL = new ViagemBLL(viagemDAL, navioBLL, tripulanteBLL, compatibilidadeBLL);
+        this.cargaBLL = new CargaBLL(cargaDAL, viagemDAL);
+        this.portoBLL = new PortoBLL(portoDAL);
+
         atualizar();
     }
 
     @FXML
     public void atualizar() {
-        PortoDAL     portoDAL     = new PortoDAL();
-        TipoNavioDAL tipoNavioDAL = new TipoNavioDAL();
-        TipoCargaDAL tipoCargaDAL = new TipoCargaDAL();
-        NavioDAL     navioDAL     = new NavioDAL(portoDAL, tipoNavioDAL);
-        CargaDAL     cargaDAL     = new CargaDAL(tipoCargaDAL, portoDAL);
-        TripulanteDAL tripulanteDAL = new TripulanteDAL();
-        ViagemDAL    viagemDAL    = new ViagemDAL(portoDAL, navioDAL);
-
         // Navios
-        List<Navio> navios = navioDAL.listarTodos();
+        List<Navio> navios = navioBLL.listarTodos();
         int nAtivo = 0, nMan = 0, nInat = 0;
         for (Navio n : navios) {
-            if (n.getEstadoOperacional() == EstadoOperacional.ATIVO)              nAtivo++;
+            if (n.getEstadoOperacional() == EstadoOperacional.ATIVO) nAtivo++;
             else if (n.getEstadoOperacional() == EstadoOperacional.EM_MANUTENCAO) nMan++;
-            else                                                                   nInat++;
+            else nInat++;
         }
         lblTotalNavios.setText(String.valueOf(navios.size()));
         lblNaviosAtivos.setText(String.valueOf(nAtivo));
@@ -71,15 +108,24 @@ public class EstatisticasViewController {
         lblNaviosInativos.setText(String.valueOf(nInat));
 
         // Viagens
-        List<Viagem> viagens = viagemDAL.listarTodos();
+        List<Viagem> viagens = viagemBLL.listarTodos();
         int vPlan = 0, vCur = 0, vConc = 0, vCanc = 0;
         double totalTransp = 0;
         for (Viagem v : viagens) {
             switch (v.getEstado()) {
-                case PLANEADA:  vPlan++;  break;
-                case EM_CURSO:  vCur++;   break;
-                case CONCLUIDA: vConc++; totalTransp += v.getPesoTotalCargas(); break;
-                case CANCELADA: vCanc++;  break;
+                case PLANEADA:
+                    vPlan++;
+                    break;
+                case EM_CURSO:
+                    vCur++;
+                    break;
+                case CONCLUIDA:
+                    vConc++;
+                    totalTransp += v.getPesoTotalCargas();
+                    break;
+                case CANCELADA:
+                    vCanc++;
+                    break;
             }
         }
         lblTotalViagens.setText(String.valueOf(viagens.size()));
@@ -90,22 +136,25 @@ public class EstatisticasViewController {
         lblTotalTransportado.setText(String.format("%.1f t", totalTransp));
 
         // Cargas
-        List<Carga> cargas = cargaDAL.listarTodos();
+        List<Carga> cargas = cargaBLL.listarTodos();
         double pesoTotal = 0;
         for (Carga c : cargas) pesoTotal += c.getPeso();
         lblTotalCargas.setText(String.valueOf(cargas.size()));
         lblPesoTotalCargas.setText(String.format("%.1f t", pesoTotal));
 
         // Tripulantes
-        List<Tripulante> trip = tripulanteDAL.listarTodos();
+        List<Tripulante> trip = tripulanteBLL.listarTodos();
         int tDisp = 0, tViagem = 0;
-        for (Tripulante t : trip) { if (t.isDisponivel()) tDisp++; else tViagem++; }
+        for (Tripulante t : trip) {
+            if (t.isDisponivel()) tDisp++;
+            else tViagem++;
+        }
         lblTotalTripulantes.setText(String.valueOf(trip.size()));
         lblTripDisp.setText(String.valueOf(tDisp));
         lblTripEmViagem.setText(String.valueOf(tViagem));
 
         // Portos
-        List<Porto> portos = portoDAL.listarTodos();
+        List<Porto> portos = portoBLL.listarTodos();
         lblTotalPortos.setText(String.valueOf(portos.size()));
     }
 }

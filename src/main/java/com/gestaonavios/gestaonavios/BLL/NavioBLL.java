@@ -82,6 +82,8 @@ public class NavioBLL {
         ValidacaoUtils.exigirExistencia(navioDAL.buscarPorId(id), "Navio", id);
         if (temViagemAtiva(id))
             throw new Exception("Não é possível remover um navio com viagem ativa.");
+        if (!viagemDAL.listarPorNavio(id).isEmpty())
+            throw new Exception("Não é possível remover este navio porque tem viagens associadas (histórico).");
         navioDAL.remover(id);
     }
 

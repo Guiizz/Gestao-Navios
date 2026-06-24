@@ -13,13 +13,13 @@ import java.util.List;
 
 public class NavioController {
 
-    private final NavioBLL    navioBLL;
-    private final PortoBLL    portoBLL;
+    private final NavioBLL navioBLL;
+    private final PortoBLL portoBLL;
     private final TipoNavioBLL tipoNavioBLL;
 
     public NavioController(NavioBLL navioBLL, PortoBLL portoBLL, TipoNavioBLL tipoNavioBLL) {
-        this.navioBLL    = navioBLL;
-        this.portoBLL    = portoBLL;
+        this.navioBLL = navioBLL;
+        this.portoBLL = portoBLL;
         this.tipoNavioBLL = tipoNavioBLL;
     }
 

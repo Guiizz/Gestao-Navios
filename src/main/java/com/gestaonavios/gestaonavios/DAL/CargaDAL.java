@@ -1,10 +1,10 @@
-package DAL;
+package com.gestaonavios.gestaonavios.DAL;
 
-import DAL.db.ConnectionManager;
-import DAL.db.RowMapper;
-import Model.Carga;
-import Model.Porto;
-import Model.TipoCarga;
+import com.gestaonavios.gestaonavios.DAL.db.ConnectionManager;
+import com.gestaonavios.gestaonavios.DAL.db.RowMapper;
+import com.gestaonavios.gestaonavios.Model.Carga;
+import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.TipoCarga;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class CargaDAL {
     private RowMapper<Carga> mapper() {
         return rs -> {
             TipoCarga tipoCarga = tipoCargaDAL.buscarPorId(rs.getInt("id_tipo_carga"));
-            Porto portoCarga    = portoDAL.buscarPorId(rs.getInt("id_porto_carga"));
+            Porto portoCarga = portoDAL.buscarPorId(rs.getInt("id_porto_carga"));
             Porto portoDescarga = portoDAL.buscarPorId(rs.getInt("id_porto_descarga"));
             return new Carga(
                     rs.getInt("id_carga"),
@@ -41,39 +41,31 @@ public class CargaDAL {
 
     public Carga buscarPorId(int id) {
         List<Carga> result = ConnectionManager.select(
-                "SELECT * FROM CARGA WHERE id_carga = " + id, mapper());
+                "SELECT * FROM CARGA WHERE id_carga = ?", mapper(), id);
         return result.isEmpty() ? null : result.get(0);
     }
 
     public void adicionar(Carga carga) {
-        String idTipoCarga    = carga.getTipoCarga()     != null ? String.valueOf(carga.getTipoCarga().getId())     : "NULL";
-        String idPortoCarga   = carga.getPortoCarga()    != null ? String.valueOf(carga.getPortoCarga().getId())    : "NULL";
-        String idPortoDescarga = carga.getPortoDescarga() != null ? String.valueOf(carga.getPortoDescarga().getId()) : "NULL";
+        Integer idTipoCarga = carga.getTipoCarga() != null ? carga.getTipoCarga().getId() : null;
+        Integer idPortoCarga = carga.getPortoCarga() != null ? carga.getPortoCarga().getId() : null;
+        Integer idPortoDescarga = carga.getPortoDescarga() != null ? carga.getPortoDescarga().getId() : null;
         ConnectionManager.create(
-                "INSERT INTO CARGA (designacao, id_tipo_carga, volume, peso, id_porto_carga, id_porto_descarga) VALUES ('"
-                        + carga.getDesignacao() + "', "
-                        + idTipoCarga + ", "
-                        + carga.getVolume() + ", "
-                        + carga.getPeso() + ", "
-                        + idPortoCarga + ", "
-                        + idPortoDescarga + ")");
+                "INSERT INTO CARGA (designacao, id_tipo_carga, volume, peso, id_porto_carga, id_porto_descarga) VALUES (?, ?, ?, ?, ?, ?)",
+                carga.getDesignacao(), idTipoCarga, carga.getVolume(), carga.getPeso(),
+                idPortoCarga, idPortoDescarga);
     }
 
     public void atualizar(Carga carga) {
-        String idTipoCarga    = carga.getTipoCarga()     != null ? String.valueOf(carga.getTipoCarga().getId())     : "NULL";
-        String idPortoCarga   = carga.getPortoCarga()    != null ? String.valueOf(carga.getPortoCarga().getId())    : "NULL";
-        String idPortoDescarga = carga.getPortoDescarga() != null ? String.valueOf(carga.getPortoDescarga().getId()) : "NULL";
+        Integer idTipoCarga = carga.getTipoCarga() != null ? carga.getTipoCarga().getId() : null;
+        Integer idPortoCarga = carga.getPortoCarga() != null ? carga.getPortoCarga().getId() : null;
+        Integer idPortoDescarga = carga.getPortoDescarga() != null ? carga.getPortoDescarga().getId() : null;
         ConnectionManager.create(
-                "UPDATE CARGA SET designacao='" + carga.getDesignacao()
-                        + "', id_tipo_carga=" + idTipoCarga
-                        + ", volume=" + carga.getVolume()
-                        + ", peso=" + carga.getPeso()
-                        + ", id_porto_carga=" + idPortoCarga
-                        + ", id_porto_descarga=" + idPortoDescarga
-                        + " WHERE id_carga=" + carga.getId());
+                "UPDATE CARGA SET designacao=?, id_tipo_carga=?, volume=?, peso=?, id_porto_carga=?, id_porto_descarga=? WHERE id_carga=?",
+                carga.getDesignacao(), idTipoCarga, carga.getVolume(), carga.getPeso(),
+                idPortoCarga, idPortoDescarga, carga.getId());
     }
 
     public void remover(int id) {
-        ConnectionManager.create("DELETE FROM CARGA WHERE id_carga=" + id);
+        ConnectionManager.create("DELETE FROM CARGA WHERE id_carga=?", id);
     }
 }

@@ -12,11 +12,11 @@ import java.util.List;
 public class TripulanteBLL {
 
     private final TripulanteDAL tripulanteDAL;
-    private final ViagemDAL     viagemDAL;
+    private final ViagemDAL viagemDAL;
 
     public TripulanteBLL(TripulanteDAL tripulanteDAL, ViagemDAL viagemDAL) {
         this.tripulanteDAL = tripulanteDAL;
-        this.viagemDAL     = viagemDAL;
+        this.viagemDAL = viagemDAL;
     }
 
     public List<Tripulante> listarTodos() {
@@ -76,6 +76,8 @@ public class TripulanteBLL {
         ValidacaoUtils.exigirExistencia(tripulanteDAL.buscarPorId(id), "Tripulante", id);
         if (viagemDAL.tripulanteEmViagemAtiva(id))
             throw new Exception("Não é possível remover este tripulante — está associado a uma viagem ativa.");
+        if (!viagemDAL.listarPorTripulante(id).isEmpty())
+            throw new Exception("Não é possível remover este tripulante porque tem histórico de viagens associado.");
         tripulanteDAL.remover(id);
     }
 }
