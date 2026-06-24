@@ -93,8 +93,12 @@ public class MainViewController {
             botaoAtivo.getStyleClass().add("nav-button-active");
         } catch (Exception e) {
             e.printStackTrace();
-            mostrarErro("Erro ao carregar a vista",
-                    "Ocorreu um erro ao abrir a página.\n\nDetalhe: " + e.getMessage());
+            Throwable causa = e.getCause() != null ? e.getCause() : e;
+            String detalhe = causa.getClass().getSimpleName() + ": " + causa.getMessage();
+            if (causa.getCause() != null)
+                detalhe += "\nCausado por: " + causa.getCause().getClass().getSimpleName()
+                        + ": " + causa.getCause().getMessage();
+            mostrarErro("Erro ao carregar a vista", "Ocorreu um erro ao abrir a página.\n\n" + detalhe);
         }
     }
 
