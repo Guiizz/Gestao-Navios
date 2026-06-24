@@ -7,14 +7,8 @@ import com.gestaonavios.gestaonavios.Model.TipoCarga;
 import com.gestaonavios.gestaonavios.Model.TipoNavio;
 import com.gestaonavios.gestaonavios.Model.enums.TipoNavioEnums;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Regras de compatibilidade navio-carga e limite de cargas por viagem,
- * lidas diretamente da base de dados (tabelas TIPO_NAVIO e COMPATIBILIDADE_CARGA),
- * que são a fonte da verdade. Evita duplicar estas regras em código.
- */
 public class CompatibilidadeBLL {
 
     private final TipoNavioDAL tipoNavioDAL;
@@ -25,38 +19,33 @@ public class CompatibilidadeBLL {
         this.compatibilidadeCargaDAL = compatibilidadeCargaDAL;
     }
 
-    /** Resolve o registo de TIPO_NAVIO a partir do enum (designacao == nome do enum). */
-    private TipoNavio resolverTipo(TipoNavioEnums tipoNavio) {
-        if (tipoNavio == null) return null;
-        return tipoNavioDAL.buscarPorDesignacao(tipoNavio.name());
+    public List<CompatibilidadeCarga> listarTodos() {
+        return compatibilidadeCargaDAL.listarTodos();
     }
 
-    /** Indica se o tipo de navio aceita o tipo de carga, segundo COMPATIBILIDADE_CARGA. */
-    public boolean aceita(TipoNavioEnums tipoNavio, TipoCarga tipoCarga) {
-        if (tipoCarga == null) return false;
-        TipoNavio tn = resolverTipo(tipoNavio);
-        if (tn == null) return false;
-        for (CompatibilidadeCarga cc : compatibilidadeCargaDAL.listarPorTipoNavio(tn.getId())) {
-            if (cc.getTipoCarga() != null && cc.getTipoCarga().getId() == tipoCarga.getId()) return true;
-        }
+    public boolean aceita(TipoNavioEnums tipoNavioEnum, TipoCarga tipoCarga) {
+        if (tipoNavioEnum == null || tipoCarga == null) return false;
+        TipoNavio tipoNavio = tipoNavioDAL.buscarPorDesignacao(tipoNavioEnum.name());
+        if (tipoNavio == null) return false;
+        List<CompatibilidadeCarga> lista = compatibilidadeCargaDAL.listarPorTipoNavio(tipoNavio.getId());
+        for (CompatibilidadeCarga c : lista)
+            if (c.getTipoCarga() != null && c.getTipoCarga().getId() == tipoCarga.getId()) return true;
         return false;
     }
 
-    /** Número máximo de cargas por viagem definido no TIPO_NAVIO. */
-    public int maxCargasPorViagem(TipoNavioEnums tipoNavio) {
-        TipoNavio tn = resolverTipo(tipoNavio);
-        if (tn != null) return tn.getMaxCargasPorViagem();
-        return tipoNavio != null ? tipoNavio.getMaxCargasPorViagem() : 0;
+    public int maxCargasPorViagem(TipoNavioEnums tipoNavioEnum) {
+        if (tipoNavioEnum == null) return 0;
+        return tipoNavioEnum.getMaxCargasPorViagem();
     }
 
-    /** Lista dos tipos de carga compatíveis com o tipo de navio. */
-    public List<TipoCarga> cargasCompativeis(TipoNavioEnums tipoNavio) {
-        List<TipoCarga> out = new ArrayList<>();
-        TipoNavio tn = resolverTipo(tipoNavio);
-        if (tn == null) return out;
-        for (CompatibilidadeCarga cc : compatibilidadeCargaDAL.listarPorTipoNavio(tn.getId())) {
-            if (cc.getTipoCarga() != null) out.add(cc.getTipoCarga());
-        }
-        return out;
+    public List<TipoCarga> cargasCompativeis(TipoNavioEnums tipoNavioEnum) {
+        if (tipoNavioEnum == null) return List.of();
+        TipoNavio tipoNavio = tipoNavioDAL.buscarPorDesignacao(tipoNavioEnum.name());
+        if (tipoNavio == null) return List.of();
+        List<CompatibilidadeCarga> lista = compatibilidadeCargaDAL.listarPorTipoNavio(tipoNavio.getId());
+        List<TipoCarga> resultado = new java.util.ArrayList<>();
+        for (CompatibilidadeCarga c : lista)
+            if (c.getTipoCarga() != null) resultado.add(c.getTipoCarga());
+        return resultado;
     }
 }
