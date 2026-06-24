@@ -1,11 +1,16 @@
 package com.gestaonavios.gestaonavios.BLL;
 
 import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
+import com.gestaonavios.gestaonavios.Model.AtribuicaoCarga;
+import com.gestaonavios.gestaonavios.Model.Capitao;
+import com.gestaonavios.gestaonavios.Model.Carga;
 import com.gestaonavios.gestaonavios.Model.Navio;
 import com.gestaonavios.gestaonavios.Model.Porto;
+import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
 import com.gestaonavios.gestaonavios.Model.Viagem;
 import com.gestaonavios.gestaonavios.Model.enums.EstadoOperacional;
 import com.gestaonavios.gestaonavios.Model.enums.EstadoViagem;
+import com.gestaonavios.gestaonavios.Model.enums.FuncaoTripulante;
 import com.gestaonavios.gestaonavios.Model.enums.TipoNavioEnums;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -135,12 +140,25 @@ class ViagemBLLTest {
     @Test
     void avancarEstado_planeadaParaEmCurso_atualizaEstado() throws Exception {
         Viagem viagem = viagemPlaneada();
+        viagem.getCargas().add(new AtribuicaoCarga(0, new Carga(), 100.0, 100.0, null));
+        viagem.getTripulacao().add(new TripulacaoViagem(0,
+                new Capitao(1, "Ana", "111111111", false, "Portuguesa", null),
+                FuncaoTripulante.CAPITAO, LocalDate.now(), null));
         when(viagemDAL.buscarPorId(1)).thenReturn(viagem);
 
         viagemBLL.avancarEstado(1, null);
 
         assertEquals(EstadoViagem.EM_CURSO, viagem.getEstado());
         verify(viagemDAL).atualizar(viagem);
+    }
+
+    @Test
+    void avancarEstado_planeadaSemCargaOuCapitao_lancaExcecao() {
+        Viagem viagem = viagemPlaneada();
+        when(viagemDAL.buscarPorId(1)).thenReturn(viagem);
+
+        assertThrows(Exception.class, () -> viagemBLL.avancarEstado(1, null));
+        assertEquals(EstadoViagem.PLANEADA, viagem.getEstado());
     }
 
     @Test
