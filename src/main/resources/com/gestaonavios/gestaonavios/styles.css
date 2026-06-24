@@ -99,8 +99,9 @@
 .btn-warning:hover { -fx-background-color: #fbf1de; -fx-border-color: #d9aa56; }
 
 /* ---------- ECRÃ DE BOAS-VINDAS ---------- */
+/* Mesmo azul-marinho da imagem splash, para as margens ficarem invisíveis */
 .content-area {
-    -fx-background-color: transparent;
+    -fx-background-color: #19315D;
 }
 .welcome-title {
     -fx-font-size: 27px;

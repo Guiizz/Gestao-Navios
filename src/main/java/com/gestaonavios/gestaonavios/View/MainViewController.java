@@ -5,16 +5,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
-import java.io.InputStream;
 import java.util.List;
 
 public class MainViewController {
@@ -23,6 +17,8 @@ public class MainViewController {
     private BorderPane root;
     @FXML
     private StackPane contentArea;
+    @FXML
+    private ImageView imgEntrada;
     @FXML
     private Button btnNavios;
     @FXML
@@ -40,18 +36,11 @@ public class MainViewController {
 
     @FXML
     public void initialize() {
-        // Imagem de entrada (splash) apenas no ecrã de boas-vindas.
-        // As secções de dados têm fundo sólido próprio, que a tapa.
-        InputStream is = getClass().getResourceAsStream("/com/gestaonavios/gestaonavios/img/splash_navios.png");
-        if (is != null) {
-            Image fundo = new Image(is);
-            BackgroundImage bg = new BackgroundImage(
-                    fundo,
-                    BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                    BackgroundPosition.CENTER,
-                    // cover: preenche toda a área mantendo o rácio (corta o mínimo)
-                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, false, true));
-            contentArea.setBackground(new Background(bg));
+        // A imagem de entrada (splash) ajusta-se ao tamanho da área de conteúdo,
+        // mantendo o rácio. Quando uma secção é carregada, esta área é substituída.
+        if (imgEntrada != null) {
+            imgEntrada.fitWidthProperty().bind(contentArea.widthProperty());
+            imgEntrada.fitHeightProperty().bind(contentArea.heightProperty());
         }
 
         navButtons.addAll(List.of(
