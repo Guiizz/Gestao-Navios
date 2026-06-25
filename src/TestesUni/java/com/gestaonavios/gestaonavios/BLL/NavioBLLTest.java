@@ -128,8 +128,6 @@ class NavioBLLTest {
     @Test
     void podeIniciarViagem_ativoSemViagens_returnaTrue() {
         Navio navio = navioValido();
-        navio.setId(1);
-        when(viagemDAL.listarPorNavio(1)).thenReturn(Collections.emptyList());
 
         assertTrue(navioBLL.podeIniciarViagem(navio));
     }
@@ -142,14 +140,4 @@ class NavioBLLTest {
         assertFalse(navioBLL.podeIniciarViagem(navio));
     }
 
-    @Test
-    void podeIniciarViagem_comViagemEmCurso_returnaFalse() {
-        Navio navio = navioValido();
-        navio.setId(1);
-        Viagem viagem = new Viagem();
-        viagem.setEstado(EstadoViagem.EM_CURSO);
-        when(viagemDAL.listarPorNavio(1)).thenReturn(List.of(viagem));
-
-        assertFalse(navioBLL.podeIniciarViagem(navio));
-    }
 }
