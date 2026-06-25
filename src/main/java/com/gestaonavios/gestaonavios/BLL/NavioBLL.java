@@ -97,8 +97,8 @@ public class NavioBLL {
     }
 
     public boolean podeIniciarViagem(Navio navio) {
-        if (navio.getEstadoOperacional() != EstadoOperacional.ATIVO)
-            return false;
-        return !temViagemAtiva(navio.getId());
+        // Pode agendar-se uma viagem a um navio desde que esteja ATIVO.
+        // A não-sobreposição de datas é verificada no ViagemBLL.
+        return navio.getEstadoOperacional() == EstadoOperacional.ATIVO;
     }
 }

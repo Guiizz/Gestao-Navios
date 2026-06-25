@@ -4,6 +4,7 @@ import com.gestaonavios.gestaonavios.DAL.ViagemDAL;
 import com.gestaonavios.gestaonavios.Model.AtribuicaoCarga;
 import com.gestaonavios.gestaonavios.Model.Carga;
 import com.gestaonavios.gestaonavios.Model.Navio;
+import com.gestaonavios.gestaonavios.Model.Tanque;
 import com.gestaonavios.gestaonavios.Model.Tripulante;
 import com.gestaonavios.gestaonavios.Model.TripulacaoViagem;
 import com.gestaonavios.gestaonavios.Model.Viagem;
@@ -64,10 +65,33 @@ public class ViagemBLL {
             throw new Exception("A data de chegada prevista tem de ser posterior à data de partida.");
         if (!navioBLL.podeIniciarViagem(viagem.getNavio()))
             throw new Exception("O navio '" + viagem.getNavio().getNome()
-                    + "' não está disponível (inativo, em manutenção ou já tem viagem ativa).");
+                    + "' não está ATIVO (em manutenção ou inativo).");
+        Viagem conflito = viagemSobreposta(viagem.getNavio(),
+                viagem.getDataPartida(), viagem.getDataChegadaPrevista(), 0);
+        if (conflito != null)
+            throw new Exception("O navio '" + viagem.getNavio().getNome()
+                    + "' já tem uma viagem agendada que se sobrepõe a estas datas (viagem #"
+                    + conflito.getId() + ": " + conflito.getDataPartida()
+                    + " a " + conflito.getDataChegadaPrevista() + ").");
 
         viagem.setEstado(EstadoViagem.PLANEADA);
         viagemDAL.adicionar(viagem);
+    }
+
+    /** Viagem do mesmo navio cujas datas se sobrepõem (ou null). Ignora canceladas e a própria. */
+    private Viagem viagemSobreposta(Navio navio, LocalDate partida, LocalDate chegada, int idExcluir) {
+        if (navio == null || partida == null || chegada == null) return null;
+        for (Viagem v : viagemDAL.listarTodos()) {
+            if (v.getId() == idExcluir) continue;
+            if (v.getEstado() == EstadoViagem.CANCELADA) continue;
+            if (v.getNavio() == null || v.getNavio().getId() != navio.getId()) continue;
+            LocalDate p = v.getDataPartida();
+            LocalDate c = v.getDataChegadaPrevista();
+            if (p == null || c == null) continue;
+            // sobreposição (datas encostadas são permitidas)
+            if (partida.isBefore(c) && p.isBefore(chegada)) return v;
+        }
+        return null;
     }
 
     public void avancarEstado(int idViagem, LocalDate dataChegadaReal) throws Exception {
@@ -171,6 +195,14 @@ public class ViagemBLL {
             }
         }
 
+        Tanque tanque = atribuicao.getTanque();
+        if (tanque != null) {
+            for (AtribuicaoCarga ac : viagem.getCargas())
+                if (ac.getTanque() != null && ac.getTanque().getId() == tanque.getId())
+                    throw new Exception("O tanque #" + tanque.getNumero()
+                            + " já está ocupado por outra carga nesta viagem.");
+        }
+
         viagemDAL.adicionarCargaViagem(idViagem, atribuicao);
     }
 
@@ -235,6 +267,10 @@ public class ViagemBLL {
             throw new Exception("A nova data de partida não pode ser no passado.");
         if (!novaChegada.isAfter(novaPartida))
             throw new Exception("A data de chegada prevista tem de ser posterior à data de partida.");
+        Viagem conflito = viagemSobreposta(viagem.getNavio(), novaPartida, novaChegada, idViagem);
+        if (conflito != null)
+            throw new Exception("As novas datas sobrepõem-se a outra viagem do navio (viagem #"
+                    + conflito.getId() + ").");
         viagem.setDataPartida(novaPartida);
         viagem.setDataChegadaPrevista(novaChegada);
         viagem.setObservacoes(observacoes);

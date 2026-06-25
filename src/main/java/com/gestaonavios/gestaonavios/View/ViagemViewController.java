@@ -722,7 +722,7 @@ public class ViagemViewController {
 
         ValidacaoUI val = new ValidacaoUI(lblErro);
         ValidacaoUI.limparAoEditar(tfPeso, tfVol);
-        ValidacaoUI.limparAoEditar(cbCarga);
+        ValidacaoUI.limparAoEditar(cbCarga, cbTanque);
 
         Boolean[] resultado = new Boolean[1];
         Button btnOk = (Button) dialog.getDialogPane().lookupButton(btnGuardar);
@@ -759,7 +759,9 @@ public class ViagemViewController {
                 resultado[0] = Boolean.TRUE;
             } catch (Exception e) {
                 String m = e.getMessage();
-                if (m != null && m.toLowerCase().contains("capacidade")) val.marcar(tfPeso, m);
+                String ml = m != null ? m.toLowerCase() : "";
+                if (ml.contains("tanque")) val.marcar(cbTanque, m);
+                else if (ml.contains("capacidade")) val.marcar(tfPeso, m);
                 else lblErro.setText(m);
                 ev.consume();
             }
@@ -799,8 +801,11 @@ public class ViagemViewController {
         });
         ComboBox<FuncaoTripulante> cbFuncao = new ComboBox<>(
                 FXCollections.observableArrayList(FuncaoTripulante.values()));
-        DatePicker dpEmbarque = new DatePicker(LocalDate.now());
-        DatePicker dpDesembarque = new DatePicker(LocalDate.now().plusDays(30));
+        // Por omissão, as datas da viagem (partida = embarque, chegada prevista = desembarque)
+        DatePicker dpEmbarque = new DatePicker(
+                sel.getDataPartida() != null ? sel.getDataPartida() : LocalDate.now());
+        DatePicker dpDesembarque = new DatePicker(
+                sel.getDataChegadaPrevista() != null ? sel.getDataChegadaPrevista() : LocalDate.now().plusDays(7));
 
         cbTrip.valueProperty().addListener((obs, o, t) -> {
             if (t != null) cbFuncao.setValue(t.getFuncaoEnum());
